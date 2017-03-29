@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noEmitOnError": false,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es5",
+    "lib": [ "dom", "es6" ],
+    "paths": {
+      "@framework": [ "./framework" ]
+    },
+    "rootDir": ".",
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
+  },
+  "exclude": [
+    "node_modules/**/*.d.ts",
+    "wwwroot",
+    "../typings/main",
+    "../typings/main.d.ts"
+  ]
+}

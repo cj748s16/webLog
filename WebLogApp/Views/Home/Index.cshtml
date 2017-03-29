@@ -2,4 +2,13 @@
     ViewBag.Title = "WebLog";
 }
 
-<h1>WebLog...</h1>
+<weblog-app>
+    <div class="loading">Loading...</div>
+</weblog-app>
+
+@section customScript {
+    System.import("app").catch(console.log.bind(console));
+    $(document).ready(function () {
+        $(".fancybox").fancybox();
+    });
+}

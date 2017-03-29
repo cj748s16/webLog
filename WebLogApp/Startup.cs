@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.FileProviders;
 
 namespace WebLogApp
 {
@@ -51,7 +53,7 @@ namespace WebLogApp
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             // this will serve up wwwroot
-            app.UseStaticFiles();
+            ConfigureStaticFiles(app);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -70,6 +72,23 @@ namespace WebLogApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+
+        // static files providers configuration
+        private static void ConfigureStaticFiles(IApplicationBuilder app)
+        {
+            app.UseStaticFiles();
+
+            // provides static file access for .less files
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".less"] = "text/css";
+            //provider.Mappings[".css"] = "text/css";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"wwwroot", "css")),
+                RequestPath = new PathString("/css"),
+                ContentTypeProvider = provider
             });
         }
 

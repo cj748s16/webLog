@@ -64,6 +64,7 @@ gulp.task("setup-vendors", [], function () {
         paths.npm + "reflect-metadata/Reflect*.js",
         paths.npm + "systemjs/dist/*.js",
         paths.npm + "jquery/dist/jquery.*js",
+        paths.npm + "bootstrap/dist/js/bootstrap*.js",
         paths.npm + "fancybox/dist/js/jquery.fancybox.pack.js",
         paths.npm + "dateformat/lib/dateformat.js",
         paths.npm + "less/dist/less*.js"
@@ -90,8 +91,6 @@ gulp.task("setup-vendors", [], function () {
     //]).pipe(gulp.dest(paths.jsVendors + "/socket.io-client"));
 
     gulp.src([
-        paths.bower + "bootstrap/dist/js/bootstrap*.js",
-        paths.bower + "tether/dist/js/tether*.js",
         paths.bower + "alertify-js/build/alertify.min.js"
     ]).pipe(gulp.dest(paths.jsVendors));
 
@@ -99,12 +98,11 @@ gulp.task("setup-vendors", [], function () {
 
     // css
     gulp.src([
+        paths.npm + "bootstrap/dist/css/bootstrap*.css",
         paths.npm + "fancybox/dist/css/jquery.fancybox.css"
     ]).pipe(gulp.dest(paths.cssVendors));
 
     gulp.src([
-        paths.bower + "bootstrap/dist/css/bootstrap*.css",
-        paths.bower + "tether/dist/css/tether*.css",
         paths.bower + "components-font-awesome/css/font-awesome.css",
         paths.bower + "alertify-js/build/css/alertify.css"
     ]).pipe(gulp.dest(paths.cssVendors));
@@ -171,15 +169,16 @@ gulp.task("compile-ts", ["clean"], function (done) {
         }
     };
     var compileFw = function (cb) {
-        var tsFwResult = gulp.src(paths.tsFw)
-            .pipe(sourcemaps.init())
-            .pipe(embedTemplates(embedOpt))
-            .pipe(tsFramework());
+        //var tsFwResult = gulp.src(paths.tsFw)
+        //    .pipe(sourcemaps.init())
+        //    .pipe(embedTemplates(embedOpt))
+        //    .pipe(tsFramework());
 
-        tsFwResult.js
-            .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(paths.tsFwTemp))
-            .on("end", cb);
+        //tsFwResult.js
+        //    .pipe(sourcemaps.write("."))
+        //    .pipe(gulp.dest(paths.tsFwTemp))
+        //    .on("end", cb);
+        cb();
     };
 
     var compileApp = function (cb) {
@@ -226,26 +225,27 @@ gulp.task("build-js", ["compile-ts"], function (done) {
         }
     };
     var buildFw = function () {
-        var builder = new SystemBuilder(paths.tsFwTemp);
+        //var builder = new SystemBuilder(paths.tsFwTemp);
+        //builder.config({
+        //    paths: {
+        //        "*": "*.js"
+        //    },
+        //    meta: meta
+        //});
+        ////return builder.bundle("index", paths.tsOutput + "framework.min.js", opt);
+        //return builder.buildStatic("index", paths.tsOutput + "framework.min.js", opt);
+        return;
+    };
+    var buildApp = function () {
+        var builder = new SystemBuilder(paths.tsTemp);
         builder.config({
             paths: {
                 "*": "*.js"
             },
             meta: meta
         });
-        //return builder.bundle("index", paths.tsOutput + "framework.min.js", opt);
-        return builder.buildStatic("index", paths.tsOutput + "framework.min.js", opt);
-    };
-    var buildApp = function () {
-        var builder = new SystemBuilder(paths.tsTemp);
-        builder.config({
-            paths: {
-                "*": "*.js",
-            },
-            meta: meta
-        });
         return builder.buildStatic("main", paths.tsOutput + "app.min.js", opt);
-    }
+    };
 
     if (buildFw()) {
         if (buildApp()) {

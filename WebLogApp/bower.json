@@ -2,7 +2,6 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "tether": "1.4.0",
     "components-font-awesome": "4.7.0",
     "alertify-js": "1.9.0"
   }
