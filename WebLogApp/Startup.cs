@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
+using NLog.Web;
+using NLog.Extensions.Logging;
 
 namespace WebLogApp
 {
@@ -28,12 +30,18 @@ namespace WebLogApp
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+
+            // Add NLog config
+            env.ConfigureNLog("NLog.config");
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add NLog to service processing
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddAuthentication();
 
             // Add MVC services to the services container.
@@ -52,6 +60,14 @@ namespace WebLogApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Add NLog logging
+            loggerFactory.AddNLog();
+            app.AddNLogWeb();
+            if (env.IsDevelopment())
+            {
+                loggerFactory.AddDebug();
+            }
+            
             // this will serve up wwwroot
             ConfigureStaticFiles(app);
 
