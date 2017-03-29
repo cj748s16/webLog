@@ -1,0 +1,54 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "@angular/core": "4.0.0",
+    "@angular/common": "4.0.0",
+    "@angular/compiler": "4.0.0",
+    "@angular/forms": "4.0.0",
+    "@angular/http": "4.0.0",
+    "@angular/platform-browser": "4.0.0",
+    "@angular/platform-browser-dynamic": "4.0.0",
+    "@angular/router": "4.0.0",
+    "@angular/upgrade": "4.0.0",
+
+    "body-parser": "1.16.0",
+    "bootstrap": "3.3.7",
+    "es6-shim": "^0.35.0",
+    "fancybox": "3.0.0",
+    "jquery": "3.1.1",
+    "ng2-bs3-modal": "0.10.4",
+
+    "core-js": "^2.4.1",
+    "reflect-metadata": "~0.1.10",
+    "rxjs": "5.0.0-beta.12",
+    "systemjs": "~0.20.9",
+    "zone.js": "~0.7.7",
+    "typescript": "~2.2.1",
+    "plugin-typescript": "~7.0.6",
+    "dateformat": "~2.0.0",
+    "lodash": "~4.17.4",
+    "less": "~2.7.2",
+    "crypto-js": "~3.1.9-1"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.5",
+    "gulp": "~3.9.1",
+    "gulp-typescript": "~3.1.5",
+    "gulp-sourcemaps": "~2.4.1",
+    "gulp-less": "~3.3.0",
+    "gulp-cssmin": "~0.1.7",
+    "gulp-rename": "~1.2.2",
+    "gulp-watch": "~4.3.11",
+    "gulp-angular-embed-templates": "git+https://github.com/laxa1986/gulp-angular-embed-templates.git",
+    "gulp-cachebust": "~0.0.6",
+    "del": "~2.2.2",
+    "typescript": "~2.2.1",
+    "typings": "~2.1.0",
+    "systemjs-builder": "~0.16.4"
+  },
+  "scripts": {
+    "postinstall": "typings install"
+  }
+}
