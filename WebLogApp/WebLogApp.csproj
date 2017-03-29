@@ -15,8 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-    <Folder Include="wwwroot\" />
+    <Content Remove="wwwroot/app\system\account\login.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\app\system\account\user\domain.ts" />
+    <Content Include="wwwroot\app\system\account\user\service.ts" />
+    <Content Include="wwwroot\app\system\account\user\user.service.ts" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
@@ -45,6 +50,10 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebLogBase\WebLogBase.csproj" />
   </ItemGroup>
 
 </Project>

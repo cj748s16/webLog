@@ -3,8 +3,13 @@ import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpModule, Headers, RequestOptions, BaseRequestOptions } from "@angular/http";
 import { Location, LocationStrategy, HashLocationStrategy } from "@angular/common";
+import { Ng2Bs3ModalModule } from "ng2-bs3-modal/ng2-bs3-modal";
+import { FrameworkModule } from "@framework";
 
+import { DataService, NotificationService, UtilityService } from "./core/services";
+import { appRouting } from "./app.routes";
 import { AppComponent } from "./app.component";
+import { AccountModule } from "./system/account/account.module";
 
 //enableProdMode();
 
@@ -23,10 +28,17 @@ class AppBaseRequestOptions extends BaseRequestOptions {
     imports: [
         BrowserModule,
         FormsModule,
-        HttpModule
+        HttpModule,
+        Ng2Bs3ModalModule,
+        FrameworkModule,
+        AccountModule,
+        appRouting
     ],
     declarations: [AppComponent],
     providers: [
+        DataService,
+        NotificationService,
+        UtilityService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: RequestOptions, useClass: AppBaseRequestOptions }
     ],

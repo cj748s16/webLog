@@ -1,0 +1,16 @@
+﻿<div id="user-list" name="user-list" tabContent>
+    <button type="button" class="btn btn-default" (click)="new()" actionButton>New</button>
+    <button [disabled]="!_selectedKey" type="button" class="btn btn-default" (click)="modify()" actionButton>Modify</button>
+
+    <hr />
+    <grid [list]="_users">
+        <grid-column field="Id" hidden="true" key="true"></grid-column>
+        <grid-column field="Userid" width="80" caption="User ID"></grid-column>
+        <grid-column field="Username" width="180" caption="Username"></grid-column>
+        <grid-column field="Passwdexpr" width="85" caption="Password expires" format="D"></grid-column>
+        <grid-column field="Addusername" width="80" caption="Creator"></grid-column>
+        <grid-column field="Adddate" width="170" caption="Created at" format="DT"></grid-column>
+    </grid>
+</div>
+
+<userEditModal #editModal></userEditModal>

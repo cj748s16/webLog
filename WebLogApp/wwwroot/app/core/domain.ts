@@ -1,0 +1,1 @@
+﻿export { OperationResult } from "./domain/operation_result";

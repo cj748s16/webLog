@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using NLog.Web;
 using NLog.Extensions.Logging;
+using WebLogApp.Infrastructure.Mappings;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebLogApp
 {
@@ -39,8 +41,30 @@ namespace WebLogApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Logging
+            services.AddSingleton<ILoggerFactory, LoggerFactory>();
+            services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+
             // Add NLog to service processing
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Add WebLogContext
+            var sqlConnectionString = Configuration["ConnectionStrings:WebLogContext"];
+            if (string.IsNullOrWhiteSpace(sqlConnectionString))
+            {
+                throw new Exception("Database ConnectionString for WebLogContext was not found");
+            }
+            services.AddDbContext<WebLogBase.Infrastructure.WebLogContext>(options =>
+            {
+                options.UseSqlServer(sqlConnectionString);
+            });
+
+            // Add repositories
+            services.AddScoped<WebLogBase.Repositories.System.Account.IUserRepository, WebLogBase.Repositories.System.Account.UserRepository>();
+
+            // Add mapper
+            var mapperInstance = AutoMapperConfiguration.Configure();
+            services.AddSingleton<AutoMapper.IMapper>(mapperInstance);
 
             services.AddAuthentication();
 
@@ -71,6 +95,8 @@ namespace WebLogApp
             // this will serve up wwwroot
             ConfigureStaticFiles(app);
 
+            //var mapperInstance = AutoMapperConfiguration.Configure();
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AutomaticAuthenticate = true,
@@ -88,6 +114,10 @@ namespace WebLogApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapWebApiRoute(
+                    name: "defaultApi",
+                    template: "api/{controller}/{id?}");
             });
         }
 

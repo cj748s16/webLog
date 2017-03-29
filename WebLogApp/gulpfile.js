@@ -169,16 +169,15 @@ gulp.task("compile-ts", ["clean"], function (done) {
         }
     };
     var compileFw = function (cb) {
-        //var tsFwResult = gulp.src(paths.tsFw)
-        //    .pipe(sourcemaps.init())
-        //    .pipe(embedTemplates(embedOpt))
-        //    .pipe(tsFramework());
+        var tsFwResult = gulp.src(paths.tsFw)
+            .pipe(sourcemaps.init())
+            .pipe(embedTemplates(embedOpt))
+            .pipe(tsFramework());
 
-        //tsFwResult.js
-        //    .pipe(sourcemaps.write("."))
-        //    .pipe(gulp.dest(paths.tsFwTemp))
-        //    .on("end", cb);
-        cb();
+        tsFwResult.js
+            .pipe(sourcemaps.write("."))
+            .pipe(gulp.dest(paths.tsFwTemp))
+            .on("end", cb);
     };
 
     var compileApp = function (cb) {
@@ -225,16 +224,15 @@ gulp.task("build-js", ["compile-ts"], function (done) {
         }
     };
     var buildFw = function () {
-        //var builder = new SystemBuilder(paths.tsFwTemp);
-        //builder.config({
-        //    paths: {
-        //        "*": "*.js"
-        //    },
-        //    meta: meta
-        //});
-        ////return builder.bundle("index", paths.tsOutput + "framework.min.js", opt);
-        //return builder.buildStatic("index", paths.tsOutput + "framework.min.js", opt);
-        return;
+        var builder = new SystemBuilder(paths.tsFwTemp);
+        builder.config({
+            paths: {
+                "*": "*.js"
+            },
+            meta: meta
+        });
+        //return builder.bundle("index", paths.tsOutput + "framework.min.js", opt);
+        return builder.buildStatic("index", paths.tsOutput + "framework.min.js", opt);
     };
     var buildApp = function () {
         var builder = new SystemBuilder(paths.tsTemp);

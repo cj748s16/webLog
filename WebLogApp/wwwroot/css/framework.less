@@ -1,0 +1,43 @@
+.container {
+    &.page {
+        position: absolute;
+        top: 72px;
+        bottom: 0;
+        width: 100%;
+    }
+
+    &.subpage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    &.tab {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.tab-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    margin: 42px 0 0 0;
+}
+
+.panel {
+    border-top-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
+    position: relative;
+    width: 100%;
+    height: ~"calc(100% - 20px)";
+    overflow: auto;
+}
+
+.btn-group {
+    margin-top: 20px;
+}

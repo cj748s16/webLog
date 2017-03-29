@@ -4,5 +4,10 @@ WebLogApp/bower_components/
 WebLogApp/typings/
 WebLogApp/bin/
 WebLogApp/wwwroot/lib/
-WebLogApp/wwwroot/app/*.js
-WebLogApp/wwwroot/app/*.map
+WebLogApp/wwwroot/app/**/*.js
+WebLogApp/wwwroot/app/**/*.map
+WebLogApp/wwwroot/framework/**/*.js
+WebLogApp/wwwroot/framework/**/*.map
+WebLogApp/wwwroot/temp/
+WebLogBase/obj/
+WebLogBase/bin/

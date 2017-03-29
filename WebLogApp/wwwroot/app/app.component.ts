@@ -3,6 +3,6 @@
 @Component({
     moduleId: module.id,
     selector: "weblog-app",
-    template: "<h2>WebLog with @angular...</h2>"
+    templateUrl: "./app.component.html"
 })
 export class AppComponent { }
