@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace WebLogApp.Controllers
         public IActionResult Index()
         {
             ViewBag.isDevelopment = env.IsDevelopment();
+            // localizer: Microsoft.Extensions.Localization.StringLocalizer
+            // localizerFactory: Microsoft.Extensions.Localization.ResourceManagerStringLocalizerFactory
             return View();
         }
     }

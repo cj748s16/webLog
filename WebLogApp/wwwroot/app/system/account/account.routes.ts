@@ -6,9 +6,10 @@ import { AccountComponent } from "./account.component";
 import { UserComponent } from "./user/user.component";
 import { UserListComponent } from "./user/user-list.component";
 
-const routes: Routes = [
+export const accountRoutes: Routes = [
     {
         path: "account",
+        //path: "",
         component: AccountComponent,
         children: [
             {
@@ -23,4 +24,4 @@ const routes: Routes = [
     }
 ];
 
-export const accountRouting: ModuleWithProviders = RouterModule.forChild(routes);
+//export const accountRouting: ModuleWithProviders = RouterModule.forChild(routes);

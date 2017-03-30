@@ -1,0 +1,13 @@
+﻿{
+  "UserID": "User ID",
+  "Username": "Name",
+  "PasswordExpires": "Password expires",
+  "Creator": "Creator",
+  "CreatedAt": "Created at",
+  "Password": "Password",
+  "ConfirmPassword": "Confirm",
+
+  "validators": {
+    "confirmMismatch": "Confirm doesn't match with the Password"
+  }
+}

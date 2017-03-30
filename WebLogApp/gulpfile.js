@@ -79,6 +79,22 @@ gulp.task("setup-vendors", [], function () {
         .pipe(gulp.dest(paths.jsVendors + "/@angular"));
 
     gulp.src([
+        paths.npm + "@ngx-translate/**/*.umd.js"
+    ], { base: paths.npm })
+        .pipe(rename(function (path) {
+            path.dirname = ".";
+        }))
+        .pipe(gulp.dest(paths.jsVendors + "/@ngx-translate"));
+
+    gulp.src([
+        paths.npm + "localize-router/**/*.umd.js"
+    ], { base: paths.npm })
+        .pipe(rename(function (path) {
+            path.dirname = ".";
+        }))
+        .pipe(gulp.dest(paths.jsVendors + "/localize-router"));
+
+    gulp.src([
         paths.npm + "typescript/lib/*.js"
     ]).pipe(gulp.dest(paths.jsVendors + "/typescript"));
 

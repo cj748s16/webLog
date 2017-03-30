@@ -361,7 +361,7 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 
         this.columns.forEach(col => {
             if (!col.hidden) {
-                template += `<div class="cell" style="width: ${col.width}px; max-width: ${col.width}px;"><span>${col.caption}</span></div>`;
+                template += `<div class="cell" style="width: ${col.width}px; max-width: ${col.width}px;"><span>{{'${col.caption}' | translate}}</span></div>`;
             }
         });
 

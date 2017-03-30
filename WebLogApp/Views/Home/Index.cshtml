@@ -1,9 +1,12 @@
-﻿@{ 
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+
+@{ 
     ViewBag.Title = "WebLog";
 }
 
 <weblog-app>
-    <div class="loading">Loading...</div>
+    <div class="loading">@Localizer["Loading"]</div>
 </weblog-app>
 
 @section customScript {

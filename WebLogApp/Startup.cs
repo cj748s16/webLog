@@ -5,16 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 using NLog.Web;
 using NLog.Extensions.Logging;
+using WebLogApp.Infrastructure;
+using WebLogApp.Infrastructure.Localization;
 using WebLogApp.Infrastructure.Mappings;
-using Microsoft.EntityFrameworkCore;
 
 namespace WebLogApp
 {
@@ -59,17 +63,25 @@ namespace WebLogApp
                 options.UseSqlServer(sqlConnectionString);
             });
 
+            // Add localization resources
+            ConfigureLocalization(services);
+
             // Add repositories
             services.AddScoped<WebLogBase.Repositories.System.Account.IUserRepository, WebLogBase.Repositories.System.Account.UserRepository>();
 
             // Add mapper
             var mapperInstance = AutoMapperConfiguration.Configure();
-            services.AddSingleton<AutoMapper.IMapper>(mapperInstance);
+            services.AddSingleton(mapperInstance);
 
             services.AddAuthentication();
 
             // Add MVC services to the services container.
-            services.AddMvc()
+            services
+                .AddMvc(opts =>
+                {
+                    // Add localized routes
+                    opts.Conventions.Insert(0, new ApiPrefixConvention());
+                })
                 .AddJsonOptions(opt =>
                 {
                     var resolver = opt.SerializerSettings.ContractResolver;
@@ -78,7 +90,9 @@ namespace WebLogApp
                         var res = resolver as DefaultContractResolver;
                         res.NamingStrategy = null;
                     }
-                });
+                })
+                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,9 +105,13 @@ namespace WebLogApp
             {
                 loggerFactory.AddDebug();
             }
-            
+
             // this will serve up wwwroot
             ConfigureStaticFiles(app);
+
+            // configure Localization
+            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
 
             //var mapperInstance = AutoMapperConfiguration.Configure();
 
@@ -111,6 +129,15 @@ namespace WebLogApp
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "cultureRoute",
+                    template: "{culture}/{controller}/{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" },
+                    constraints: new
+                    {
+                        culture = new RegexRouteConstraint("^[a-z]{2}(?:-[A-Z]{2})?$")
+                    });
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
@@ -135,6 +162,20 @@ namespace WebLogApp
                 FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"wwwroot", "css")),
                 RequestPath = new PathString("/css"),
                 ContentTypeProvider = provider
+            });
+        }
+
+        // Localization configuration
+        private static void ConfigureLocalization(IServiceCollection services)
+        {
+            //services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddJsonLocalization(Options => Options.ResourcesPath = "Resources");
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US", "en-US");
+                options.SupportedCultures = Controllers.System.LanguageApiController.SupportedCultures;
+                options.SupportedUICultures = Controllers.System.LanguageApiController.SupportedCultures;
+                options.RequestCultureProviders.Insert(0, new UrlRequestCultureProvider());
             });
         }
 

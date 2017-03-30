@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,17 @@ using WebLogBase.Repositories.System.Account;
 
 namespace WebLogApp.Controllers.System.Account
 {
-    [Route("api/system/account/[controller]")]
-    public class UserController : BaseController<UserController>
+    //[Route("api/{language:regex(^[[a-z]]{{2}}(?:-[[A-Z]]{{2}})?$)}/system/account/[controller]")]
+    //[Route("api/system/account/[controller]")]
+    public class UserApiController : BaseApiController<UserApiController>
     {
         private readonly IUserRepository userRepository;
 
-        public UserController(
+        public UserApiController(
             IUserRepository userRepository,
             IMapper mapper,
-            ILogger<UserController> logger) : base(mapper, logger)
+            ILogger<UserApiController> logger,
+            IStringLocalizer<UserApiController> localizer) : base(mapper, logger, localizer)
         {
             this.userRepository = userRepository;
         }
@@ -45,16 +48,28 @@ namespace WebLogApp.Controllers.System.Account
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int? id)
         {
-            UserViewModel userVM = null;
+            GenericResult result = null;
 
             var user = await userRepository.GetSingleByIdAsync(id);
-
             if (user != null)
             {
-                userVM = Mapper.Map<User, UserViewModel>(user);
+                var userVM = Mapper.Map<User, UserViewModel>(user);
+                result = new GenericResult
+                {
+                    Succeeded = true,
+                    CustomData = userVM
+                };
+            }
+            else
+            {
+                result = new GenericResult
+                {
+                    Succeeded = false,
+                    Message = Localizer["User not found (Id: {0})", id]
+                };
             }
 
-            return new ObjectResult(userVM);
+            return new ObjectResult(result);
         }
 
         [HttpPost]
@@ -76,7 +91,7 @@ namespace WebLogApp.Controllers.System.Account
                     result = new GenericResult
                     {
                         Succeeded = true,
-                        Message = "User created"
+                        Message = Localizer["User created"]
                     };
                 }
                 else
@@ -84,7 +99,7 @@ namespace WebLogApp.Controllers.System.Account
                     result = new GenericResult
                     {
                         Succeeded = false,
-                        Message = "Invalid fields"
+                        Message = Localizer["Invalid fields"]
                     };
                 }
             }
@@ -124,7 +139,7 @@ namespace WebLogApp.Controllers.System.Account
                         result = new GenericResult
                         {
                             Succeeded = true,
-                            Message = "User modified"
+                            Message = Localizer["User modified"]
                         };
                     }
                     else
@@ -132,7 +147,7 @@ namespace WebLogApp.Controllers.System.Account
                         result = new GenericResult
                         {
                             Succeeded = false,
-                            Message = $"User not found (Id: {userVM.Id})"
+                            Message = Localizer["User not found (Id: {0})", userVM.Id]
                         };
                     }
                 }
@@ -141,7 +156,7 @@ namespace WebLogApp.Controllers.System.Account
                     result = new GenericResult
                     {
                         Succeeded = false,
-                        Message = "Invalid fields"
+                        Message = Localizer["Invalid fields"]
                     };
                 }
             }

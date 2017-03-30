@@ -1,0 +1,18 @@
+﻿{
+  "Menu": {
+    "Language": "Language",
+    "Account": "Account",
+    "Users": "Users"
+  },
+
+  "New": "New...",
+  "Modify": "Modify",
+  "Save": "Save",
+  "Cancel": "Cancel",
+
+  "validators": {
+    "required": "{{value}} is required"
+  },
+
+  "ROUTES.users": "users"
+}

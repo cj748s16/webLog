@@ -19,9 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\app\core\domain\language.ts" />
+    <Content Include="wwwroot\app\core\services\language.service.ts" />
     <Content Include="wwwroot\app\system\account\user\domain.ts" />
-    <Content Include="wwwroot\app\system\account\user\service.ts" />
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
+    <Content Include="wwwroot\assets\en.json" />
+    <Content Include="wwwroot\assets\hu.json" />
+    <Content Include="wwwroot\assets\locales.json" />
+    <Content Include="wwwroot\assets\locales\en.json" />
+    <Content Include="wwwroot\assets\locales\hu.json" />
+    <Content Include="wwwroot\locales.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
@@ -54,6 +61,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebLogBase\WebLogBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views\Home\Index.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

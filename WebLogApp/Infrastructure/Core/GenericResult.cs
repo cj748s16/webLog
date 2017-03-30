@@ -9,5 +9,6 @@ namespace WebLogApp.Infrastructure.Core
     {
         public bool Succeeded { get; set; }
         public string Message { get; set; }
+        public object CustomData { get; set; }
     }
 }
