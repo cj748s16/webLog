@@ -29,6 +29,14 @@
     <Content Include="wwwroot\app\core\domain\language.ts" />
     <Content Include="wwwroot\app\core\services\language.service.ts" />
     <Content Include="wwwroot\app\home.component.ts" />
+    <Content Include="wwwroot\app\system\account\group\domain.ts" />
+    <Content Include="wwwroot\app\system\account\group\group-edit.component.html" />
+    <Content Include="wwwroot\app\system\account\group\group-edit.component.ts" />
+    <Content Include="wwwroot\app\system\account\group\group-list.component.html" />
+    <Content Include="wwwroot\app\system\account\group\group-list.component.ts" />
+    <Content Include="wwwroot\app\system\account\group\group.component.html" />
+    <Content Include="wwwroot\app\system\account\group\group.component.ts" />
+    <Content Include="wwwroot\app\system\account\group\group.service.ts" />
     <Content Include="wwwroot\app\system\account\user\domain.ts" />
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
     <Content Include="wwwroot\assets\locales.json" />

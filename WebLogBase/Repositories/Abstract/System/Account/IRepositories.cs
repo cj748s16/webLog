@@ -8,7 +8,7 @@ namespace WebLogBase.Repositories.System.Account
 {
     public interface IUserRepository : IEntityBaseWithIdRepository<User> { }
 
-    //public interface IGroupRepository : IEntityBaseRepository<Group> { }
+    public interface IGroupRepository : IEntityBaseWithIdRepository<Group> { }
 
     //public interface IUserGroupRepository : IEntityBaseRepository<UserGroup> { }
 }

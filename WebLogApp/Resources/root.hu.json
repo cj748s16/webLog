@@ -2,7 +2,8 @@
   "Menu": {
     "Language": "Nyelv",
     "Account": "Fiók kezelés",
-    "Users": "Felhasználók"
+    "Users": "Felhasználók",
+    "Groups": "Csoporotok"
   },
 
   "New": "Új...",
@@ -10,9 +11,13 @@
   "Save": "Mentés",
   "Cancel": "Mégsem",
 
+  "Creator": "Létrehozó",
+  "CreatedAt": "Létrehozva",
+
   "validators": {
     "required": "{{value}} megadása kötelező"
   },
 
-  "ROUTES.users": "users"
+  "ROUTES.users": "users",
+  "ROUTES.groups": "groups"
 }

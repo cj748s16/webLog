@@ -16,6 +16,11 @@ import { UserComponent } from "./user/user.component";
 import { UserListComponent } from "./user/user-list.component";
 import { UserEditComponent } from "./user/user-edit.component";
 
+import { GroupService } from "./group/group.service";
+import { GroupComponent } from "./group/group.component";
+import { GroupListComponent } from "./group/group-list.component";
+import { GroupEditComponent } from "./group/group-edit.component";
+
 @NgModule({
     imports: [
         CommonModule,
@@ -31,10 +36,15 @@ import { UserEditComponent } from "./user/user-edit.component";
 
         UserComponent,
         UserListComponent,
-        UserEditComponent
+        UserEditComponent,
+
+        GroupComponent,
+        GroupListComponent,
+        GroupEditComponent
     ],
     providers: [
-        UserService
+        UserService,
+        GroupService
     ]
 })
 export class AccountModule { }

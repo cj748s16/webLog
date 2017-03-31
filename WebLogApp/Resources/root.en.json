@@ -2,7 +2,8 @@
   "Menu": {
     "Language": "Language",
     "Account": "Account",
-    "Users": "Users"
+    "Users": "Users",
+    "Groups": "Groups"
   },
 
   "New": "New...",
@@ -10,9 +11,13 @@
   "Save": "Save",
   "Cancel": "Cancel",
 
+  "Creator": "Creator",
+  "CreatedAt": "Created at",
+
   "validators": {
     "required": "{{value}} is required"
   },
 
-  "ROUTES.users": "users"
+  "ROUTES.users": "users",
+  "ROUTES.groups":  "groups"
 }

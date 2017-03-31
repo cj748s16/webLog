@@ -1,0 +1,9 @@
+﻿{
+  "Groups":  "Csoportok",
+  "Groupname": "Név",
+
+  "Invalid fields": "Adatok hibásan lettek megadva",
+  "Group created": "Csoport sikeresen létrehozva",
+  "Group modified": "Csoport sikeresen módosítva",
+  "Group not found (Id: {0})": "A csoport nem találhaót (Id: {0})"
+}

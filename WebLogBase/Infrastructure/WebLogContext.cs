@@ -11,6 +11,7 @@ namespace WebLogBase.Infrastructure
     public class WebLogContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
         public WebLogContext(DbContextOptions options) : base(options)
         {

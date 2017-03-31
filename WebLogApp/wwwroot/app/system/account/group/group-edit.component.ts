@@ -4,22 +4,22 @@ import { Observable } from "rxjs/Observable";
 import { ModalComponent } from "ng2-bs3-modal/ng2-bs3-modal";
 import { Key } from "@framework";
 
-import { UserEdit, OperationResult } from "./domain";
-import { NotificationService } from "../../../core/services";
+import { GroupEdit, OperationResult } from "./domain";
+import { NotificationService, UtilityService } from "../../../core/services";
 
-import { UserService } from "./user.service";
+import { GroupService } from "./group.service";
 
 import "rxjs/add/operator/toPromise";
 
 @Component({
     moduleId: module.id,
-    selector: "userEditModal",
-    templateUrl: "user-edit.component.html"
+    selector: "groupEditModal",
+    templateUrl: "group-edit.component.html"
 })
-export class UserEditComponent implements OnInit {
+export class GroupEditComponent implements OnInit {
 
     private _id: number;
-    private _user: UserEdit;
+    private _group: GroupEdit;
 
     private _donePromise: Promise<any>;
     private _doneResolve: () => void;
@@ -29,11 +29,12 @@ export class UserEditComponent implements OnInit {
     private _modal: ModalComponent;
 
     constructor(
-        private _userService: UserService,
-        private _notificationService: NotificationService) { }
+        private _groupService: GroupService,
+        private _notificationService: NotificationService,
+        private _utilityService: UtilityService) { }
 
     ngOnInit() {
-        this._user = new UserEdit("", "");
+        this._group = new GroupEdit("");
     }
 
     open(key: Key = null): Promise<any> {
@@ -44,7 +45,7 @@ export class UserEditComponent implements OnInit {
 
         this._id = key && "Id" in key ? (<any>key).Id : null;
         if (this._id != null) {
-            this.loadUser(this._id).then(this._showModal.bind(this));
+            this.loadGroup(this._id).then(this._showModal.bind(this));
         } else {
             this._showModal();
         }
@@ -60,38 +61,31 @@ export class UserEditComponent implements OnInit {
             this._doneResolve();
         }
         this._modal.close();
-        this._user = new UserEdit("", "");
+        this._group = new GroupEdit("");
     }
 
-    loadUser(id: number): Promise<any> {
+    loadGroup(id: number): Promise<any> {
         const loadResult: OperationResult = new OperationResult(false, "");
         const promise = new Promise<any>((resolve, reject) => {
-            this._userService.get(id)
+            this._groupService.get(id)
                 .subscribe((res: any) => {
                     loadResult.Succeeded = res.Succeeded;
                     loadResult.Message = res.Message;
                     loadResult.CustomData = res.CustomData;
                 },
-                error => console.error(`Error: ${error}`),
+                error => this._utilityService.handleError.bind(this._utilityService),
                 () => {
                     if (loadResult.Succeeded) {
-                        this._user = <UserEdit>loadResult.CustomData;
+                        this._group = <GroupEdit>loadResult.CustomData;
                         resolve();
                     } else {
                         this._notificationService.printErrorMessage(loadResult.Message);
                         this._close(false);
                         reject();
                     }
-                })
+                });
         });
         return promise;
-    }
-
-    isConfirmMatches(c: AbstractControl): { [key: string]: boolean } {
-        if (this._user.Password != this._user.ConfirmPassword) {
-            return { match: true }
-        }
-        return null;
     }
 
     save() {
@@ -99,9 +93,9 @@ export class UserEditComponent implements OnInit {
         let obs: Observable<any>;
 
         if (this._id) {
-            obs = this._userService.modify(this._user);
+            obs = this._groupService.modify(this._group);
         } else {
-            obs = this._userService.new(this._user);
+            obs = this._groupService.new(this._group);
         }
 
         obs
@@ -110,10 +104,9 @@ export class UserEditComponent implements OnInit {
                 editResult.Message = res.Message;
                 editResult.CustomData = res.CustomData;
             },
-            error => console.error(`Error: ${error}`),
+            error => this._utilityService.handleError.bind(this._utilityService),
             () => {
                 if (editResult.Succeeded) {
-                    //this._modifySavedUser();
                     this._notificationService.printSuccessMessage(editResult.Message);
                     this._close(true);
                 } else {
@@ -121,13 +114,4 @@ export class UserEditComponent implements OnInit {
                 }
             });
     }
-
-    //private _modifySavedUser() {
-    //    var user = <User>JSON.parse(localStorage.getItem("user"));
-    //    if (user.Userid == this._user.Userid) {
-    //        user.Username = this._user.Username;
-    //        user.Password = this._user.Password;
-    //        localStorage.setItem("user", JSON.stringify(user));
-    //    }
-    //}
 }

@@ -5,30 +5,26 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace WebLogBase.Migrations
 {
-    public partial class AddUser : Migration
+    public partial class AddGroup : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Group",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Userid = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Password = table.Column<byte[]>(nullable: false),
-                    Salt = table.Column<byte[]>(nullable: false),
-                    Passwdexpr = table.Column<DateTime>(nullable: false),
                     Adduserid = table.Column<int>(nullable: true),
                     Adddate = table.Column<DateTime>(nullable: false),
                     Delstat = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Group", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_User_Adduserid",
+                        name: "FK_Group_User_Adduserid",
                         column: x => x.Adduserid,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -36,15 +32,15 @@ namespace WebLogBase.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Adduserid",
-                table: "User",
+                name: "IX_Group_Adduserid",
+                table: "Group",
                 column: "Adduserid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Group");
         }
     }
 }

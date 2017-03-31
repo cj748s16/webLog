@@ -68,6 +68,7 @@ namespace WebLogApp
 
             // Add repositories
             services.AddScoped<WebLogBase.Repositories.System.Account.IUserRepository, WebLogBase.Repositories.System.Account.UserRepository>();
+            services.AddScoped<WebLogBase.Repositories.System.Account.IGroupRepository, WebLogBase.Repositories.System.Account.GroupRepository>();
 
             // Add mapper
             var mapperInstance = AutoMapperConfiguration.Configure();

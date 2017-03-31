@@ -3,8 +3,6 @@
   "UserID": "User ID",
   "Username": "Name",
   "PasswordExpires": "Password expires",
-  "Creator": "Creator",
-  "CreatedAt": "Created at",
   "Password": "Password",
   "ConfirmPassword": "Confirm",
 
