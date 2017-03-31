@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { TranslateModule } from "@ngx-translate/core";
 
 import { JitModule } from "./jit/jit";
 import * as c from "./controls";
@@ -20,6 +21,7 @@ import { PagePartsModule } from "./page-parts/page-parts.module";
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        TranslateModule,
         TabsModule,
         ActionBarModule,
         PagePartsModule,
@@ -32,6 +34,7 @@ import { PagePartsModule } from "./page-parts/page-parts.module";
         c.GridColumn
     ],
     exports: [
+        TranslateModule,
         //c.Control,
         c.TextboxControl,
         c.GridControl,

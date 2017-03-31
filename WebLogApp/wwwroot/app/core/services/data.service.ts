@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import { TranslateService } from "@ngx-translate/core";
 
 import "rxjs/add/operator/map";
 
@@ -9,10 +10,24 @@ export class DataService {
 
     private _baseUri: string;
 
-    constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        private translateService: TranslateService) { }
+
+    get currentLangId(): string {
+        return this.translateService.currentLang;
+    }
+
+    prepareUrl(langUrl: string): string {
+        const langId = this.currentLangId;
+        if (langId) {
+            langUrl = langUrl.replace(/:lang/, langId);
+        }
+        return langUrl;
+    }
 
     set(baseUri: string) {
-        this._baseUri = baseUri;
+        this._baseUri = this.prepareUrl(baseUri);
     }
 
     get(mapJson: boolean = true) {

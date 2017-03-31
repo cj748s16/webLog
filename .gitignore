@@ -11,3 +11,6 @@ WebLogApp/wwwroot/framework/**/*.map
 WebLogApp/wwwroot/temp/
 WebLogBase/obj/
 WebLogBase/bin/
+WebLogApp/appsettings.development.json
+WebLogApp/appsettings.production.json
+WebLogApp/Properties/PublishProfiles/

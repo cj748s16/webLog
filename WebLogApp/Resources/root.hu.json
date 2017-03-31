@@ -1,0 +1,18 @@
+﻿{
+  "Menu": {
+    "Language": "Nyelv",
+    "Account": "Fiók kezelés",
+    "Users": "Felhasználók"
+  },
+
+  "New": "Új...",
+  "Modify": "Módosítás",
+  "Save": "Mentés",
+  "Cancel": "Mégsem",
+
+  "validators": {
+    "required": "{{value}} megadása kötelező"
+  },
+
+  "ROUTES.users": "users"
+}

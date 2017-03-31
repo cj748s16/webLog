@@ -1,6 +1,7 @@
 ﻿import { Injectable, Component, Input, ReflectiveKey, ComponentFactory, Type, NgModule, Compiler, ElementRef, HostListener } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { TranslateModule } from "@ngx-translate/core";
 
 import { JitModule } from "./jit_module";
 
@@ -37,7 +38,7 @@ export class DynamicTypeBuilder<TComp> {
 
     private _createComponentModule(componentType: Type<any>): Type<any> {
         @NgModule({
-            imports: [CommonModule, FormsModule, JitModule],
+            imports: [CommonModule, FormsModule, TranslateModule, JitModule],
             declarations: [componentType],
             //exports: [componentType]
         })

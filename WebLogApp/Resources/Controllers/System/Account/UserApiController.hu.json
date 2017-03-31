@@ -1,0 +1,19 @@
+﻿{
+  "Users":  "Felhasználók",
+  "UserID": "Felhasználó azon.",
+  "Username": "Név",
+  "PasswordExpires": "Jelszó lejárat",
+  "Creator": "Létrehozó",
+  "CreatedAt": "Létrehozva",
+  "Password": "Jelszó",
+  "ConfirmPassword": "Megerősítés",
+
+  "validators": {
+    "confirmMismatch": "A Jelszó és a Megerősítés eltér"
+  },
+
+  "Invalid fields": "Adatok hibásan lettek megadva",
+  "User created": "Felhasználó sikeresen létrehozva",
+  "User modified": "Felhasználó sikeresen módosítva",
+  "User not found (Id: {0})": "A felhasználó nem találhaót (Id: {0})"
+}

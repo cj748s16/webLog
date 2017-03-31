@@ -7,14 +7,22 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" [routerLink]="['/home']"><i class="fa fa-home fa-fw"></i>&nbsp;WebLog</a>
+            <a class="navbar-brand" [routerLink]="['/' | localize]"><i class="fa fa-home fa-fw"></i>&nbsp;WebLog</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-fw"></i>&nbsp;Account</a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-fw"></i>&nbsp;{{'Menu.Account' | translate}}</a>
                     <ul class="dropdown-menu">
-                        <li><a [routerLink]="['/account/user']"><i class="fa fa-user fa-fw"></i>&nbsp;Users</a></li>
+                        <li><a [routerLink]="['/account/user' | localize]"><i class="fa fa-user fa-fw"></i>&nbsp;{{'Menu.Users' | translate}}</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-hidden="true" aria-expanded="false"><i class="fa fa-language fa-fw"></i>&nbsp;{{'Menu.Language' | translate}}</a>
+                    <ul class="dropdown-menu">
+                        <li *ngFor="let lang of _languages"><a (click)="setLanguage(lang.Id)">&nbsp;{{lang.DisplayName}}</a></li>
                     </ul>
                 </li>
             </ul>

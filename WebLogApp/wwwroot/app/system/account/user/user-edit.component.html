@@ -11,21 +11,21 @@
     </div>
     <div class="modal-body" style="overflow: auto;">
         <form class="form col-md-12 center-block" #editForm="ngForm">
-            <textbox id="userid" name="userid" placeholder="User ID" [(ngModel)]="_user.Userid" [errorDefs]="{required: 'User ID is required'}"></textbox>
-            <textbox id="username" name="username" placeholder="Username" [(ngModel)]="_user.Username" [errorDefs]="{required: 'Username is required'}"></textbox>
-            <textbox id="password" name="password" placeholder="Password" password [(ngModel)]="_user.Password" [errorDefs]="{required: 'Password is required'}"></textbox>
-            <textbox id="_confirmPassword" name="_confirmPassword" placeholder="Confirm" password [(ngModel)]="_user.ConfirmPassword" #_confirmPassword="ngModel" 
-                     [errorDefs]="{required: 'Confirm is required',
-                                   match: { message: 'Confirm doesn\'t match with the Password', fn: isConfirmMatches.bind(this) }
+            <textbox id="userid" name="userid" placeholder="system.account.user.UserID" [(ngModel)]="_user.Userid" [errorDefs]="{required: true}" [disabled]="_id"></textbox>
+            <textbox id="username" name="username" placeholder="system.account.user.Username" [(ngModel)]="_user.Username" [errorDefs]="{required: true}"></textbox>
+            <textbox id="password" name="password" placeholder="system.account.user.Password" password [(ngModel)]="_user.Password" [errorDefs]="{required: true}"></textbox>
+            <textbox id="_confirmPassword" name="_confirmPassword" placeholder="system.account.user.ConfirmPassword" password [(ngModel)]="_user.ConfirmPassword" #_confirmPassword="ngModel" 
+                     [errorDefs]="{required: true,
+                                   match: { message: 'system.account.user.validators.confirmMismatch', fn: isConfirmMatches.bind(this) }
                      }"></textbox>
             <div class="form-group">
-                <button class="btn btn-primary btn-lg btn-block" (click)="save()" [disabled]="!editForm.form.valid">Save</button>
+                <button class="btn btn-primary btn-lg btn-block" (click)="save()" [disabled]="!editForm.form.valid">{{'Save' | translate}}</button>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <div class="col-md-12">
-            <a class="btn btn-danger pull-left" (click)="_close()" data-dismiss="modal" aria-hidden="true">Cancel</a>
+            <a class="btn btn-danger pull-left" (click)="_close()" data-dismiss="modal" aria-hidden="true">{{'Cancel' | translate}}</a>
         </div>
     </div>
 </modal>

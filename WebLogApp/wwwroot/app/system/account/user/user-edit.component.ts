@@ -67,23 +67,23 @@ export class UserEditComponent implements OnInit {
     }
 
     loadUser(id: number): Promise<any> {
+        const loadResult: OperationResult = new OperationResult(false, "");
         const promise = new Promise<any>((resolve, reject) => {
             this._userService.get(id)
-                .subscribe((data: any) => {
-                    if (data) {
-                        this._user.Id = data.Id;
-                        this._user.Userid = data.Userid;
-                        this._user.Username = data.Username;
-                    }
+                .subscribe((res: any) => {
+                    loadResult.Succeeded = res.Succeeded;
+                    loadResult.Message = res.Message;
+                    loadResult.CustomData = res.CustomData;
                 },
                 error => console.error(`Error: ${error}`),
                 () => {
-                    if (!this._user.Userid) {
-                        this._notificationService.printErrorMessage(`User not found (User ID: ${id})`);
+                    if (loadResult.Succeeded) {
+                        this._user = <UserEdit>loadResult.CustomData;
+                        resolve();
+                    } else {
+                        this._notificationService.printErrorMessage(loadResult.Message);
                         this._close(false);
                         reject();
-                    } else {
-                        resolve();
                     }
                 })
         });
@@ -98,7 +98,7 @@ export class UserEditComponent implements OnInit {
     }
 
     save() {
-        var editResult: OperationResult = new OperationResult(false, "");
+        const editResult: OperationResult = new OperationResult(false, "");
         let obs: Observable<any>;
 
         if (this._id) {
@@ -117,7 +117,7 @@ export class UserEditComponent implements OnInit {
             () => {
                 if (editResult.Succeeded) {
                     //this._modifySavedUser();
-                    this._notificationService.printSuccessMessage(`User ${this._user.Username} was ${this._id ? "modified" : "created"}`);
+                    this._notificationService.printSuccessMessage(editResult.Message);
                     this._close(true);
                 } else {
                     this._notificationService.printErrorMessage(editResult.Message);
