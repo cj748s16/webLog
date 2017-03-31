@@ -19,12 +19,23 @@ using NLog.Extensions.Logging;
 using WebLogApp.Infrastructure;
 using WebLogApp.Infrastructure.Localization;
 using WebLogApp.Infrastructure.Mappings;
+using SimpleInjector;
+using SimpleInjector.Integration.AspNetCore.Mvc;
+using System.Reflection;
+using WebLogBase.Infrastructure.Core;
 
 namespace WebLogApp
 {
     public class Startup
     {
+        // App Configuration (appsettings.json + appsettings.?.json)
         private IConfigurationRoot Configuration { get; }
+
+        // Hosting Environment for singleton DI
+        private IHostingEnvironment Environment { get; }
+
+        // DI container (SimpleInjector)
+        private Container Container { get; } = new Container();
 
         public Startup(IHostingEnvironment env)
         {
@@ -39,40 +50,42 @@ namespace WebLogApp
 
             // Add NLog config
             env.ConfigureNLog("NLog.config");
+
+            Environment = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add Logging
-            services.AddSingleton<ILoggerFactory, LoggerFactory>();
-            services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+            // SimpleInjector
+            var controllerActivator = new SimpleInjectorControllerActivator(Container);
+            services.AddSingleton<Microsoft.AspNetCore.Mvc.Controllers.IControllerActivator>(controllerActivator);
+            var viewComponentActivator = new SimpleInjectorViewComponentActivator(Container);
+            services.AddSingleton<Microsoft.AspNetCore.Mvc.ViewComponents.IViewComponentActivator>(viewComponentActivator);
+
+            Container.RegisterSingleton(Environment);
+            Container.RegisterSingleton(Container);
+
+            // Add ConfigurationRoot to SimpleInjector
+            Container.RegisterSingleton(Configuration);
+
+            // Add Logging 
+            Container.RegisterSingleton<ILoggerFactory, LoggerFactory>();
+            Container.RegisterSingleton(typeof(ILogger<>), typeof(Logger<>));
 
             // Add NLog to service processing
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            // Add WebLogContext
-            var sqlConnectionString = Configuration["ConnectionStrings:WebLogContext"];
-            if (string.IsNullOrWhiteSpace(sqlConnectionString))
-            {
-                throw new Exception("Database ConnectionString for WebLogContext was not found");
-            }
-            services.AddDbContext<WebLogBase.Infrastructure.WebLogContext>(options =>
-            {
-                options.UseSqlServer(sqlConnectionString);
-            });
-
-            // Add localization resources
-            ConfigureLocalization(services);
-
-            // Add repositories
-            services.AddScoped<WebLogBase.Repositories.System.Account.IUserRepository, WebLogBase.Repositories.System.Account.UserRepository>();
-            services.AddScoped<WebLogBase.Repositories.System.Account.IGroupRepository, WebLogBase.Repositories.System.Account.GroupRepository>();
+            Container.RegisterSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add mapper
             var mapperInstance = AutoMapperConfiguration.Configure();
-            services.AddSingleton(mapperInstance);
+            Container.RegisterSingleton(mapperInstance);
+
+            // Initialize external DLL's
+            services.AddExternalDLLs(Configuration, Container);
+
+            // Add localization resources
+            ConfigureLocalization(services);
 
             services.AddAuthentication();
 
@@ -97,12 +110,18 @@ namespace WebLogApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            // Add Localization options to the container
+            var jsonLocOptions = app.ApplicationServices.GetService<IOptions<JsonLocalizationOptions>>();
+            Container.RegisterSingleton(jsonLocOptions);
+            // Verifing the SimpleInjector container
+            Container.Verify();
+
             // Add NLog logging
             loggerFactory.AddNLog();
             app.AddNLogWeb();
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 loggerFactory.AddDebug();
             }
@@ -122,7 +141,7 @@ namespace WebLogApp
                 AutomaticChallenge = true
             });
 
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -150,7 +169,7 @@ namespace WebLogApp
         }
 
         // static files providers configuration
-        private static void ConfigureStaticFiles(IApplicationBuilder app)
+        private void ConfigureStaticFiles(IApplicationBuilder app)
         {
             app.UseStaticFiles();
 
@@ -167,10 +186,10 @@ namespace WebLogApp
         }
 
         // Localization configuration
-        private static void ConfigureLocalization(IServiceCollection services)
+        private void ConfigureLocalization(IServiceCollection services)
         {
             //services.AddLocalization(options => options.ResourcesPath = "Resources");
-            services.AddJsonLocalization(Options => Options.ResourcesPath = "Resources");
+            services.AddJsonLocalization(Container, Options => Options.ResourcesPath = "Resources");
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US", "en-US");

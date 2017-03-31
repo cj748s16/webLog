@@ -18,9 +18,9 @@ namespace WebLogApp.Infrastructure.Localization
     {
         private readonly ConcurrentDictionary<string, Lazy<JObject>> _resourceObjectCache = new ConcurrentDictionary<string, Lazy<JObject>>();
 
-        private readonly string _baseName;
-        private readonly string _applicationName;
-        private readonly ILogger _logger;
+        protected readonly string _baseName;
+        protected readonly string _applicationName;
+        protected readonly ILogger _logger;
         private readonly IEnumerable<string> _resourceFileLocations;
         private readonly List<string> _pathWatcher = new List<string>();
 
@@ -30,7 +30,7 @@ namespace WebLogApp.Infrastructure.Localization
             _applicationName = applicationName ?? throw new ArgumentNullException(nameof(applicationName));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            logger.LogTrace($"Created {nameof(JsonStringLocalizer)} with:{Environment.NewLine}" +
+            logger.LogTrace($"Created {GetType().Name} with:{Environment.NewLine}" +
                 $"  (base name: {baseName}){Environment.NewLine}" +
                 $"  (application name: {applicationName}){Environment.NewLine}");
 
@@ -247,11 +247,28 @@ namespace WebLogApp.Infrastructure.Localization
             throw new NotImplementedException();
         }
 
-        public IStringLocalizer WithCulture(CultureInfo culture)
+        public virtual IStringLocalizer WithCulture(CultureInfo culture)
         {
             if (culture == null)
             {
                 return new JsonStringLocalizer(_baseName, _applicationName, _logger);
+            }
+
+            throw new NotImplementedException();
+        }
+    }
+
+    public class JsonStringLocalizer<T> : JsonStringLocalizer, IStringLocalizer<T>
+    {
+        public JsonStringLocalizer(string baseName, string applicationName, ILogger logger) : base(baseName, applicationName, logger)
+        {
+        }
+
+        public override IStringLocalizer WithCulture(CultureInfo culture)
+        {
+            if (culture == null)
+            {
+                return new JsonStringLocalizer<T>(_baseName, _applicationName, _logger);
             }
 
             throw new NotImplementedException();

@@ -65,7 +65,13 @@ namespace WebLogApp.Infrastructure.Localization
                 + LocalizerUtil.TrimPrefix(typeInfo.FullName, _applicationEnvironment.ApplicationName + ".");
             _logger.LogTrace($"Localizer basename: {resourceBaseName}");
 
-            return _localizerCache.GetOrAdd(resourceBaseName, new JsonStringLocalizer(resourceBaseName, _applicationEnvironment.ApplicationName, _logger));
+            // making generic type to creating instance using resourceSource as generic argument (IStringLocalizer<...>: JsonStringLocalizer<...>)
+            var type = typeof(JsonStringLocalizer<>).MakeGenericType(resourceSource);
+            var ctor = type.GetConstructor(new[] { typeof(string), typeof(string), typeof(ILogger) });
+            var invokeArgs = new object[] { resourceBaseName, _applicationEnvironment.ApplicationName, _logger };
+
+            // if cached instance not found, calling the ctor and passing the calculated arguments
+            return _localizerCache.GetOrAdd(resourceBaseName, (JsonStringLocalizer)ctor.Invoke(invokeArgs));
         }
 
         public IStringLocalizer Create(string baseName, string location)

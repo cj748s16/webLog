@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="1.1.0" />
+    <PackageReference Include="SimpleInjector" Version="3.3.2" />
   </ItemGroup>
 
   <ItemGroup>
