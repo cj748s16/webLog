@@ -1,4 +1,4 @@
-﻿import { NgModule, enableProdMode } from "@angular/core";
+﻿import { NgModule, LOCALE_ID, enableProdMode } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpModule, Headers, RequestOptions, BaseRequestOptions, Http } from "@angular/http";
@@ -13,6 +13,7 @@ import { FrameworkModule } from "@framework";
 import { DataService, NotificationService, UtilityService, LanguageService } from "./core/services";
 import { appRoutes } from "./app.routes";
 import { AppComponent } from "./app.component";
+import { HomeComponent } from "./home.component";
 
 import { AccountModule } from "./system/account/account.module";
 
@@ -51,14 +52,15 @@ function createTranslateLoader(http: Http) {
         LocalizeRouterModule.forRoot(appRoutes),
         RouterModule.forRoot(appRoutes)
     ],
-    declarations: [AppComponent],
+    declarations: [AppComponent, HomeComponent],
     providers: [
         DataService,
         NotificationService,
         UtilityService,
         LanguageService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        { provide: RequestOptions, useClass: AppBaseRequestOptions }
+        { provide: RequestOptions, useClass: AppBaseRequestOptions },
+        { provide: LOCALE_ID, deps: [TranslateService], useFactory: (translateService) => translateService.currentLang }
     ],
     bootstrap: [AppComponent]
 })

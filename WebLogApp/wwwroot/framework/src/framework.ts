@@ -34,6 +34,7 @@ import { PagePartsModule } from "./page-parts/page-parts.module";
         c.GridColumn
     ],
     exports: [
+        TranslateModule,
         //c.Control,
         c.TextboxControl,
         c.GridControl,

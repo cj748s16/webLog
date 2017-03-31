@@ -15,20 +15,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\assets\locales\**" />
+    <Content Remove="wwwroot\assets\locales\**" />
+    <EmbeddedResource Remove="wwwroot\assets\locales\**" />
+    <None Remove="wwwroot\assets\locales\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot/app\system\account\login.component.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="wwwroot\app\core\domain\language.ts" />
     <Content Include="wwwroot\app\core\services\language.service.ts" />
+    <Content Include="wwwroot\app\home.component.ts" />
     <Content Include="wwwroot\app\system\account\user\domain.ts" />
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
-    <Content Include="wwwroot\assets\en.json" />
-    <Content Include="wwwroot\assets\hu.json" />
     <Content Include="wwwroot\assets\locales.json" />
-    <Content Include="wwwroot\assets\locales\en.json" />
-    <Content Include="wwwroot\assets\locales\hu.json" />
-    <Content Include="wwwroot\locales.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />

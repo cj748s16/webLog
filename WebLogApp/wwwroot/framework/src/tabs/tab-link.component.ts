@@ -6,7 +6,7 @@ import { TabComponent } from "./tab.component";
     selector: "[tabLink]",
     template: `
 <a [routerLink]="tab.routerLink" [attr.aria-controls]="tab.title" role="tab" [class]="tab.active ? 'active' : ''" (click)="click()">
-    {{tab.title}}
+    {{tab.title | translate}}
 </a>
 `
 })

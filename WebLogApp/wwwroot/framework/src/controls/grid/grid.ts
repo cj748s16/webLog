@@ -15,7 +15,7 @@ import { IGridRow } from "./grid-row";
 import { Key } from "../../utility";
 import * as Utility from "../../utility";
 
-import { IDynamicTemplateBuilder, /*DynamicViewBase,*/ DynamicTypeBuilder, JitModule } from "../../jit/jit";
+import { IDynamicTemplateBuilder, DynamicTypeBuilder, JitModule } from "../../jit/jit";
 
 declare var jQuery: any;
 const $ = jQuery;
@@ -283,12 +283,12 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
                 return this._key;
             }
 
-            convertDateTime(value: any, showTime: boolean = false) {
-                if (typeof value === "string") {
-                    value = Date.parse(value);
-                }
-                return Utility.convertDateTime(value, showTime);
-            }
+            //convertDateTime(value: any, showTime: boolean = false) {
+            //    if (typeof value === "string") {
+            //        value = Date.parse(value);
+            //    }
+            //    return Utility.convertDateTime(value, showTime);
+            //}
         }
         return DynamicGridRowComponent;
     }
@@ -337,10 +337,12 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
                 if (col.format) {
                     switch (col.format) {
                         case "D":
-                            field = `convertDateTime(${field})`;
+                            //field = `convertDateTime(${field})`;
+                            field += " | date:'shortDate'";
                             break;
                         case "DT":
-                            field = `convertDateTime(${field}, true)`;
+                            //field = `convertDateTime(${field}, true)`;
+                            field += " | date:'short'";
                             break;
                         default:
                             throw new Error(`Unknown column format: ${col.format}`);
