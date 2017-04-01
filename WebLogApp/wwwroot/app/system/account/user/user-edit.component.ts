@@ -64,14 +64,10 @@ export class UserEditComponent implements OnInit {
     }
 
     loadUser(id: number): Promise<any> {
-        const loadResult: OperationResult = new OperationResult(false, "");
+        let loadResult: OperationResult = new OperationResult(false, "");
         const promise = new Promise<any>((resolve, reject) => {
             this._userService.get(id)
-                .subscribe((res: any) => {
-                    loadResult.Succeeded = res.Succeeded;
-                    loadResult.Message = res.Message;
-                    loadResult.CustomData = res.CustomData;
-                },
+                .subscribe(res => loadResult = OperationResult.fromResponse(res),
                 error => console.error(`Error: ${error}`),
                 () => {
                     if (loadResult.Succeeded) {
@@ -95,7 +91,7 @@ export class UserEditComponent implements OnInit {
     }
 
     save() {
-        const editResult: OperationResult = new OperationResult(false, "");
+        let editResult: OperationResult = new OperationResult(false, "");
         let obs: Observable<any>;
 
         if (this._id) {
@@ -105,11 +101,7 @@ export class UserEditComponent implements OnInit {
         }
 
         obs
-            .subscribe(res => {
-                editResult.Succeeded = res.Succeeded;
-                editResult.Message = res.Message;
-                editResult.CustomData = res.CustomData;
-            },
+            .subscribe(res => editResult = OperationResult.fromResponse(res),
             error => console.error(`Error: ${error}`),
             () => {
                 if (editResult.Succeeded) {

@@ -1,0 +1,14 @@
+﻿<div id="user-group-assign" name="user-group-assign" tabContent>
+    <button [disabled]="!_availableSelectedKey" type="button" class="btn btn-default" (click)="assign()" actionButton>{{'Assign' | translate}}</button>
+    <button [disabled]="!_assignedSelectedKey" type="button" class="btn btn-default" (click)="unassign()" actionButton>{{'Unassign' | translate}}</button>
+
+    <hr />
+    <grid [list]="_availableGroups" id="availableList" height="40">
+        <grid-column field="Id" hidden="true" key="true"></grid-column>
+        <grid-column field="Groupname" width="180" caption="system.account.group.Groupname"></grid-column>
+    </grid>
+    <grid [list]="_assignedGroups" id="assignedList" height="60">
+        <grid-column field="Id" hidden="true" key="true"></grid-column>
+        <grid-column field="Groupname" width="180" caption="system.account.group.Groupname"></grid-column>
+    </grid>
+</div>

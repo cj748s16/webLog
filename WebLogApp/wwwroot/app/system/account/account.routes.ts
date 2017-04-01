@@ -5,14 +5,14 @@ import { AccountComponent } from "./account.component";
 
 import { UserComponent } from "./user/user.component";
 import { UserListComponent } from "./user/user-list.component";
+import { UserGroupAssignComponent } from "./user/user-group-assign.component";
 
 import { GroupComponent } from "./group/group.component";
 import { GroupListComponent } from "./group/group-list.component";
 
 export const accountRoutes: Routes = [
     {
-        path: "account",
-        //path: "",
+        path: "",
         component: AccountComponent,
         children: [
             {
@@ -20,7 +20,8 @@ export const accountRoutes: Routes = [
                 component: UserComponent,
                 children: [
                     { path: "", redirectTo: "list", pathMatch: "full" },
-                    { path: "list", component: UserListComponent }
+                    { path: "list", component: UserListComponent },
+                    { path: "groups", component: UserGroupAssignComponent }
                 ]
             },
             {

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
@@ -23,6 +22,8 @@ using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using System.Reflection;
 using WebLogBase.Infrastructure.Core;
+using NLog;
+using WebLogApp.Infrastructure.Logging;
 
 namespace WebLogApp
 {
@@ -70,9 +71,8 @@ namespace WebLogApp
             // Add ConfigurationRoot to SimpleInjector
             Container.RegisterSingleton(Configuration);
 
-            // Add Logging 
-            Container.RegisterSingleton<ILoggerFactory, LoggerFactory>();
-            Container.RegisterSingleton(typeof(ILogger<>), typeof(Logger<>));
+            // Add Logging
+            Container.RegisterConditional(typeof(ILogger), context => typeof(NLogProxy<>).MakeGenericType(context.Consumer.ImplementationType), Lifestyle.Singleton, context => true);
 
             // Add NLog to service processing
             Container.RegisterSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -110,7 +110,7 @@ namespace WebLogApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory)
         {
             // Add Localization options to the container
             var jsonLocOptions = app.ApplicationServices.GetService<IOptions<JsonLocalizationOptions>>();
@@ -121,10 +121,10 @@ namespace WebLogApp
             // Add NLog logging
             loggerFactory.AddNLog();
             app.AddNLogWeb();
-            if (Environment.IsDevelopment())
-            {
-                loggerFactory.AddDebug();
-            }
+            //if (Environment.IsDevelopment())
+            //{
+            //    loggerFactory.AddDebug();
+            //}
 
             // this will serve up wwwroot
             ConfigureStaticFiles(app);

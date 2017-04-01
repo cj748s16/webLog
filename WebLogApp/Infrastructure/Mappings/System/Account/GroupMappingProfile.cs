@@ -21,7 +21,8 @@ namespace WebLogApp.Infrastructure.Mappings.System.Account
                 .ForMember(d => d.Adddate, map => map.Ignore())
                 .ForMember(d => d.Adduser, map => map.Ignore())
                 .ForMember(d => d.Adduserid, map => map.Ignore())
-                .ForMember(d => d.Delstat, map => map.Ignore());
+                .ForMember(d => d.Delstat, map => map.Ignore())
+                .ForMember(d => d.Users, map => map.Ignore());
         }
     }
 }

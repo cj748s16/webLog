@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace WebLogApp.Controllers.System.Account
         public UserApiController(
             IUserRepository userRepository,
             IMapper mapper,
-            ILogger<UserApiController> logger,
+            ILogger logger,
             IStringLocalizer<UserApiController> localizer) : base(mapper, logger, localizer)
         {
             this.userRepository = userRepository;
@@ -111,7 +111,7 @@ namespace WebLogApp.Controllers.System.Account
                     Message = ex.Message
                 };
 
-                Logger.LogError(1000, ex, ex.Message);
+                Logger.Error(ex, ex.Message);
             }
 
             return new ObjectResult(result);
@@ -168,7 +168,7 @@ namespace WebLogApp.Controllers.System.Account
                     Message = ex.Message
                 };
 
-                Logger.LogError(1001, ex, ex.Message);
+                Logger.Error(ex, ex.Message);
             }
 
             return new ObjectResult(result);

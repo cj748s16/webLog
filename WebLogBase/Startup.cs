@@ -32,6 +32,7 @@ namespace WebLogBase
             // Add repositories
             Container.Register<Repositories.System.Account.IUserRepository, Repositories.System.Account.UserRepository>();
             Container.Register<Repositories.System.Account.IGroupRepository, Repositories.System.Account.GroupRepository>();
+            Container.Register<Repositories.System.Account.IUserGroupRepository, Repositories.System.Account.UserGroupRepository>();
         }
 
         private void RegisterWebLogContext()

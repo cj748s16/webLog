@@ -25,7 +25,7 @@ export class UserViewModel {
     Userid: string;
     Username: string;
     Passwdexpr: Date;
-    Addusrid: string;
+    Addusrid: number;
     Addusername: string;
     Adddate: Date;
     Delstat: number;

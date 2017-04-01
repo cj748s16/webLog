@@ -11,7 +11,7 @@ export class GroupEdit {
 export class GroupViewModel {
     Id: number;
     Groupname: string;
-    Adduserid: string;
+    Adduserid: number;
     Addusername: string;
     Adddate: Date;
     Delstat: number;

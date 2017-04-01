@@ -9,7 +9,7 @@ namespace WebLogApp.ViewModels.System.Account
     {
         public int? Id { get; set; }
         public string Groupname { get; set; }
-        public string Adduserid { get; set; }
+        public int? Adduserid { get; set; }
         public string Addusername { get; set; }
         public DateTime? Adddate { get; set; }
         public int? Delstat { get; set; }

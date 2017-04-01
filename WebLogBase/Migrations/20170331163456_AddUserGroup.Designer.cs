@@ -8,9 +8,10 @@ using WebLogBase.Infrastructure;
 namespace WebLogBase.Migrations
 {
     [DbContext(typeof(WebLogContext))]
-    partial class WebLogContextModelSnapshot : ModelSnapshot
+    [Migration("20170331163456_AddUserGroup")]
+    partial class AddUserGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

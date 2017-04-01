@@ -122,10 +122,12 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
         this._renderer.setElementStyle(this._innerContent.nativeElement, "margin-right", `${Utility.scrollSize()}px`);
         this._renderer.setElementStyle(this._vScroller.nativeElement, "width", `${Utility.scrollSize()}px`);
         this._renderer.listen(this._vScroller.nativeElement, "scroll", this._vScrollHandler.bind(this));
+
+        this._refreshContent();
     }
 
     private _refreshContent() {
-        if (!this.list || !this.columns) {
+        if (!this.columns) {
             return;
         }
 
@@ -219,21 +221,23 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
                 .then((factory: ComponentFactory<IGridRow>) => {
 
                     this._componentRef = new Array();
-                    for (let i = 0; i < this.list.length; i++) {
-                        const compRef = this._gridRowsTarget.createComponent(factory);
-                        this._componentRef.push(compRef);
-                        const comp = compRef.instance;
-                        comp.entity = this.list[i];
-                        comp.prepareKey(this.columns.toArray());
-                        comp.click = () => {
-                            this._setSelectedRow(comp);
-                        }
+                    if (this.list) {
+                        for (let i = 0; i < this.list.length; i++) {
+                            const compRef = this._gridRowsTarget.createComponent(factory);
+                            this._componentRef.push(compRef);
+                            const comp = compRef.instance;
+                            comp.entity = this.list[i];
+                            comp.prepareKey(this.columns.toArray());
+                            comp.click = () => {
+                                this._setSelectedRow(comp);
+                            }
 
-                        if (!rowHeight) {
-                            rowHeight = $(comp.el.nativeElement).height();
-                        }
-                        if (!selectedKey) {
-                            selectedKey = comp.key;
+                            if (!rowHeight) {
+                                rowHeight = $(comp.el.nativeElement).height();
+                            }
+                            if (!selectedKey) {
+                                selectedKey = comp.key;
+                            }
                         }
                     }
 
@@ -305,17 +309,19 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
     }
 
     private _getSelectedKey(): Key {
-        return this._selectedComp.key;
+        return this._selectedComp ? this._selectedComp.key : null;
     }
 
     private _findBySelectedKey(key: Key) {
-        if (this._componentRef) {
+        if (this._componentRef && this._componentRef.length) {
             for (let i = 0; i < this._componentRef.length; i++) {
                 if (Utility.compareKey(this._componentRef[i].instance.key, key)) {
                     this._setSelectedRow(this._componentRef[i].instance);
                     break;
                 }
             }
+        } else {
+            this._setSelectedRow(null);
         }
     }
 

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using WebLogBase.Repositories.System.Account;
 using Microsoft.AspNetCore.Mvc;
 using WebLogApp.ViewModels.System.Account;
 using Microsoft.EntityFrameworkCore;
 using WebLogBase.Entities.System.Account;
 using WebLogApp.Infrastructure.Core;
+using NLog;
 
 namespace WebLogApp.Controllers.System.Account
 {
@@ -21,7 +21,7 @@ namespace WebLogApp.Controllers.System.Account
         public GroupApiController(
             IGroupRepository groupRepository,
             IMapper mapper,
-            ILogger<GroupApiController> logger,
+            ILogger logger,
             IStringLocalizer<GroupApiController> localizer) : base(mapper, logger, localizer)
         {
             this.groupRepository = groupRepository;
@@ -106,7 +106,7 @@ namespace WebLogApp.Controllers.System.Account
                     Message = ex.Message
                 };
 
-                Logger.LogError(2000, ex, ex.Message);
+                Logger.Error(ex, ex.Message);
             }
 
             return new ObjectResult(result);
@@ -162,7 +162,7 @@ namespace WebLogApp.Controllers.System.Account
                     Message = ex.Message
                 };
 
-                Logger.LogError(2001, ex, ex.Message);
+                Logger.Error(ex, ex.Message);
             }
 
             return new ObjectResult(result);

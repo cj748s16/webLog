@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using WebLogApp.Infrastructure.Localization;
@@ -15,6 +14,7 @@ using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using NLog;
 
 namespace WebLogApp.Controllers.System
 {
@@ -34,7 +34,7 @@ namespace WebLogApp.Controllers.System
 
         public LanguageApiController(
             IMapper mapper,
-            ILogger<LanguageApiController> logger,
+            ILogger logger,
             IStringLocalizer<LanguageApiController> localizer,
             IStringLocalizerFactory locFactory) : base(mapper, logger, localizer)
         {
@@ -171,7 +171,7 @@ namespace WebLogApp.Controllers.System
                 }
                 else if (r.Value is JArray)
                 {
-                    Logger.LogError($"Unsupported JSON type: {r.Value.Type}");
+                    Logger.Error($"Unsupported JSON type: {r.Value.Type}");
                 }
                 else
                 {
@@ -196,17 +196,17 @@ namespace WebLogApp.Controllers.System
             watcher.Renamed += (sender, e) =>
             {
                 RemoveCachedResourceObject(e.OldName);
-                Logger.LogTrace($"{Path.GetFileName(e.OldName)} was renamed, removed from cache");
+                Logger.Trace($"{Path.GetFileName(e.OldName)} was renamed, removed from cache");
             };
             watcher.Deleted += (sender, e) =>
             {
                 RemoveCachedResourceObject(e.Name);
-                Logger.LogTrace($"{e.Name} file was deleted, removed from cache");
+                Logger.Trace($"{e.Name} file was deleted, removed from cache");
             };
             watcher.Changed += (sender, e) =>
             {
                 RemoveCachedResourceObject(e.Name);
-                Logger.LogTrace($"{e.Name} file was changed, removed from cache");
+                Logger.Trace($"{e.Name} file was changed, removed from cache");
             };
             watcher.EnableRaisingEvents = true;
         }
@@ -223,13 +223,13 @@ namespace WebLogApp.Controllers.System
                         IDictionary<string, object> dict;
                         if (!_resourceObjectCache.TryRemove(cultureSuffix, out dict))
                         {
-                            Logger.LogError($"Failed to remove cached object for culture {cultureSuffix.Substring(1)}");
+                            Logger.Error($"Failed to remove cached object for culture {cultureSuffix.Substring(1)}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError($"Error occurred attempting to delete cached object for culture {cultureSuffix.Substring(1)}: {ex}");
+                    Logger.Error($"Error occurred attempting to delete cached object for culture {cultureSuffix.Substring(1)}: {ex}");
                 }
             }
         }
@@ -245,7 +245,7 @@ namespace WebLogApp.Controllers.System
         [HttpGet("assets/{langId}")]
         public IActionResult GetCulture(string langId)
         {
-            Logger.LogTrace($"GetCulture invoked: ({nameof(langId)}: '{langId}')");
+            Logger.Trace($"GetCulture invoked: ({nameof(langId)}: '{langId}')");
 
             if (langId == null)
             {

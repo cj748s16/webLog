@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NLog;
+using SimpleInjector;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,8 +16,9 @@ namespace WebLogApp.Infrastructure.Localization
     public class JsonStringLocalizerFactory : IStringLocalizerFactory
     {
         private readonly IHostingEnvironment _applicationEnvironment;
-        private readonly ILogger<JsonStringLocalizerFactory> _logger;
+        private readonly ILogger _logger;
         public string ResourceRelativePath { get; private set; }
+        public Container Container { get; private set; }
 
         private readonly ConcurrentDictionary<string, JsonStringLocalizer> _localizerCache = new ConcurrentDictionary<string, JsonStringLocalizer>();
         private static readonly string[] knownViewExtensions = new[] { ".cshtml" };
@@ -24,7 +26,8 @@ namespace WebLogApp.Infrastructure.Localization
         public JsonStringLocalizerFactory(
             IHostingEnvironment applicationEnvironment,
             IOptions<JsonLocalizationOptions> localizationOptions,
-            ILogger<JsonStringLocalizerFactory> logger)
+            ILogger logger,
+            Container container)
         {
             if (localizationOptions == null)
             {
@@ -33,6 +36,7 @@ namespace WebLogApp.Infrastructure.Localization
 
             _applicationEnvironment = applicationEnvironment ?? throw new ArgumentNullException(nameof(applicationEnvironment));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Container = container ?? throw new ArgumentNullException(nameof(container));
 
             ResourceRelativePath = localizationOptions.Value.ResourcesPath ?? string.Empty;
             if (!string.IsNullOrWhiteSpace(ResourceRelativePath))
@@ -42,7 +46,7 @@ namespace WebLogApp.Infrastructure.Localization
                     .Replace(Path.DirectorySeparatorChar, '.');
             }
 
-            logger.LogTrace($"Created {nameof(JsonStringLocalizerFactory)} with:{Environment.NewLine}" +
+            logger.Trace($"Created {nameof(JsonStringLocalizerFactory)} with:{Environment.NewLine}" +
                 $"  (application name: {applicationEnvironment.ApplicationName}){Environment.NewLine}" +
                 $"  (resources relateive path: {ResourceRelativePath})");
         }
@@ -54,21 +58,28 @@ namespace WebLogApp.Infrastructure.Localization
                 throw new ArgumentNullException(nameof(resourceSource));
             }
 
-            _logger.LogTrace($"Getting localizer for type {resourceSource}");
+            _logger.Trace($"Getting localizer for type {resourceSource}");
 
             var typeInfo = resourceSource.GetTypeInfo();
             var assembly = typeInfo.Assembly;
 
+            var typeName = typeInfo.Name;
+            if (typeName.IndexOf('`')> 0)
+            {
+                typeName = typeName.Substring(0, typeName.IndexOf('`'));
+            }
+            typeName = $"{typeInfo.Namespace}.{typeName}";
+
             var resourceBaseName = string.IsNullOrWhiteSpace(ResourceRelativePath)
                 ? typeInfo.FullName
-                : _applicationEnvironment.ApplicationName + "." + ResourceRelativePath
-                + LocalizerUtil.TrimPrefix(typeInfo.FullName, _applicationEnvironment.ApplicationName + ".");
-            _logger.LogTrace($"Localizer basename: {resourceBaseName}");
+                : _applicationEnvironment.ApplicationName + "." + ResourceRelativePath + "."
+                + LocalizerUtil.TrimPrefix(typeName, _applicationEnvironment.ApplicationName + ".");
+            _logger.Trace($"Localizer basename: {resourceBaseName}");
 
             // making generic type to creating instance using resourceSource as generic argument (IStringLocalizer<...>: JsonStringLocalizer<...>)
             var type = typeof(JsonStringLocalizer<>).MakeGenericType(resourceSource);
-            var ctor = type.GetConstructor(new[] { typeof(string), typeof(string), typeof(ILogger) });
-            var invokeArgs = new object[] { resourceBaseName, _applicationEnvironment.ApplicationName, _logger };
+            var ctor = type.GetConstructor(new[] { typeof(string), typeof(string), typeof(ILogger), typeof(IStringLocalizerFactory) });
+            var invokeArgs = new object[] { resourceBaseName, _applicationEnvironment.ApplicationName, _logger, this };
 
             // if cached instance not found, calling the ctor and passing the calculated arguments
             return _localizerCache.GetOrAdd(resourceBaseName, (JsonStringLocalizer)ctor.Invoke(invokeArgs));
@@ -81,7 +92,7 @@ namespace WebLogApp.Infrastructure.Localization
                 throw new ArgumentNullException(nameof(baseName));
             }
 
-            _logger.LogTrace($"Getting localizer for baseName {baseName} and location {location}");
+            _logger.Trace($"Getting localizer for baseName {baseName} and location {location}");
 
             location = location ?? _applicationEnvironment.ApplicationName;
 
@@ -93,9 +104,9 @@ namespace WebLogApp.Infrastructure.Localization
                 resourceBaseName = resourceBaseName.Substring(0, resourceBaseName.Length - viewExtension.Length);
             }
 
-            _logger.LogTrace($"Localizer basename: {resourceBaseName}");
+            _logger.Trace($"Localizer basename: {resourceBaseName}");
 
-            return _localizerCache.GetOrAdd(resourceBaseName, new JsonStringLocalizer(resourceBaseName, _applicationEnvironment.ApplicationName, _logger));
+            return _localizerCache.GetOrAdd(resourceBaseName, new JsonStringLocalizer(resourceBaseName, _applicationEnvironment.ApplicationName, _logger, this));
         }
     }
 }

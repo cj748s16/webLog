@@ -1,5 +1,7 @@
 ﻿{
-  "Users":  "Users",
+  "Users": "Users",
+  "UserGroups": "Groups",
+
   "UserID": "User ID",
   "Username": "Name",
   "PasswordExpires": "Password expires",

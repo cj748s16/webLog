@@ -65,14 +65,10 @@ export class GroupEditComponent implements OnInit {
     }
 
     loadGroup(id: number): Promise<any> {
-        const loadResult: OperationResult = new OperationResult(false, "");
+        let loadResult: OperationResult = new OperationResult(false, "");
         const promise = new Promise<any>((resolve, reject) => {
             this._groupService.get(id)
-                .subscribe((res: any) => {
-                    loadResult.Succeeded = res.Succeeded;
-                    loadResult.Message = res.Message;
-                    loadResult.CustomData = res.CustomData;
-                },
+                .subscribe(res => loadResult = OperationResult.fromResponse(res),
                 error => this._utilityService.handleError.bind(this._utilityService),
                 () => {
                     if (loadResult.Succeeded) {
@@ -89,7 +85,7 @@ export class GroupEditComponent implements OnInit {
     }
 
     save() {
-        const editResult: OperationResult = new OperationResult(false, "");
+        let editResult: OperationResult = new OperationResult(false, "");
         let obs: Observable<any>;
 
         if (this._id) {
@@ -99,11 +95,7 @@ export class GroupEditComponent implements OnInit {
         }
 
         obs
-            .subscribe(res => {
-                editResult.Succeeded = res.Succeeded;
-                editResult.Message = res.Message;
-                editResult.CustomData = res.CustomData;
-            },
+            .subscribe(res => editResult = OperationResult.fromResponse(res),
             error => this._utilityService.handleError.bind(this._utilityService),
             () => {
                 if (editResult.Succeeded) {

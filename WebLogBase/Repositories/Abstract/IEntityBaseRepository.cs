@@ -19,6 +19,6 @@ namespace WebLogBase.Repositories
         int Commit();
         Task<int> CommitAsync();
 
-        IQueryable<T> FromSql(string sql);
+        IQueryable<TEntity> FromSql<TEntity>(string sql) where TEntity : class, IEntityBase, new();
     }
 }

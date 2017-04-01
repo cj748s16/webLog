@@ -12,6 +12,7 @@ namespace WebLogBase.Infrastructure
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
 
         public WebLogContext(DbContextOptions options) : base(options)
         {
@@ -22,8 +23,8 @@ namespace WebLogBase.Infrastructure
             modelBuilder.RemovePluralizingTableNameConventions();
             modelBuilder.RemoveManyToManyCascadeDeleteConvention();
 
-            //modelBuilder.Entity<UserGroup>()
-            //    .HasKey(c => new { c.Userid, c.Groupid });
+            modelBuilder.Entity<UserGroup>()
+                .HasKey(c => new { c.Userid, c.Groupid });
         }
     }
 }

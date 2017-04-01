@@ -33,8 +33,8 @@ namespace WebLogBase.Entities.System.Account
 
         public virtual User Adduser { get; set; }
 
-        //[InverseProperty("User")]
-        //public virtual ICollection<UserGroup> Groups { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<UserGroup> Groups { get; set; }
 
         [NotMapped]
         public string PasswordStr { get; set; }

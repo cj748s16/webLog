@@ -15,6 +15,7 @@ namespace WebLogApp.Infrastructure.Mappings
             {
                 cfg.AddProfile<UserMappingProfile>();
                 cfg.AddProfile<GroupMappingProfile>();
+                cfg.AddProfile<UserGroupMappingProfile>();
             });
 
             config.AssertConfigurationIsValid();

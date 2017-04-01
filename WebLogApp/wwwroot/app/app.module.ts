@@ -15,8 +15,6 @@ import { appRoutes } from "./app.routes";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home.component";
 
-import { AccountModule } from "./system/account/account.module";
-
 //enableProdMode();
 
 class AppBaseRequestOptions extends BaseRequestOptions {
@@ -41,7 +39,6 @@ function createTranslateLoader(http: Http) {
         HttpModule,
         Ng2Bs3ModalModule,
         FrameworkModule,
-        AccountModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

@@ -5,15 +5,14 @@ using System.Threading.Tasks;
 
 namespace WebLogApp.ViewModels.System.Account
 {
-    public class UserViewModel
+    public class UserGroupViewModel
     {
-        public int? Id { get; set; }
-        public string Userid { get; set; }
+        public int? Userid { get; set; }
+        public int? Groupid { get; set; }
         public string Username { get; set; }
-        public DateTime? Passwdexpr { get; set; }
+        public string Groupname { get; set; }
         public int? Adduserid { get; set; }
         public string Addusername { get; set; }
         public DateTime? Adddate { get; set; }
-        public int? Delstat { get; set; }
     }
 }

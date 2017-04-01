@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 namespace Microsoft.Extensions.DependencyInjection
 {
     using global::WebLogApp.Infrastructure.Localization;
+    using Microsoft.AspNetCore.Mvc.Localization;
     using Microsoft.Extensions.Logging;
     using SimpleInjector;
     using System.Linq.Expressions;

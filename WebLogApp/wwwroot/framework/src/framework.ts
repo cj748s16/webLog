@@ -1,7 +1,6 @@
 ﻿//import "./importGlobalModules";
 
 import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TranslateModule } from "@ngx-translate/core";
@@ -17,7 +16,6 @@ import { PagePartsModule } from "./page-parts/page-parts.module";
 
 @NgModule({
     imports: [
-        BrowserModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,

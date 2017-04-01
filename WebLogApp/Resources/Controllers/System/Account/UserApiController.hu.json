@@ -1,5 +1,7 @@
 ﻿{
-  "Users":  "Felhasználók",
+  "Users": "Felhasználók",
+  "UserGroups": "Csoportok",
+
   "UserID": "Felhasználó azon.",
   "Username": "Név",
   "PasswordExpires": "Jelszó lejárat",

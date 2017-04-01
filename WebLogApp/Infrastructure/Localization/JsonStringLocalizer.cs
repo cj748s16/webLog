@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,23 +22,25 @@ namespace WebLogApp.Infrastructure.Localization
         protected readonly string _baseName;
         protected readonly string _applicationName;
         protected readonly ILogger _logger;
+        protected readonly IStringLocalizerFactory _factory;
         private readonly IEnumerable<string> _resourceFileLocations;
         private readonly List<string> _pathWatcher = new List<string>();
 
-        public JsonStringLocalizer(string baseName, string applicationName, ILogger logger)
+        public JsonStringLocalizer(string baseName, string applicationName, ILogger logger, IStringLocalizerFactory factory)
         {
             _baseName = baseName ?? throw new ArgumentNullException(nameof(baseName));
             _applicationName = applicationName ?? throw new ArgumentNullException(nameof(applicationName));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
 
-            logger.LogTrace($"Created {GetType().Name} with:{Environment.NewLine}" +
+            logger.Trace($"Created {GetType().Name} with:{Environment.NewLine}" +
                 $"  (base name: {baseName}){Environment.NewLine}" +
                 $"  (application name: {applicationName}){Environment.NewLine}");
 
             _resourceFileLocations = LocalizerUtil.ExpandPaths(baseName, applicationName).ToList();
             foreach (var resFileLocation in _resourceFileLocations)
             {
-                logger.LogTrace($"Resource file location base path: {resFileLocation}");
+                logger.Trace($"Resource file location base path: {resFileLocation}");
             }
         }
 
@@ -51,9 +54,23 @@ namespace WebLogApp.Infrastructure.Localization
                 }
 
                 var format = GetLocalizedString(name, CultureInfo.CurrentUICulture);
-                var value = string.Format(format ?? name, arguments);
+                string value;
+                if (format == null)
+                {
+                    value = TryParent(name, out format, arguments);
+                }
+                else
+                {
+                    value = string.Format(format ?? name, arguments);
+                }
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
+        }
+
+        protected virtual string TryParent(string name, out string format, params object[] arguments)
+        {
+            format = null;
+            return null;
         }
 
         public LocalizedString this[string name]
@@ -66,8 +83,14 @@ namespace WebLogApp.Infrastructure.Localization
                 }
 
                 var value = GetLocalizedString(name, CultureInfo.CurrentUICulture);
+                value = value ?? TryParent(name);
                 return new LocalizedString(name, value ?? name, resourceNotFound: value == null);
             }
+        }
+
+        protected virtual string TryParent(string name)
+        {
+            return null;
         }
 
         protected string GetLocalizedString(string name, CultureInfo culture)
@@ -77,14 +100,15 @@ namespace WebLogApp.Infrastructure.Localization
                 throw new ArgumentNullException(nameof(name));
             }
 
-            var currentCulture = CultureInfo.CurrentCulture;
+            //var currentCulture = CultureInfo.CurrentCulture;
+            var currentCulture = culture;
             CultureInfo previousCulture = null;
             while (previousCulture != currentCulture)
             {
                 var resourceObject = GetResourceObject(currentCulture);
                 if (resourceObject == null)
                 {
-                    _logger.LogInformation($"No resource file found or error occurred for base name {_baseName}, culture {currentCulture} and key '{name}'");
+                    _logger.Info($"No resource file found or error occurred for base name {_baseName}, culture {currentCulture} and key '{name}'");
                 }
                 else
                 {
@@ -98,10 +122,10 @@ namespace WebLogApp.Infrastructure.Localization
                 // Consult parent culture
                 previousCulture = currentCulture;
                 currentCulture = currentCulture.Parent;
-                _logger.LogTrace($"Switching to parent culture {currentCulture} for key '{name}'.");
+                _logger.Trace($"Switching to parent culture {currentCulture} for key '{name}'.");
             }
 
-            _logger.LogInformation($"Could not find key '{name}' in resource file for base name {_baseName} and culture {CultureInfo.CurrentCulture}");
+            _logger.Info($"Could not find key '{name}' in resource file for base name {_baseName} and culture {CultureInfo.CurrentCulture}");
             return null;
         }
 
@@ -112,7 +136,7 @@ namespace WebLogApp.Infrastructure.Localization
                 throw new ArgumentNullException(nameof(currentCulture));
             }
 
-            _logger.LogTrace($"Attempt to get resource object for culture {currentCulture}");
+            _logger.Trace($"Attempt to get resource object for culture {currentCulture}");
             var cultureSuffix = "." + currentCulture.Name;
             cultureSuffix = cultureSuffix == "." ? "" : cultureSuffix;
 
@@ -132,18 +156,18 @@ namespace WebLogApp.Infrastructure.Localization
                     resourcePath = resourceFileLocation + cultureSuffix + ".json";
                     if (File.Exists(resourcePath))
                     {
-                        _logger.LogInformation($"Resource file location {resourcePath} found");
+                        _logger.Info($"Resource file location {resourcePath} found");
                         break;
                     }
                     else
                     {
-                        _logger.LogTrace($"Resource file location {resourcePath} does not exist");
+                        _logger.Trace($"Resource file location {resourcePath} does not exist");
                         resourcePath = null;
                     }
                 }
                 if (resourcePath == null)
                 {
-                    _logger.LogTrace($"No resource fiel foudn for suffix {cultureSuffix}");
+                    _logger.Trace($"No resource fiel foudn for suffix {cultureSuffix}");
                     return null;
                 }
 
@@ -160,7 +184,7 @@ namespace WebLogApp.Infrastructure.Localization
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error occurred attempting to read JSON resource file {resourcePath}: {ex}");
+                    _logger.Error($"Error occurred attempting to read JSON resource file {resourcePath}: {ex}");
                     return null;
                 }
             }, LazyThreadSafetyMode.ExecutionAndPublication);
@@ -189,17 +213,17 @@ namespace WebLogApp.Infrastructure.Localization
             watcher.Renamed += (sender, e) =>
             {
                 RemoveCachedResourceObject(e.OldName);
-                _logger.LogTrace($"{Path.GetFileName(e.OldName)} was renamed, removed from cache");
+                _logger.Trace($"{Path.GetFileName(e.OldName)} was renamed, removed from cache");
             };
             watcher.Deleted += (sender, e) =>
             {
                 RemoveCachedResourceObject(e.Name);
-                _logger.LogTrace($"{e.Name} file was deleted, removed from cache");
+                _logger.Trace($"{e.Name} file was deleted, removed from cache");
             };
             watcher.Changed += (sender, e) =>
             {
                 RemoveCachedResourceObject(e.Name);
-                _logger.LogTrace($"{e.Name} file was changed, removed from cache");
+                _logger.Trace($"{e.Name} file was changed, removed from cache");
             };
             watcher.EnableRaisingEvents = true;
         }
@@ -216,13 +240,13 @@ namespace WebLogApp.Infrastructure.Localization
                         Lazy<JObject> lazyJObject;
                         if (!_resourceObjectCache.TryRemove(cultureSuffix, out lazyJObject))
                         {
-                            _logger.LogError($"Failed to remove cached object for culture {cultureSuffix.Substring(1)}");
+                            _logger.Error($"Failed to remove cached object for culture {cultureSuffix.Substring(1)}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error occurred attempting to delete cached object for culture {cultureSuffix.Substring(1)}: {ex}");
+                    _logger.Error($"Error occurred attempting to delete cached object for culture {cultureSuffix.Substring(1)}: {ex}");
                 }
             }
         }
@@ -251,7 +275,7 @@ namespace WebLogApp.Infrastructure.Localization
         {
             if (culture == null)
             {
-                return new JsonStringLocalizer(_baseName, _applicationName, _logger);
+                return new JsonStringLocalizer(_baseName, _applicationName, _logger, _factory);
             }
 
             throw new NotImplementedException();
@@ -260,15 +284,42 @@ namespace WebLogApp.Infrastructure.Localization
 
     public class JsonStringLocalizer<T> : JsonStringLocalizer, IStringLocalizer<T>
     {
-        public JsonStringLocalizer(string baseName, string applicationName, ILogger logger) : base(baseName, applicationName, logger)
+        public JsonStringLocalizer(string baseName, string applicationName, ILogger logger, IStringLocalizerFactory factory) : base(baseName, applicationName, logger, factory)
         {
+        }
+
+        protected override string TryParent(string name)
+        {
+            var type = typeof(T);
+            var typeInfo = type.GetTypeInfo();
+            var baseType = typeInfo.BaseType;
+            var localizerType = typeof(IStringLocalizer<>).MakeGenericType(baseType);
+            var localizer = ((JsonStringLocalizerFactory)_factory).Container.GetInstance(localizerType);
+
+            if (localizer != null)
+            {
+                var jsonStringLocalizerType = typeof(JsonStringLocalizer<>).MakeGenericType(baseType);
+                var method = jsonStringLocalizerType.GetMethod("GetLocalizedString", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod);
+                if (method != null)
+                {
+                    return (string)method.Invoke(localizer, new object[] { name, CultureInfo.CurrentUICulture });
+                }
+            }
+
+            return null;
+        }
+
+        protected override string TryParent(string name, out string format, params object[] arguments)
+        {
+            format = TryParent(name);
+            return string.Format(format ?? name, arguments);
         }
 
         public override IStringLocalizer WithCulture(CultureInfo culture)
         {
             if (culture == null)
             {
-                return new JsonStringLocalizer<T>(_baseName, _applicationName, _logger);
+                return new JsonStringLocalizer<T>(_baseName, _applicationName, _logger, _factory);
             }
 
             throw new NotImplementedException();

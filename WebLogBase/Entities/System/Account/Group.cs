@@ -23,5 +23,8 @@ namespace WebLogBase.Entities.System.Account
         public int? Delstat { get; set; }
 
         public virtual User Adduser { get; set; }
+
+        [InverseProperty("Group")]
+        public virtual ICollection<UserGroup> Users { get; set; }
     }
 }
