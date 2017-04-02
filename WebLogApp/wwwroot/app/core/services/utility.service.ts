@@ -1,29 +1,14 @@
 ﻿import { Injectable } from "@angular/core";
 import { Router, NavigationExtras } from "@angular/router";
 
-import { NotificationService } from "./notification.service";
+import { NotificationService, UtilityService as fwUtilityService } from "@framework";
 
 @Injectable()
-export class UtilityService {
+export class UtilityService extends fwUtilityService  {
 
     constructor(
-        private _router: Router,
-        private _notificationService: NotificationService) { }
-
-    navigate(path: string, extras?: NavigationExtras) {
-        this._router.navigate([path], extras);
-    }
-
-    navigateToSignIn(extras?: NavigationExtras) {
-        this.navigate("/account/login", extras);
-    }
-
-    handleError(error: any) {
-        if (error.status == 401 || error.status == 404) {
-            this._notificationService.printErrorMessage("Authentication required");
-            this.navigateToSignIn();
-        } else {
-            console.error(`Error: ${error}`);
-        }
+        _router: Router,
+        _notificationService: NotificationService) {
+        super(_router, _notificationService, "/system/account/login");
     }
 }

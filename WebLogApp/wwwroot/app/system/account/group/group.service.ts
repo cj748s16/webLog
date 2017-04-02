@@ -1,10 +1,11 @@
 ﻿import { Injectable } from "@angular/core";
+import { IService } from "@framework";
 
 import { DataService } from "../../../core/services";
 import { GroupEdit } from "./domain";
 
 @Injectable()
-export class GroupService {
+export class GroupService implements IService {
 
     private static _groupAPI = "api/:lang/system/account/group/";
 

@@ -1,5 +1,5 @@
 ﻿import { Injectable } from "@angular/core";
-import { Key } from "@framework";
+import { Key, IService } from "@framework";
 
 import { DataService } from "../../../core/services";
 import { UserEdit } from "./domain";
@@ -8,7 +8,7 @@ declare var jQuery: any;
 const $ = jQuery;
 
 @Injectable()
-export class UserService {
+export class UserService implements IService {
 
     private static _userAPI = "api/:lang/system/account/user/";
     private static _userGroupAPI = "api/:lang/system/account/usergroup/";

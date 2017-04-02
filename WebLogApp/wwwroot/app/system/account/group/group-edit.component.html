@@ -1,24 +1,3 @@
-﻿<modal id="editModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true" [backdrop]="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" arid-hidden="true" (click)="_close()">x</button>
-        <h1 class="text-center">
-            <span class="fa-stack fa-1x">
-                <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                <i class="fa fa-group fa-stack-1x fa-inverse"></i>
-            </span>
-        </h1>
-    </div>
-    <div class="modal-body" style="overflow: auto;">
-        <form class="form col-md-12 center-block" #editForm="ngForm">
-            <textbox id="groupname" name="groupname" placeholder="system.account.group.Groupname" [(ngModel)]="_group.Groupname" [errorDefs]="{required: true}"></textbox>
-            <div class="form-group">
-                <button class="btn btn-primary btn-lg btn-block" (click)="save()" [disabled]="!editForm.form.valid">{{'Save' | translate}}</button>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <div class="col-md-12">
-            <a class="btn btn-danger pull-left" (click)="_close()" data-dismiss="modal" aria-hidden="true">{{"Cancel" | translate}}</a>
-        </div>
-    </div>
-</modal>
+﻿<inline-edit id="groupEditModal" title="system.account.group.Group">
+    <textbox id="Groupname" name="Groupname" placeholder="system.account.group.Groupname" [errorDefs]="{required: true}"></textbox>
+</inline-edit>

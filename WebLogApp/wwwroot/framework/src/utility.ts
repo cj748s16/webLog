@@ -1,4 +1,7 @@
-﻿import * as dateFormat from "dateformat";
+﻿import { Response } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+
+import * as dateFormat from "dateformat";
 
 let _scrollSize: number;
 
@@ -74,4 +77,28 @@ export function createId(_class: string): string {
 
 export function isMapStringKey(obj: any): obj is Map<string, Key> {
     return !!obj && typeof obj.has === "function";
+}
+
+export class OperationResult {
+
+    public CustomData: any;
+
+    constructor(public Succeeded: boolean, public Message: string) { }
+
+    public static fromResponse(res: Response): OperationResult {
+        // parse response, and getting fields
+        let succeeded = (<any>res).Succeeded;
+        let message = (<any>res).Message;
+
+        const result = new OperationResult(!!succeeded, message);
+        result.CustomData = (<any>res).CustomData;
+        return result;
+    }
+}
+
+export abstract class IService {
+
+    abstract get(key: any): Observable<any>;
+    abstract modify(entity: any): Observable<any>;
+    abstract new(entity: any): Observable<any>;
 }

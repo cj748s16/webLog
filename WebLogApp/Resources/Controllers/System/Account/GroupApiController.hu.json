@@ -1,5 +1,6 @@
 ﻿{
-  "Groups":  "Csoportok",
+  "Groups": "Csoportok",
+  "Group": "Csoport",
   "Groupname": "Név",
 
   "Invalid fields": "Adatok hibásan lettek megadva",

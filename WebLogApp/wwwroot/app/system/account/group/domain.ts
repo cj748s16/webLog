@@ -1,6 +1,4 @@
-﻿export { OperationResult } from "../../../core/domain";
-
-export class GroupEdit {
+﻿export class GroupEdit {
 
     Id: number;
 

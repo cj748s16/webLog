@@ -19,6 +19,9 @@ import { TabsComponent } from "./tabs.component";
         TabsComponent
     ],
     exports: [
+        CommonModule,
+        RouterModule,
+        TranslateModule,
         TabComponent,
         TabsComponent
     ]

@@ -3,7 +3,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs/Subject";
 
 import { ActionBarComponent, ActionButtonComponent } from "../actionBar";
-import { GridControl } from "../controls";
+import { GridControl } from "../controls/grid/grid.control";
 import { Key, compareKey } from "../utility";
 
 declare var jQuery: any;

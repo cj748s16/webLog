@@ -1,6 +1,4 @@
-﻿export { OperationResult } from "../../../core/domain";
-
-//export class User {
+﻿//export class User {
 
 //    Username: string;
 //    RememberMe = false;

@@ -42,6 +42,25 @@
     <Content Include="wwwroot\app\system\account\user\user-group-assign.component.ts" />
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
     <Content Include="wwwroot\assets\locales.json" />
+    <Content Include="wwwroot\framework\src\controls\cancel-button.control.ts" />
+    <Content Include="wwwroot\framework\src\controls\control.component.js" />
+    <Content Include="wwwroot\framework\src\controls\control.component.js.map" />
+    <Content Include="wwwroot\framework\src\controls\control.js" />
+    <Content Include="wwwroot\framework\src\controls\control.js.map" />
+    <Content Include="wwwroot\framework\src\controls\control.ts" />
+    <Content Include="wwwroot\framework\src\controls\controls.module.ts" />
+    <Content Include="wwwroot\framework\src\controls\grid\grid.control.js" />
+    <Content Include="wwwroot\framework\src\controls\grid\grid.control.js.map" />
+    <Content Include="wwwroot\framework\src\controls\grid\grid.control.ts" />
+    <Content Include="wwwroot\framework\src\controls\save-button.control.js" />
+    <Content Include="wwwroot\framework\src\controls\save-button.control.js.map" />
+    <Content Include="wwwroot\framework\src\controls\save-button.control.ts" />
+    <Content Include="wwwroot\framework\src\controls\textbox.control.js" />
+    <Content Include="wwwroot\framework\src\controls\textbox.control.js.map" />
+    <Content Include="wwwroot\framework\src\controls\textbox.control.ts" />
+    <Content Include="wwwroot\framework\src\notification.service.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\inline-edit.component.ts" />
+    <Content Include="wwwroot\framework\src\utility.service.ts" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
