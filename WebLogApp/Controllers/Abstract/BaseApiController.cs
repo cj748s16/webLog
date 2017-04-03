@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
 using WebLogApp.Infrastructure.Core;
-using WebLogBase.Infrastructure;
 
 namespace WebLogApp.Controllers
 {
-    public abstract class BaseApiController<T> : ApiController
+    public abstract class BaseApiController<T> : Controller
         where T : BaseApiController<T>
     {
         protected IMapper Mapper { get; }

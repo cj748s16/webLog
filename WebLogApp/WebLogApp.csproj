@@ -23,10 +23,19 @@
 
   <ItemGroup>
     <Content Remove="wwwroot/app\system\account\login.component.ts" />
+    <Content Remove="wwwroot/framework\src\page-parts\page-parts.module.js" />
+    <Content Remove="wwwroot/framework\src\page-parts\page-parts.module.js.map" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\app\core\domain\index.js" />
+    <Content Include="wwwroot\app\core\domain\index.js.map" />
+    <Content Include="wwwroot\app\core\domain\index.ts" />
     <Content Include="wwwroot\app\core\domain\language.ts" />
+    <Content Include="wwwroot\app\core\services.ts" />
+    <Content Include="wwwroot\app\core\services\index.js" />
+    <Content Include="wwwroot\app\core\services\index.js.map" />
+    <Content Include="wwwroot\app\core\services\index.ts" />
     <Content Include="wwwroot\app\core\services\language.service.ts" />
     <Content Include="wwwroot\app\home.component.ts" />
     <Content Include="wwwroot\app\system\account\group\domain.ts" />
@@ -38,10 +47,18 @@
     <Content Include="wwwroot\app\system\account\group\group.component.ts" />
     <Content Include="wwwroot\app\system\account\group\group.service.ts" />
     <Content Include="wwwroot\app\system\account\user\domain.ts" />
+    <Content Include="wwwroot\app\system\account\user\user-edit.component.html" />
+    <Content Include="wwwroot\app\system\account\user\user-edit.component.js" />
+    <Content Include="wwwroot\app\system\account\user\user-edit.component.js.map" />
+    <Content Include="wwwroot\app\system\account\user\user-edit.component.ts" />
     <Content Include="wwwroot\app\system\account\user\user-group-assign.component.html" />
     <Content Include="wwwroot\app\system\account\user\user-group-assign.component.ts" />
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
     <Content Include="wwwroot\assets\locales.json" />
+    <Content Include="wwwroot\framework\src\action-bar.ts" />
+    <Content Include="wwwroot\framework\src\action-bar\index.js" />
+    <Content Include="wwwroot\framework\src\action-bar\index.js.map" />
+    <Content Include="wwwroot\framework\src\action-bar\index.ts" />
     <Content Include="wwwroot\framework\src\controls\cancel-button.control.ts" />
     <Content Include="wwwroot\framework\src\controls\control.component.js" />
     <Content Include="wwwroot\framework\src\controls\control.component.js.map" />
@@ -52,15 +69,41 @@
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.js" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.js.map" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.ts" />
+    <Content Include="wwwroot\framework\src\controls\index.ts" />
     <Content Include="wwwroot\framework\src\controls\save-button.control.js" />
     <Content Include="wwwroot\framework\src\controls\save-button.control.js.map" />
     <Content Include="wwwroot\framework\src\controls\save-button.control.ts" />
     <Content Include="wwwroot\framework\src\controls\textbox.control.js" />
     <Content Include="wwwroot\framework\src\controls\textbox.control.js.map" />
     <Content Include="wwwroot\framework\src\controls\textbox.control.ts" />
-    <Content Include="wwwroot\framework\src\notification.service.ts" />
+    <Content Include="wwwroot\framework\src\page-parts.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\activated-route.component.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-content.component.js" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-content.component.js.map" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-tab.component.js" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-tab.component.js.map" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-tab.component.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-content.component.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\iedit.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\index.js" />
+    <Content Include="wwwroot\framework\src\page-parts\index.js.map" />
+    <Content Include="wwwroot\framework\src\page-parts\index.module.js" />
+    <Content Include="wwwroot\framework\src\page-parts\index.module.js.map" />
+    <Content Include="wwwroot\framework\src\page-parts\index.ts" />
     <Content Include="wwwroot\framework\src\page-parts\inline-edit.component.ts" />
-    <Content Include="wwwroot\framework\src\utility.service.ts" />
+    <Content Include="wwwroot\framework\src\services.ts" />
+    <Content Include="wwwroot\framework\src\services\data.service.js" />
+    <Content Include="wwwroot\framework\src\services\data.service.js.map" />
+    <Content Include="wwwroot\framework\src\services\data.service.ts" />
+    <Content Include="wwwroot\framework\src\services\index.ts" />
+    <Content Include="wwwroot\framework\src\services\notification.service.js" />
+    <Content Include="wwwroot\framework\src\services\notification.service.js.map" />
+    <Content Include="wwwroot\framework\src\services\notification.service.ts" />
+    <Content Include="wwwroot\framework\src\services\utility.service.ts" />
+    <Content Include="wwwroot\framework\src\tabs.ts" />
+    <Content Include="wwwroot\framework\src\tabs\index.js" />
+    <Content Include="wwwroot\framework\src\tabs\index.js.map" />
+    <Content Include="wwwroot\framework\src\tabs\index.ts" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />

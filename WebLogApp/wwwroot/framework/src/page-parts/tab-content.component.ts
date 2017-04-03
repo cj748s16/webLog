@@ -2,7 +2,7 @@
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs/Subject";
 
-import { ActionBarComponent, ActionButtonComponent } from "../actionBar";
+import { ActionBarComponent, ActionButtonComponent } from "../action-bar";
 import { GridControl } from "../controls/grid/grid.control";
 import { Key, compareKey } from "../utility";
 
@@ -46,12 +46,14 @@ export class TabContentComponent implements AfterViewInit, AfterViewChecked, Con
     private _keyGrid: GridControl;
     private _gridKeys: Map<string, Key> = new Map<string, Key>();
 
+    protected _handleButtons: boolean = true;
+
     constructor(private _el: ElementRef) {
         this.$el = $(_el.nativeElement);
     }
 
     ngAfterViewInit() {
-        if (this._actionBar) {
+        if (this._actionBar && this._handleButtons) {
             this._actionBar.addButtons(this.buttons);
         }
 
@@ -71,7 +73,7 @@ export class TabContentComponent implements AfterViewInit, AfterViewChecked, Con
     }
 
     ngAfterViewChecked() {
-        if (this.grids) {
+        if (this.grids && this.grids.length > 0) {
             let minGridTop = 0, totalHeightPercnt = 0;
             this.grids.forEach(g => {
                 minGridTop = Math.min(minGridTop || g.top, g.top);

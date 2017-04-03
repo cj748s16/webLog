@@ -1,7 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
-import { IService } from "@framework";
+import { IService, UtilityService, DataService } from "@framework";
 
-import { DataService } from "../../../core/services";
 import { GroupEdit } from "./domain";
 
 @Injectable()

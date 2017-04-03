@@ -1,7 +1,6 @@
 ﻿import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { InlineEdit, NotificationService } from "@framework";
-import { UtilityService } from "../../../core/services";
+import { EditTabComponent, NotificationService, UtilityService } from "@framework";
 
 import { GroupEdit } from "./domain";
 import { GroupService } from "./group.service";
@@ -11,12 +10,12 @@ import { GroupService } from "./group.service";
     selector: "groupEditModal",
     templateUrl: "group-edit.component.html"
 })
-export class GroupEditComponent extends InlineEdit<GroupEdit> {
+export class GroupEditComponent extends EditTabComponent<GroupEdit> {
 
     constructor(
-        _groupService: GroupService,
-        _notificationService: NotificationService,
-        _utilityService: UtilityService) {
-        super(_groupService, _notificationService, _utilityService);
+        groupService: GroupService,
+        notificationService: NotificationService,
+        utilityService: UtilityService) {
+        super(groupService, notificationService, utilityService);
     }
 }

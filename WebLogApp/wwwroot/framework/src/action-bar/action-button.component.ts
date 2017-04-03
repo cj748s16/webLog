@@ -1,6 +1,6 @@
-﻿import { Component, Input, ElementRef } from "@angular/core";
+﻿import { Component/*, Input*/, ElementRef } from "@angular/core";
 
-const noop = () => { };
+//const noop = () => { };
 
 @Component({
     selector: "[actionButton]",
@@ -8,8 +8,8 @@ const noop = () => { };
 })
 export class ActionButtonComponent {
 
-    @Input() title: string;
-    @Input() click: (event) => void = noop;
+    //@Input() title: string;
+    //@Input() click: (event) => void = noop;
 
     constructor(public el: ElementRef) { }
 }

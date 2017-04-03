@@ -1,7 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, forwardRef } from "@angular/core";
-import { UtilityService } from "../../../core/services";
-
-import { Key, compareKey, TAB_ACCESSOR, TabAccessor, TabContentComponent } from "@framework";
+import { Key, compareKey, TAB_ACCESSOR, TabAccessor, TabContentComponent, UtilityService } from "@framework";
 
 import { GroupService } from "./group.service";
 import { GroupViewModel } from "./domain";

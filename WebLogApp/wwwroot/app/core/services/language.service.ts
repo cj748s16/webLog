@@ -1,6 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
+import { DataService } from "@framework";
 
-import { DataService } from "./data.service";
 import { UtilityService } from "./utility.service";
 import { LanguageViewModel } from "../domain";
 

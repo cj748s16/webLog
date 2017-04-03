@@ -1,42 +1,41 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, forwardRef, ViewChild } from "@angular/core";
 import { AbstractControl, ValidationErrors } from "@angular/forms";
-import { InlineEdit, NotificationService } from "@framework";
-import { UtilityService } from "../../../core/services";
+import { Key, EditContentComponent, EditTabComponent, TabAccessor, TAB_ACCESSOR, NotificationService, UtilityService } from "@framework";
 
 import { UserEdit } from "./domain";
 import { UserService } from "./user.service";
 
 @Component({
     moduleId: module.id,
-    selector: "userEditModal",
-    templateUrl: "user-edit.component.html"
+    selector: "user-edit",
+    templateUrl: "user-edit.component.html",
+    providers: [
+        { provide: TAB_ACCESSOR, useExisting: forwardRef(() => UserEditComponent), multi: true }
+    ]
 })
-export class UserEditComponent extends InlineEdit<UserEdit> {
+export class UserEditComponent extends EditTabComponent<UserEdit> implements TabAccessor {
+
+    @ViewChild(EditContentComponent)
+    private _tabContent: EditContentComponent;
 
     constructor(
-        _userService: UserService,
-        _notificationService: NotificationService,
-        _utilityService: UtilityService) {
-        super(_userService, _notificationService, _utilityService);
+        userService: UserService,
+        notificationService: NotificationService,
+        utilityService: UtilityService) {
+        super(userService, notificationService, utilityService);
     }
 
     isConfirmMatches(c: AbstractControl): ValidationErrors {
-        if (this.entity.Password != this.entity.ConfirmPassword) {
+        if (this.entity && this.entity.Password != this.entity.ConfirmPassword) {
             return { match: true }
         }
         return null;
     }
 
-    protected afterSaved() {
-        //this._modifySavedUser();
+    getTab(): EditContentComponent {
+        return this._tabContent;
     }
 
-    //private _modifySavedUser() {
-    //    var user = <User>JSON.parse(localStorage.getItem("user"));
-    //    if (user.Userid == this._user.Userid) {
-    //        user.Username = this._user.Username;
-    //        user.Password = this._user.Password;
-    //        localStorage.setItem("user", JSON.stringify(user));
-    //    }
-    //}
+    writeValue(value: Map<string, Key>) {
+    }
 }

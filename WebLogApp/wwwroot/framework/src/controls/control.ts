@@ -109,6 +109,7 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     set value(v: any) {
         if (this._value != v) {
             this._value = v;
+            this.validate(this.control);
             this.onChangedCallback(v);
         }
     }
@@ -116,6 +117,7 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     writeValue(v: any) {
         if (this._value != v) {
             this._value = v;
+            this.validate(this.control);
         }
     }
 

@@ -6,6 +6,7 @@ import { TabComponent, TabsComponent } from "../tabs";
 import { TabContentComponent } from "./tab-content.component";
 import { TabAccessor } from "./tab_accessor";
 import { Key } from "../utility";
+import { EditTabComponent } from "./edit-tab.component";
 
 @Component({
     selector: "page",
@@ -56,17 +57,19 @@ export class PageComponent implements AfterViewInit {
             throw new Error(`The given router-outlet doesn't implement TabAccessor`);
         }
         if (!tab.getTab().id) {
-            throw new Error(`The given tab id isn't defined`);
+            throw new Error(`The given tab id doesn't defined`);
         }
 
         this._activeTabAccessor = tab;
         this._activeTab = tab.getTab();
-        this._activeTab.registerOnChange(this._tabValueChanged.bind(this));
-        //if (!this._tabObjs.has(this._activeTab.id)) {
-        //    this._tabObjs.set(this._activeTab.id, new Subject());
-        //}
-        //this._activeTabAccessor.pushChanges(this._tabObjs.get(this._activeTab.id));
-        this._activeTabAccessor.writeValue(this._tabKeys);
+
+        if (isEditTab(tab)) {
+            this._tabs.disable();
+        } else {
+            this._tabs.enable();
+            this._activeTab.registerOnChange(this._tabValueChanged.bind(this));
+            this._activeTabAccessor.writeValue(this._tabKeys);
+        }
     }
 
     private _tabValueChanged(value: Key) {
@@ -84,4 +87,8 @@ export class PageComponent implements AfterViewInit {
 
 function isTabAccessor(obj: any): obj is TabAccessor {
     return !!obj && typeof obj.getTab === "function";
+}
+
+function isEditTab(obj: any): obj is EditTabComponent<any> {
+    return !!obj && typeof obj.open === "function";
 }

@@ -1,11 +1,11 @@
 ﻿import { Component, OnInit, ViewChild, forwardRef } from "@angular/core";
-import { UtilityService } from "../../../core/services";
-
-import { Key, compareKey, TAB_ACCESSOR, TabAccessor, TabContentComponent } from "@framework";
+import { Key, compareKey, TAB_ACCESSOR, TabAccessor, TabContentComponent, UtilityService } from "@framework";
 
 import { UserService } from "./user.service";
 import { UserViewModel } from "./domain";
-import { UserEditComponent } from "./user-edit.component";
+
+declare var jQuery: any;
+const $ = jQuery;
 
 const noop = () => { };
 
@@ -19,11 +19,10 @@ const noop = () => { };
 })
 export class UserListComponent implements OnInit, TabAccessor {
 
+    private static _editUrl = "/:lang/account/user/edit/";
+
     private _users: Array<UserViewModel>;
     private _selectedKey: Key;
-
-    @ViewChild(UserEditComponent)
-    private _editModal: UserEditComponent;
 
     @ViewChild(TabContentComponent)
     private _tabContent: TabContentComponent;
@@ -45,12 +44,13 @@ export class UserListComponent implements OnInit, TabAccessor {
     }
 
     new() {
-        this._editModal.open().then(() => this.getUsers());
+        this._utilityService.navigate(UserListComponent._editUrl);
     }
 
     modify() {
         if (this._selectedKey) {
-            this._editModal.open(this._selectedKey).then(() => this.getUsers());
+            let id = "Id" in this._selectedKey ? this._selectedKey["Id"] : null;
+            this._utilityService.navigate(`${UserListComponent._editUrl}${id}`);
         }
     }
 

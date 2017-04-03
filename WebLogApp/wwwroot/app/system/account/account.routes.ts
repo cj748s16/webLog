@@ -5,6 +5,7 @@ import { AccountComponent } from "./account.component";
 
 import { UserComponent } from "./user/user.component";
 import { UserListComponent } from "./user/user-list.component";
+import { UserEditComponent } from "./user/user-edit.component";
 import { UserGroupAssignComponent } from "./user/user-group-assign.component";
 
 import { GroupComponent } from "./group/group.component";
@@ -21,6 +22,8 @@ export const accountRoutes: Routes = [
                 children: [
                     { path: "", redirectTo: "list", pathMatch: "full" },
                     { path: "list", component: UserListComponent },
+                    { path: "edit/:Id", component: UserEditComponent },
+                    { path: "edit", component: UserEditComponent },
                     { path: "groups", component: UserGroupAssignComponent }
                 ]
             },

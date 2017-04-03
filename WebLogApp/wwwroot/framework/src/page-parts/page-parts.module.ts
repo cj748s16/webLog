@@ -5,17 +5,18 @@ import { FormsModule } from "@angular/forms";
 import { Ng2Bs3ModalModule } from "ng2-bs3-modal/ng2-bs3-modal";
 import { TranslateModule } from "@ngx-translate/core";
 
-import { NotificationService } from "../notification.service";
-import { UtilityService } from "../utility.service";
+import { NotificationService } from "../services";
 
 import { TabsModule } from "../tabs/tabs.module";
 import { ActionBarModule } from "../action-bar/action-bar.module";
 import { ControlsModule } from "../controls/controls.module";
 
+import { ActivatedRouteComponent } from "./activated-route.component";
 import { PageComponent } from "./page.component";
 import { TabContentComponent } from "./tab-content.component";
 
 import { InlineEditComponent } from "./inline-edit.component";
+import { EditContentComponent } from "./edit-content.component";
 
 @NgModule({
     imports: [
@@ -26,9 +27,11 @@ import { InlineEditComponent } from "./inline-edit.component";
         ControlsModule
     ],
     declarations: [
+        ActivatedRouteComponent,
         PageComponent,
         TabContentComponent,
-        InlineEditComponent
+        InlineEditComponent,
+        EditContentComponent
     ],
     exports: [
         RouterModule,
@@ -36,13 +39,14 @@ import { InlineEditComponent } from "./inline-edit.component";
         TabsModule,
         ActionBarModule,
         ControlsModule,
+        ActivatedRouteComponent,
         PageComponent,
         TabContentComponent,
-        InlineEditComponent
+        InlineEditComponent,
+        EditContentComponent
     ],
     providers: [
-        NotificationService,
-        UtilityService
+        NotificationService
     ]
 })
 export class PagePartsModule { }

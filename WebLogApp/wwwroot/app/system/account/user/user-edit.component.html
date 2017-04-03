@@ -1,9 +1,9 @@
-﻿<inline-edit id="userEditModal" title="system.account.user.User">
-    <textbox id="Userid" name="Userid" placeholder="system.account.user.UserID" [errorDefs]="{required: true}" [disabled]="_key"></textbox>
+﻿<div id="user-edit" name="user-edit" editTab>
+    <textbox id="Userid" name="Userid" placeholder="system.account.user.UserID" [errorDefs]="{required: true}" [disabled]="key"></textbox>
     <textbox id="Username" name="Username" placeholder="system.account.user.Username" [errorDefs]="{required: true}"></textbox>
     <textbox id="Password" name="Password" placeholder="system.account.user.Password" password [errorDefs]="{required: true}"></textbox>
     <textbox id="ConfirmPassword" name="ConfirmPassword" placeholder="system.account.user.ConfirmPassword" password
              [errorDefs]="{required: true,
                 match: { message: 'system.account.user.validators.confirmMismatch', fn: isConfirmMatches.bind(this) }
              }"></textbox>
-</inline-edit>
+</div>

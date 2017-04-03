@@ -1,7 +1,6 @@
 ﻿import { Component, ViewChild, forwardRef } from "@angular/core";
-import { UtilityService } from "../../../core/services";
 import { UserService } from "./user.service";
-import { Key, compareKey, TAB_ACCESSOR, TabAccessor, TabContentComponent, isMapStringKey, OperationResult, NotificationService } from "@framework";
+import { Key, compareKey, TAB_ACCESSOR, TabAccessor, TabContentComponent, isMapStringKey, OperationResult, NotificationService, UtilityService } from "@framework";
 
 import { GroupViewModel } from "../group/domain";
 

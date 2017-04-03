@@ -1,7 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
-import { Key, IService } from "@framework";
+import { Key, IService, UtilityService, DataService } from "@framework";
 
-import { DataService } from "../../../core/services";
 import { UserEdit } from "./domain";
 
 declare var jQuery: any;

@@ -28,7 +28,7 @@ export function scrollSize(): number {
 
 export interface Key extends Object { };
 
-export const Key: { [key: string]: any } = {};
+export declare const Key: { [key: string]: any };
 
 export function compareKey(key1: Key, key2: Key): boolean {
     if (key1 == null && key2 != null) {

@@ -9,8 +9,19 @@ const noop = () => { };
 })
 export class TabComponent {
 
-    @Input() routerLink: RouterLink;
+    private _routerLink: RouterLink;
+    @Input()
+    get routerLink(): RouterLink{
+        return !this.disabled ? this._routerLink : null;
+    }
+    set routerLink(value: RouterLink) {
+        if (this._routerLink != value) {
+            this._routerLink = value;
+        }
+    }
+
     @Input() title: string;
+    @Input() disabled: boolean;
 
     private _active: boolean;
 

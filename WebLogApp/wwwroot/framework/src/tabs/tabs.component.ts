@@ -1,4 +1,4 @@
-﻿import { Component, AfterViewInit, ContentChildren, QueryList } from "@angular/core";
+﻿import { Component, AfterViewInit, ContentChildren, QueryList, ChangeDetectorRef } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { TabComponent } from "./tab.component";
@@ -7,7 +7,7 @@ import { TabComponent } from "./tab.component";
     selector: "tabs",
     template: `
 <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" *ngFor="let tab of tabs" [tab]="tab" [class.active]="tab.active" tabLink></li>
+    <li role="presentation" *ngFor="let tab of tabs" [tab]="tab" [class.active]="tab.active && !tab.disabled" [class.disabled]="tab.disabled" tabLink></li>
 </ul>
 `
 })
@@ -31,7 +31,7 @@ export class TabsComponent implements AfterViewInit {
     }
 
     private _tabActivated(tab: TabComponent) {
-        if (tab.active) {
+        if (!this._disabled && tab.active) {
             this.tabs.forEach(t => {
                 if (t.active && t != tab) {
                     t.active = false;
@@ -52,5 +52,21 @@ export class TabsComponent implements AfterViewInit {
         this._unsubscribeOnActivate();
         this.tabs = tabs;
         this._subscribeOnActivate();
+    }
+
+    private _disabled = false;
+
+    disable() {
+        this._disabled = true;
+        this.tabs.forEach(t => {
+            t.disabled = true;
+        });
+    }
+
+    enable() {
+        this._disabled = false;
+        this.tabs.forEach(t => {
+            t.disabled = false;
+        });
     }
 }

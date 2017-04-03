@@ -1,35 +1,32 @@
-﻿import { Component, Input, Output, ViewChild, EventEmitter, ContentChildren, QueryList, forwardRef, AfterContentInit, ChangeDetectorRef, OnDestroy } from "@angular/core";
+﻿import { Component, Input, Output, ViewChild, EventEmitter, ContentChildren, QueryList, forwardRef, AfterContentInit, ChangeDetectorRef, ElementRef, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { ModalComponent } from "ng2-bs3-modal/ng2-bs3-modal";
 
 import { Control } from "../controls/control";
+import { ActivatedRouteComponent } from "./activated-route.component";
+import { TabContentComponent } from "./tab-content.component";
 import { IEdit } from "./iedit";
 
 @Component({
-    selector: "inline-edit",
-    //changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "[editTab]",
     template: `
-<modal id="{{id}}" class="modal" tabindex="-1" role="dialog" aria-hidden="true" [backdrop]="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="_cancel($event)">x</button>
-        <h1 class="text-center">{{title | translate}}</h1>
-    </div>
-    <div class="modal-body" style="overflow: auto;">
-        <form class="form col-md-12 center-block" [formGroup]="form">
-            <ng-content></ng-content>
-            <saveButton (clicked)="_save($event)" [disabled]="!form.valid"></saveButton>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <cancelButton (clicked)="_cancel($event)" data-dismiss="modal" aria-hidden="true"></cancelButton>
-    </div>
-</modal>
+<div activatedRoute></div>
+<action-bar>
+    <button (click)="_save($event)" class="btn btn-primary" [disabled]="!form.valid" actionButton>{{'Save' | translate}}</button>
+    <button (click)="_cancel($event)" class="btn btn-default" actionButton>{{'Cancel' | translate}}</button>
+</action-bar>
+<hr />
+<div class="panel-body">
+    <form class="form col-md-12 center-block" [formGroup]="form">
+        <ng-content></ng-content>
+    </form>
+</div>
 `,
     providers: [
-        { provide: IEdit, useExisting: forwardRef(() => InlineEditComponent), multi: true }
+        { provide: TabContentComponent, useExisting: forwardRef(() => EditContentComponent), multi: true },
+        { provide: IEdit, useExisting: forwardRef(() => EditContentComponent), multi: true }
     ]
 })
-export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDestroy {
+export class EditContentComponent extends TabContentComponent implements IEdit<any>, AfterContentInit, OnDestroy {
 
     @Input()
     public id: string;
@@ -43,19 +40,22 @@ export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDest
     @Output()
     public cancel = new EventEmitter<Event>();
 
-    @ViewChild(ModalComponent)
-    public modal: ModalComponent;
-
     @ContentChildren(forwardRef(() => Control))
     private _content: QueryList<Control>;
 
     private _controls: Array<Control>;
 
+    @ViewChild(ActivatedRouteComponent)
+    activatedRoute: ActivatedRouteComponent;
+
     private form: FormGroup;
 
-    activatedRoute: any;
+    modal: any;
 
-    constructor(private _changeDetector: ChangeDetectorRef) { }
+    constructor(private _changeDetector: ChangeDetectorRef, el: ElementRef) {
+        super(el);
+        this._handleButtons = false;
+    }
 
     private _save($event: Event) {
         this.save.emit($event);
@@ -107,7 +107,7 @@ export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDest
         this._controls.forEach(ctrl => {
             ctrl.writeValue(this._entity ? this._entity[ctrl.name] : null);
         });
-        setTimeout(() => this._detectChanges, 100);
+        setTimeout(() => this._detectChanges(), 100);
     }
 
     ngOnDestroy() {

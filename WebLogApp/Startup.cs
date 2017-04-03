@@ -164,7 +164,7 @@ namespace WebLogApp
 
                 routes.MapWebApiRoute(
                     name: "defaultApi",
-                    template: "api/{controller}/{id?}");
+                    template: "api/{controller}/{action}/{id?}");
             });
         }
 

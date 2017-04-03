@@ -25,6 +25,9 @@ export class ActionBarComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.$container = $(this._container.nativeElement);
+        if (this.buttons && this.buttons.length) {
+            this.buttons.forEach(b => this.$container.append(b.el.nativeElement));
+        }
     }
 
     addButtons(buttons: QueryList<ActionButtonComponent>) {

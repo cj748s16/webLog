@@ -1,1 +1,0 @@
-﻿export { LanguageViewModel } from "./domain/language";
