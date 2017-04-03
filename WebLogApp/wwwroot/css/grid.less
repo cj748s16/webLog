@@ -1,4 +1,5 @@
 ﻿@import "colors.less";
+@import "font.less";
 
 .grid {
     padding: 0;
@@ -6,8 +7,8 @@
     background-color: #fff;
     position: relative;
     margin: 1px;
-    border: 1px solid #ccc;
-    color: @darkestBlue;
+    border: 0;
+    border-top: 1px solid @darkGreen;
     height: ~"calc(100% - 300px)";
 
     & .content {
@@ -31,20 +32,21 @@
 
     & .heading {
         width: 100%;
-        height: 21px;
-        padding: 0 1px;
+        height: 36px;
+        padding: 0;
         line-height: 14px;
         white-space: nowrap;
         overflow: hidden;
 
         & .cell {
-            background: @darkBlue;
             margin-left: 1px;
             margin-right: 0;
             color: #fff;
-            border-right-color: @darkestBlue;
-            border-bottom-color: @darkestBlue;
-            padding: 1px 2px;
+            padding: 4px 4px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
 
             & span {
                 width: 100%;
@@ -60,7 +62,7 @@
         width: 100%;
         top: 0;
         bottom: 0;
-        margin-top: 22px;
+        margin-top: 37px;
         background-color: #fff;
         position: absolute;
         overflow-x: auto;
@@ -80,14 +82,11 @@
             color: #000;
             border-right-color: #ddd;
             border-bottom-color: #ddd;
-            padding: 4px;
-        }
+            padding: 7px;
 
-        & .selected .cell {
-            background-color: @lightestBlue;
-            color: #fff;
-            border-right-color: @darkestBlue;
-            border-bottom-color: @darkestBlue;
+            &:first-child {
+                margin-left: 0;
+            }
         }
     }
 
@@ -98,17 +97,17 @@
     }
 
     & .row {
-        height: 21px;
+        height: 36px;
         margin: 0;
     }
 
     & .cell {
         display: inline-block;
-        font: normal 1.1rem/1.5 dagny, arial, tahoma, verdana, sans-serif;
         border: 1px solid transparent;
         overflow: hidden;
-        line-height: 1;
-        height: 21px;
+        height: 36px;
+        padding: 7px;
+        .font-face;
     }
 
     & .v-scroller {
@@ -124,6 +123,48 @@
 
         & > div {
             width: 0;
+        }
+    }
+
+    &.blue {
+        color: @darkestBlue;
+
+        & .heading {
+            & .cell {
+                background: @darkBlue;
+                border-right-color: @darkestBlue;
+                border-bottom-color: @darkestBlue;
+            }
+        }
+
+        & .body {
+            & .selected .cell {
+                background-color: @lightestBlue;
+                color: #fff;
+                border-right-color: @darkestBlue;
+                border-bottom-color: @darkestBlue;
+            }
+        }
+    }
+
+    &.green {
+        color: @darkGreen;
+
+        & .heading {
+            & .cell {
+                background: @darkGreen;
+                border-right-color: transparent;
+                border-bottom-color: transparent;
+            }
+        }
+
+        & .body {
+            & .selected .cell {
+                background-color: @lightestGreen;
+                color: #fff;
+                border-right-color: transparent;
+                border-bottom-color: transparent;
+            }
         }
     }
 }

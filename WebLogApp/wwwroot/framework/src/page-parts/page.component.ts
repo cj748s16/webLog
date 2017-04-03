@@ -69,12 +69,14 @@ export class PageComponent implements AfterViewInit {
             this._tabs.enable();
             this._activeTab.registerOnChange(this._tabValueChanged.bind(this));
             this._activeTabAccessor.writeValue(this._tabKeys);
+            if (this._tabKeys.has(this._activeTab.id)) {
+                this._activeTab.writeValue(this._tabKeys.get(this._activeTab.id));
+            }
         }
     }
 
     private _tabValueChanged(value: Key) {
         this._tabKeys.set(this._activeTab.id, value);
-        //this._tabObjs.get(this._activeTab.id).next(this._tabKeys);
         this._activeTabAccessor.writeValue(this._tabKeys);
     }
 

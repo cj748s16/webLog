@@ -2,7 +2,6 @@
     <button type="button" class="btn btn-default" (click)="new()" actionButton>{{'New' | translate}}</button>
     <button [disabled]="!_selectedKey" type="button" class="btn btn-default" (click)="modify()" actionButton>{{'Modify' | translate}}</button>
 
-    <hr />
     <grid [list]="_groups">
         <grid-column field="Id" hidden="true" key="true"></grid-column>
         <grid-column field="Groupname" width="180" caption="system.account.group.Groupname"></grid-column>

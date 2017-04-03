@@ -2,13 +2,12 @@
     <button type="button" class="btn btn-default" (click)="new()" actionButton>{{'New' | translate}}</button>
     <button [disabled]="!_selectedKey" type="button" class="btn btn-default" (click)="modify()" actionButton>{{'Modify' | translate}}</button>
 
-    <hr />
     <grid [list]="_users">
         <grid-column field="Id" hidden="true" key="true"></grid-column>
         <grid-column field="Userid" width="80" caption="system.account.user.UserID"></grid-column>
         <grid-column field="Username" width="180" caption="system.account.user.Username"></grid-column>
-        <grid-column field="Passwdexpr" width="85" caption="system.account.user.PasswordExpires" format="D"></grid-column>
-        <grid-column field="Addusername" width="80" caption="Creator"></grid-column>
+        <grid-column field="Passwdexpr" width="100" caption="system.account.user.PasswordExpires" format="D"></grid-column>
+        <grid-column field="Addusername" width="180" caption="Creator"></grid-column>
         <grid-column field="Adddate" width="170" caption="CreatedAt" format="DT"></grid-column>
     </grid>
 </div>

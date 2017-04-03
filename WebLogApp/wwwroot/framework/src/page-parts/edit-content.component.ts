@@ -11,10 +11,9 @@ import { IEdit } from "./iedit";
     template: `
 <div activatedRoute></div>
 <action-bar>
-    <button (click)="_save($event)" class="btn btn-primary" [disabled]="!form.valid" actionButton>{{'Save' | translate}}</button>
+    <button (click)="_save($event)" class="btn btn-raised btn-primary" [disabled]="!form.valid" actionButton>{{'Save' | translate}}</button>
     <button (click)="_cancel($event)" class="btn btn-default" actionButton>{{'Cancel' | translate}}</button>
 </action-bar>
-<hr />
 <div class="panel-body">
     <form class="form col-md-12 center-block" [formGroup]="form">
         <ng-content></ng-content>

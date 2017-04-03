@@ -25,7 +25,7 @@ const noop = () => { };
 @Component({
     selector: "grid",
     template: `
-<div class="grid" #grid>
+<div class="grid green" #grid>
     <div class="content">
         <div #innerContent class="inner-content">
             <div class="heading">
@@ -89,6 +89,7 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
     private _refreshContentResolve: () => void;
 
     private _selectedComp: IGridRow;
+    private _predictedSelectedKey: Key;
     private _rowHeight: number;
     private _topRowIndex: number = 0;
 
@@ -154,7 +155,7 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
             if (this._refreshContentResolve) {
                 this._refreshContentResolve();
                 this._refreshContentResolve = null;
-                this._refreshContentDone = null;
+                this._refreshContentDone = new Promise<any>((resolve) => this._refreshContentResolve = resolve);
             }
         });
     }
@@ -314,11 +315,20 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 
     private _findBySelectedKey(key: Key) {
         if (this._componentRef && this._componentRef.length) {
+            if (this._predictedSelectedKey) {
+                key = this._predictedSelectedKey;
+                this._predictedSelectedKey = null;
+            }
+            let found = false;
             for (let i = 0; i < this._componentRef.length; i++) {
                 if (Utility.compareKey(this._componentRef[i].instance.key, key)) {
                     this._setSelectedRow(this._componentRef[i].instance);
+                    found = true;
                     break;
                 }
+            }
+            if (!found) {
+                this._setSelectedRow(this._componentRef[0].instance);
             }
         } else {
             this._setSelectedRow(null);
@@ -402,6 +412,7 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
     writeValue(v: any) {
         if (v) {
             if ((!this._wasViewInitialized || this._refreshingContent) && this._refreshContentDone) {
+                this._predictedSelectedKey = v;
                 this._refreshContentDone.then(() => this._findBySelectedKey(v));
             } else {
                 this._findBySelectedKey(v);

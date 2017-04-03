@@ -6,7 +6,7 @@ import { TabComponent } from "./tab.component";
 @Component({
     selector: "tabs",
     template: `
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-pills" role="tablist">
     <li role="presentation" *ngFor="let tab of tabs" [tab]="tab" [class.active]="tab.active && !tab.disabled" [class.disabled]="tab.disabled" tabLink></li>
 </ul>
 `

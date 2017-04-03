@@ -65,6 +65,7 @@ gulp.task("setup-vendors", [], function () {
         paths.npm + "systemjs/dist/*.js",
         paths.npm + "jquery/dist/jquery.*js",
         paths.npm + "bootstrap/dist/js/bootstrap*.js",
+        paths.npm + "bootstrap-material-design/dist/js/*.js",
         paths.npm + "fancybox/dist/js/jquery.fancybox.pack.js",
         paths.npm + "dateformat/lib/dateformat.js",
         paths.npm + "less/dist/less*.js"
@@ -115,6 +116,7 @@ gulp.task("setup-vendors", [], function () {
     // css
     gulp.src([
         paths.npm + "bootstrap/dist/css/bootstrap*.css",
+        paths.npm + "bootstrap-material-design/dist/css/*.css",
         paths.npm + "fancybox/dist/css/jquery.fancybox.css"
     ]).pipe(gulp.dest(paths.cssVendors));
 

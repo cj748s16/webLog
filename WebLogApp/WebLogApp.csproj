@@ -55,6 +55,9 @@
     <Content Include="wwwroot\app\system\account\user\user-group-assign.component.ts" />
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
     <Content Include="wwwroot\assets\locales.json" />
+    <Content Include="wwwroot\css\alertify.less" />
+    <Content Include="wwwroot\css\font.less" />
+    <Content Include="wwwroot\css\material.less" />
     <Content Include="wwwroot\framework\src\action-bar.ts" />
     <Content Include="wwwroot\framework\src\action-bar\index.js" />
     <Content Include="wwwroot\framework\src\action-bar\index.js.map" />
