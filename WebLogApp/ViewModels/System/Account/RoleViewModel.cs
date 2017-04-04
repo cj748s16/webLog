@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebLogApp.ViewModels.System.Account
 {
-    public class GroupEditViewModel
+    public class RoleViewModel
     {
         public int? Id { get; set; }
-        public string Groupname { get; set; }
-        public int? Roleid { get; set; }
+        public string Rolename { get; set; }
     }
 }

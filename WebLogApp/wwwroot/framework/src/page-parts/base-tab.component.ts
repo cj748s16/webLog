@@ -16,7 +16,7 @@ export abstract class BaseTabComponent<T> implements OnInit, TabAccessor {
     private _tabContent: TabContentComponent;
 
     constructor(
-        protected _service: IService,
+        protected _assignService: IService,
         protected _utilityService: UtilityService) { }
 
     abstract ngOnInit();

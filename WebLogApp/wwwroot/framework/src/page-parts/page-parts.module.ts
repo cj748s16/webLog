@@ -16,7 +16,7 @@ import { PageComponent } from "./page.component";
 import { TabContentComponent } from "./tab-content.component";
 import { AssignTabContentComponent } from "./assign-tab-content.component";
 
-import { InlineEditComponent } from "./inline-edit.component";
+import { EditModalComponent } from "./edit-modal.component";
 import { EditContentComponent } from "./edit-content.component";
 
 @NgModule({
@@ -32,7 +32,7 @@ import { EditContentComponent } from "./edit-content.component";
         PageComponent,
         TabContentComponent,
         AssignTabContentComponent,
-        InlineEditComponent,
+        EditModalComponent,
         EditContentComponent
     ],
     exports: [
@@ -45,7 +45,7 @@ import { EditContentComponent } from "./edit-content.component";
         PageComponent,
         TabContentComponent,
         AssignTabContentComponent,
-        InlineEditComponent,
+        EditModalComponent,
         EditContentComponent
     ],
     providers: [

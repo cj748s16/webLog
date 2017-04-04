@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, forwardRef } from "@angular/core";
+﻿import { Component, ElementRef, OnInit, ViewChild, forwardRef } from "@angular/core";
 import { Key, compareKey, UtilityService, ListTabComponent } from "@framework";
 
 import { GroupService } from "./group.service";
@@ -17,8 +17,9 @@ export class GroupListComponent extends ListTabComponent<GroupViewModel> {
 
     constructor(
         groupService: GroupService,
-        utilityService: UtilityService) {
-        super(groupService, utilityService, null);
+        utilityService: UtilityService,
+        el: ElementRef) {
+        super(groupService, utilityService, null, el);
     }
 
 

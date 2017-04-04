@@ -38,6 +38,10 @@
         white-space: nowrap;
         overflow: hidden;
 
+        &.noheading {
+            display: none;
+        }
+
         & .cell {
             margin-left: 1px;
             margin-right: 0;
@@ -67,6 +71,10 @@
         position: absolute;
         overflow-x: auto;
         overflow-y: hidden;
+
+        &.noheading {
+            margin-top: 0;
+        }
 
         & .row {
             white-space: nowrap;
@@ -166,5 +174,13 @@
                 border-bottom-color: transparent;
             }
         }
+    }
+}
+
+.gridContainer .grid {
+    height: 100%;
+
+    .cell {
+        border-color: transparent;
     }
 }

@@ -35,7 +35,7 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
 
     ngOnInit() {
         this.$host = $(this._element.nativeElement);
-        this.$control = $("input", this.$host);
+        this.$control = $("input:first-child", this.$host);
 
         this._parseAttributesAndErrors();
 
@@ -107,6 +107,10 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     }
 
     set value(v: any) {
+        this._setValue(v);
+    }
+
+    protected _setValue(v: any) {
         if (this._value != v) {
             this._value = v;
             this.validate(this.control);
@@ -152,5 +156,10 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
         }
         this._errorMsg = !c.untouched ? Object.keys(result).map(k => result[k]) : null;
         return result;
+    }
+
+    reset() {
+        this.control.markAsUntouched;
+        this._errorMsg = null;
     }
 }

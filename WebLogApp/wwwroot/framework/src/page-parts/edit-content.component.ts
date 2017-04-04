@@ -42,7 +42,7 @@ export class EditContentComponent extends TabContentComponent implements IEdit<a
     @ContentChildren(forwardRef(() => Control))
     private _content: QueryList<Control>;
 
-    private _controls: Array<Control>;
+    public controls: Array<Control>;
 
     @ViewChild(ActivatedRouteComponent)
     activatedRoute: ActivatedRouteComponent;
@@ -67,9 +67,9 @@ export class EditContentComponent extends TabContentComponent implements IEdit<a
     ngAfterContentInit() {
         let group: any = {};
 
-        this._controls = this._content.map(c => c);
+        this.controls = this._content.map(c => c);
 
-        this._controls.forEach(ctrl => {
+        this.controls.forEach(ctrl => {
             ctrl.registerOnChange((v) => {
                 if (this.entity) {
                     this.entity[ctrl.name] = v;
@@ -103,7 +103,7 @@ export class EditContentComponent extends TabContentComponent implements IEdit<a
 
     private _assignDataToControls() {
         this._changeDetector.detach();
-        this._controls.forEach(ctrl => {
+        this.controls.forEach(ctrl => {
             ctrl.writeValue(this._entity ? this._entity[ctrl.name] : null);
         });
         setTimeout(() => this._detectChanges(), 100);

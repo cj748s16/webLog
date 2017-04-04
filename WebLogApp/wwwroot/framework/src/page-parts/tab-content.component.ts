@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, ViewChildren, ContentChildren, QueryList, AfterViewInit, HostBinding, ElementRef, AfterViewChecked, Input, forwardRef } from "@angular/core";
+﻿import { Component, ViewChild, ViewChildren, ContentChildren, QueryList, AfterViewInit, HostBinding, ElementRef, Input, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs/Subject";
 
@@ -21,7 +21,7 @@ const noop = () => { };
         { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => TabContentComponent), multi: true }
     ]
 })
-export class TabContentComponent implements AfterViewInit, AfterViewChecked, ControlValueAccessor {
+export class TabContentComponent implements AfterViewInit, ControlValueAccessor {
 
     @ViewChild(ActionBarComponent)
     private _actionBar: ActionBarComponent;
@@ -70,9 +70,11 @@ export class TabContentComponent implements AfterViewInit, AfterViewChecked, Con
         if (!keyGridFound && this.keyGrid) {
             throw Error(`Grid with key ${this.keyGrid} not found`);
         }
+
+        this.setHeight();
     }
 
-    ngAfterViewChecked() {
+    setHeight() {
         if (this.grids && this.grids.length > 0) {
             let minGridTop = 0, totalHeightPercnt = 0;
             this.grids.forEach(g => {

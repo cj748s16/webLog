@@ -2,6 +2,7 @@
   "Groups": "Csoportok",
   "Group": "Csoport",
   "Groupname": "Név",
+  "Rolename": "Szerepkör",
 
   "Invalid fields": "Adatok hibásan lettek megadva",
   "Group created": "Csoport sikeresen létrehozva",

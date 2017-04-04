@@ -32,11 +32,28 @@ namespace WebLogBase.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<int?>("Roleid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Adduserid");
 
+                    b.HasIndex("Roleid");
+
                     b.ToTable("Group");
+                });
+
+            modelBuilder.Entity("WebLogBase.Entities.System.Account.Role", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("WebLogBase.Entities.System.Account.User", b =>
@@ -99,6 +116,10 @@ namespace WebLogBase.Migrations
                     b.HasOne("WebLogBase.Entities.System.Account.User", "Adduser")
                         .WithMany()
                         .HasForeignKey("Adduserid");
+
+                    b.HasOne("WebLogBase.Entities.System.Account.Role", "Role")
+                        .WithMany("Groups")
+                        .HasForeignKey("Roleid");
                 });
 
             modelBuilder.Entity("WebLogBase.Entities.System.Account.User", b =>

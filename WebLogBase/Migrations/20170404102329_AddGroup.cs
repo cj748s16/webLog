@@ -16,6 +16,7 @@ namespace WebLogBase.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: false),
+                    Roleid = table.Column<int>(nullable: true),
                     Adduserid = table.Column<int>(nullable: true),
                     Adddate = table.Column<DateTime>(nullable: false),
                     Delstat = table.Column<int>(nullable: false)
@@ -29,12 +30,23 @@ namespace WebLogBase.Migrations
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Group_Role_Roleid",
+                        column: x => x.Roleid,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Group_Adduserid",
                 table: "Group",
                 column: "Adduserid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Group_Roleid",
+                table: "Group",
+                column: "Roleid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

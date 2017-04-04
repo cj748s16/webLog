@@ -2,7 +2,7 @@
 import { Observable } from "rxjs/Observable";
 import { EditTabComponent, NotificationService, UtilityService } from "@framework";
 
-import { GroupEdit } from "./domain";
+import { GroupEdit, RoleViewModel } from "./domain";
 import { GroupService } from "./group.service";
 
 @Component({
@@ -12,10 +12,23 @@ import { GroupService } from "./group.service";
 })
 export class GroupEditComponent extends EditTabComponent<GroupEdit> {
 
+    private _roleList: Array<RoleViewModel>;
+
     constructor(
-        groupService: GroupService,
+        private _groupService: GroupService,
         utilityService: UtilityService,
         notificationService: NotificationService) {
-        super(groupService, utilityService, notificationService);
+        super(_groupService, utilityService, notificationService);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
+        this._getRoleList();
+    }
+
+    private _getRoleList() {
+        this._groupService.getRoleList()
+            .subscribe((data: any) => this._roleList = data,
+            error => this._utilityService.handleError.bind(this._utilityService));
     }
 }

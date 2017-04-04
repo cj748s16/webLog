@@ -21,10 +21,10 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
     public id: string;
 
     constructor(
-        service: IAssignService,
+        protected _assignService: IAssignService,
         utilityService: UtilityService,
-        private _notificationService: NotificationService) {
-        super(service, utilityService);
+        protected _notificationService: NotificationService) {
+        super(_assignService, utilityService);
     }
 
     ngOnInit() {
@@ -59,7 +59,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
 
     protected getAvailableList() {
         if (this.parentKey) {
-            (<IAssignService>this._service).getAvailable<T>(this.parentKey)
+            this._assignService.getAvailable<T>(this.parentKey)
                 .subscribe((data: any) => {
                     this.availableList = data;
                 },
@@ -71,7 +71,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
 
     protected getAssignedList() {
         if (this.parentKey) {
-            (<IAssignService>this._service).getAssigned<T>(this.parentKey)
+            this._assignService.getAssigned<T>(this.parentKey)
                 .subscribe((data: any) => {
                     this.assignedList = data;
                 },
@@ -84,7 +84,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
     assign() {
         if (this.parentKey && this.availableSelectedKey) {
             let assignResult: OperationResult = new OperationResult(false, "");
-            (<IAssignService>this._service).assign<T>(this.parentKey, this.availableSelectedKey)
+            this._assignService.assign<T>(this.parentKey, this.availableSelectedKey)
                 .subscribe(res => assignResult = OperationResult.fromResponse(res),
                 error => this._utilityService.handleError.bind(this._utilityService),
                 () => {
@@ -101,7 +101,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
     unassign() {
         if (this.parentKey && this.assignedSelectedKey) {
             let unassignResult: OperationResult = new OperationResult(false, "");
-            (<IAssignService>this._service).unassign<T>(this.parentKey, this.assignedSelectedKey)
+            this._assignService.unassign<T>(this.parentKey, this.assignedSelectedKey)
                 .subscribe(res => unassignResult = OperationResult.fromResponse(res),
                 error => this._utilityService.handleError.bind(this._utilityService),
                 () => {

@@ -9,7 +9,7 @@ import { Key, OperationResult, IService } from "../utility";
 import { NotificationService, UtilityService } from "../services";
 
 import { BaseTabComponent } from "./base-tab.component";
-import { InlineEditComponent } from "./inline-edit.component";
+import { EditModalComponent } from "./edit-modal.component";
 import { Control } from "../controls/control";
 import { IEdit } from "./iedit";
 
@@ -34,7 +34,7 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
     constructor(
         service: IService,
         utilityService: UtilityService,
-        private _notificationService: NotificationService) {
+        protected _notificationService: NotificationService) {
         super(service, utilityService);
     }
 
@@ -78,6 +78,7 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
     private _showModal() {
         if (this._editComponent) {
             this._editComponent.entity = this.entity;
+            this._editComponent.controls.forEach(c => c.reset());
         }
         if (this._modal) {
             this._modal.open();
@@ -114,7 +115,7 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
             if (id == null) {
                 reject();
             } else {
-                this._service.get(id)
+                this._assignService.get(id)
                     .subscribe(res => {
                         loadResult = OperationResult.fromResponse(res);
                     },
@@ -138,9 +139,9 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
         let obs: Observable<any>;
 
         if (this.key) {
-            obs = this._service.modify(this.entity);
+            obs = this._assignService.modify(this.entity);
         } else {
-            obs = this._service.new(this.entity);
+            obs = this._assignService.new(this.entity);
         }
 
         obs

@@ -166,6 +166,8 @@ namespace WebLogApp
                     name: "defaultApi",
                     template: "api/{controller}/{action}/{id?}");
             });
+
+            app.InitializeDatabase(Container);
         }
 
         // static files providers configuration

@@ -7,6 +7,7 @@ import { GroupEdit } from "./domain";
 export class GroupService implements IService {
 
     private static _groupAPI = "api/:lang/system/account/group/";
+    private static _roleAPI = "api/:lang/system/account/role/";
 
     constructor(private _dataService: DataService) { }
 
@@ -23,5 +24,10 @@ export class GroupService implements IService {
     modify(group: GroupEdit) {
         this._dataService.set(GroupService._groupAPI);
         return this._dataService.put(group);
+    }
+
+    getRoleList() {
+        this._dataService.set(GroupService._roleAPI);
+        return this._dataService.get();
     }
 }

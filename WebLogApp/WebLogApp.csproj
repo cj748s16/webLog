@@ -62,6 +62,7 @@
     <Content Include="wwwroot\framework\src\action-bar\index.js" />
     <Content Include="wwwroot\framework\src\action-bar\index.js.map" />
     <Content Include="wwwroot\framework\src\action-bar\index.ts" />
+    <Content Include="wwwroot\framework\src\controls.ts" />
     <Content Include="wwwroot\framework\src\controls\cancel-button.control.ts" />
     <Content Include="wwwroot\framework\src\controls\control.component.js" />
     <Content Include="wwwroot\framework\src\controls\control.component.js.map" />
@@ -69,6 +70,7 @@
     <Content Include="wwwroot\framework\src\controls\control.js.map" />
     <Content Include="wwwroot\framework\src\controls\control.ts" />
     <Content Include="wwwroot\framework\src\controls\controls.module.ts" />
+    <Content Include="wwwroot\framework\src\controls\dropdown.control.ts" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.js" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.js.map" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.ts" />
@@ -86,6 +88,9 @@
     <Content Include="wwwroot\framework\src\page-parts\detail-assign-tab.component.ts" />
     <Content Include="wwwroot\framework\src\page-parts\edit-content.component.js" />
     <Content Include="wwwroot\framework\src\page-parts\edit-content.component.js.map" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-modal.component.js" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-modal.component.js.map" />
+    <Content Include="wwwroot\framework\src\page-parts\edit-modal.component.ts" />
     <Content Include="wwwroot\framework\src\page-parts\edit-tab.component.js" />
     <Content Include="wwwroot\framework\src\page-parts\edit-tab.component.js.map" />
     <Content Include="wwwroot\framework\src\page-parts\edit-tab.component.ts" />
@@ -96,7 +101,6 @@
     <Content Include="wwwroot\framework\src\page-parts\index.module.js" />
     <Content Include="wwwroot\framework\src\page-parts\index.module.js.map" />
     <Content Include="wwwroot\framework\src\page-parts\index.ts" />
-    <Content Include="wwwroot\framework\src\page-parts\inline-edit.component.ts" />
     <Content Include="wwwroot\framework\src\page-parts\list-tab.component.ts" />
     <Content Include="wwwroot\framework\src\services.ts" />
     <Content Include="wwwroot\framework\src\services\data.service.js" />

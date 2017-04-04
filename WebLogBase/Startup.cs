@@ -31,6 +31,7 @@ namespace WebLogBase
         {
             // Add repositories
             Container.Register<Repositories.System.Account.IUserRepository, Repositories.System.Account.UserRepository>();
+            Container.Register<Repositories.System.Account.IRoleRepository, Repositories.System.Account.RoleRepository>();
             Container.Register<Repositories.System.Account.IGroupRepository, Repositories.System.Account.GroupRepository>();
             Container.Register<Repositories.System.Account.IUserGroupRepository, Repositories.System.Account.UserGroupRepository>();
         }
@@ -47,6 +48,11 @@ namespace WebLogBase
             var optionsBuilder = new DbContextOptionsBuilder();
             optionsBuilder.UseSqlServer(sqlConnectionString);
             Container.RegisterSingleton(() => new WebLogContext(optionsBuilder.Options));
+        }
+
+        public void InitializeDatabase(Container container)
+        {
+            DbInitializer.Initialize(container);
         }
     }
 }

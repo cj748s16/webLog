@@ -25,4 +25,6 @@ namespace WebLogBase.Repositories.System.Account
         /// <param name="predicate">ug => ug.Userid == ?; where the ug is the UserGroup</param>
         Task<IEnumerable<Group>> AssignedByUserAsync(Expression<Func<UserGroup, bool>> predicate);
     }
+
+    public interface IRoleRepository : IEntityBaseWithIdRepository<Role> { }
 }

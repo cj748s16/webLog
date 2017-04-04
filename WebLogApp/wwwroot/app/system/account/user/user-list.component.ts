@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, forwardRef } from "@angular/core";
+﻿import { Component, ElementRef, OnInit, ViewChild, forwardRef } from "@angular/core";
 import { Key, compareKey, UtilityService, ListTabComponent } from "@framework";
 
 import { UserService } from "./user.service";
@@ -20,7 +20,8 @@ export class UserListComponent extends ListTabComponent<UserViewModel> {
 
     constructor(
         userService: UserService,
-        utilityService: UtilityService) {
-        super(userService, utilityService, UserListComponent._editUrl);
+        utilityService: UtilityService,
+        el: ElementRef) {
+        super(userService, utilityService, UserListComponent._editUrl, el);
     }
 }

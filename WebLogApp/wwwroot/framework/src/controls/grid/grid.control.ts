@@ -28,7 +28,7 @@ const noop = () => { };
 <div class="grid green" #grid>
     <div class="content">
         <div #innerContent class="inner-content">
-            <div class="heading">
+            <div #heading class="heading">
                 <div #gridHeadingPlaceHolder></div>
             </div>
             <div #body class="body">
@@ -50,6 +50,10 @@ const noop = () => { };
 export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges, ControlValueAccessor {
 
     @Input() list: Array<any>;
+    @Input() height: number;
+    @Input() id: string;
+    @Input() heading: boolean = true;
+    @Input() autoselect: boolean = true;
 
     @ContentChildren(GridColumn) columns: QueryList<GridColumn>;
 
@@ -65,6 +69,10 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 
     @ViewChild("innerContent")
     private _innerContent: ElementRef;
+
+    @ViewChild("heading")
+    private _heading: ElementRef;
+    private $heading: any;
 
     @ViewChild("body")
     private _body: ElementRef;
@@ -93,12 +101,6 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
     private _rowHeight: number;
     private _topRowIndex: number = 0;
 
-    @Input()
-    height: number;
-
-    @Input()
-    id: string;
-
     constructor(
         private _typeBuilder: DynamicTypeBuilder<IGridRow>,
         private _renderer: Renderer) {
@@ -110,14 +112,10 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
     }
 
     ngAfterViewInit() {
-        if (this.list) {
-            this._wasViewInitialized = true;
-            this._refreshContent();
-        }
-
         this.$grid = $(this._grid.nativeElement);
 
         this.$vScroller = $(this._vScroller.nativeElement);
+        this.$heading = $(this._heading.nativeElement);
         this.$body = $(this._body.nativeElement);
 
         this._renderer.setElementStyle(this._innerContent.nativeElement, "margin-right", `${Utility.scrollSize()}px`);
@@ -125,6 +123,8 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
         this._renderer.listen(this._vScroller.nativeElement, "scroll", this._vScrollHandler.bind(this));
 
         this._refreshContent();
+
+        this._wasViewInitialized = true;
     }
 
     private _refreshContent() {
@@ -195,16 +195,28 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 
     private _renderHeading(): Promise<any> {
         return new Promise<any>((resolve) => {
-            const headingTemplate = this._createHeadingTemplate();
-            const headingKey = MD5(headingTemplate).toString();
-            const compMeta = { template: headingTemplate };
+            if (typeof this.heading === "string") {
+                this.heading = this.heading === "true";
+            }
+            if (this.heading) {
+                const headingTemplate = this._createHeadingTemplate();
+                const headingKey = MD5(headingTemplate).toString();
+                const compMeta = { template: headingTemplate };
 
-            this._typeBuilder
-                .createComponentFactory(headingKey, () => { return this._createNewComponent(compMeta, null); })
-                .then((factory: ComponentFactory<IGridRow>) => {
-                    this._headingComponentRef = this._gridHeadingTarget.createComponent(factory);
-                    resolve();
-                });
+                this.$heading.removeClass("noheading");
+                this.$body.removeClass("noheading");
+
+                this._typeBuilder
+                    .createComponentFactory(headingKey, () => { return this._createNewComponent(compMeta, null); })
+                    .then((factory: ComponentFactory<IGridRow>) => {
+                        this._headingComponentRef = this._gridHeadingTarget.createComponent(factory);
+                        resolve();
+                    });
+            } else {
+                this.$heading.addClass("noheading");
+                this.$body.addClass("noheading");
+                resolve();
+            }
         });
     }
 
@@ -216,6 +228,10 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
             rowTemplate = this._createRowTemplate();
             const rowKey = MD5(rowTemplate).toString();
             const compMeta = { template: rowTemplate };
+
+            if (typeof this.autoselect === "string") {
+                this.autoselect = this.autoselect == "true";
+            }
 
             this._typeBuilder
                 .createComponentFactory(rowKey, () => { return this._createNewComponent(compMeta/*, fnList*/); })
@@ -234,9 +250,9 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
                             }
 
                             if (!rowHeight) {
-                                rowHeight = $(comp.el.nativeElement).height();
+                                this._rowHeight = rowHeight = $(comp.el.nativeElement).height();
                             }
-                            if (!selectedKey) {
+                            if (!selectedKey && this.autoselect) {
                                 selectedKey = comp.key;
                             }
                         }
@@ -398,10 +414,13 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (this._wasViewInitialized) {
-            return;
-        }
         if (changes && "list" in changes) {
+            this._refreshContent();
+        }
+        if (changes && "columns" in changes) {
+            this._refreshContent();
+        }
+        if (changes && "heading" in changes) {
             this._refreshContent();
         }
     }
@@ -421,7 +440,7 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
     }
 
     registerOnChange(fn: any) {
-        this.onChangedCallback = fn;
+        this.onChangedCallback = fn || noop;
     }
 
     registerOnTouched(fn: any) {
@@ -432,6 +451,30 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
         return this.$grid.position().top;
     }
 
+    get width(): number {
+        return this.$grid.outerWidth(true);
+    }
+
+    get rowHeight(): number {
+        if (!this._rowHeight && this._componentRef && this._componentRef.length > 0) {
+            // if no rowHeight, calculate it on the fly
+            let placeHolder = null;
+            if (!this.$grid.is(":visible")) {
+                placeHolder = $("<div/>");
+                this.$grid.before(placeHolder);
+                this.$grid.appendTo("body");
+                this.$grid.css({ "top": -10000, "left": -10000, "display": "block", "height": 1000 });
+            }
+            this._rowHeight = $(this._componentRef[0].instance.el.nativeElement).height();
+            if (placeHolder) {
+                this.$grid.css({ "top": "", "left": "", "display": "", "height": "" });
+                placeHolder.before(this.$grid);
+                placeHolder.detach();
+            }
+        }
+        return this._rowHeight;
+    }
+
     setHeight(height: number, percent: boolean = false) {
         let topCorr = parseFloat(this.$grid.css("margin-top")) + parseFloat(this.$grid.css("border-top")),
             bottomCorr = parseFloat(this.$grid.css("margin-bottom")) + parseFloat(this.$grid.css("border-bottom"));
@@ -440,5 +483,15 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
         } else {
             this.$grid.css({ "height": `calc(${height}% - ${topCorr + bottomCorr}px)` });
         }
+        this._renderer.setElementStyle(this._innerVScroller.nativeElement, "height", `${height}px`);
     }
 }
+
+/* ** TODO
+- mouse scroll handling
+- key handling
+- column orders
+- column resize
+- column move
+- assign-tab height???
+*/

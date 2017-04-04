@@ -1,3 +1,7 @@
 ﻿<inline-edit id="groupEditModal" title="system.account.group.Group">
     <textbox id="Groupname" name="Groupname" placeholder="system.account.group.Groupname" [errorDefs]="{required: true}"></textbox>
+    <dropdown id="Roleid" name="Roleid" placeholder="system.account.group.Rolename" [list]="_roleList" [errorDefs]="{required: true}">
+        <column field="Id" hidden="true" key="true"></column>
+        <column field="Rolename" width="180" lookup="true"></column>
+    </dropdown>
 </inline-edit>

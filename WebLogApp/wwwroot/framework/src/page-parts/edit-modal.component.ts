@@ -26,10 +26,10 @@ import { IEdit } from "./iedit";
 </modal>
 `,
     providers: [
-        { provide: IEdit, useExisting: forwardRef(() => InlineEditComponent), multi: true }
+        { provide: IEdit, useExisting: forwardRef(() => EditModalComponent), multi: true }
     ]
 })
-export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDestroy {
+export class EditModalComponent implements AfterContentInit, IEdit<any>, OnDestroy {
 
     @Input()
     public id: string;
@@ -49,7 +49,7 @@ export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDest
     @ContentChildren(forwardRef(() => Control))
     private _content: QueryList<Control>;
 
-    private _controls: Array<Control>;
+    public controls: Array<Control>;
 
     private form: FormGroup;
 
@@ -68,9 +68,9 @@ export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDest
     ngAfterContentInit() {
         let group: any = {};
 
-        this._controls = this._content.map(c => c);
+        this.controls = this._content.map(c => c);
 
-        this._controls.forEach(ctrl => {
+        this.controls.forEach(ctrl => {
             ctrl.registerOnChange((v) => {
                 if (this.entity) {
                     this.entity[ctrl.name] = v;
@@ -104,7 +104,7 @@ export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDest
 
     private _assignDataToControls() {
         this._changeDetector.detach();
-        this._controls.forEach(ctrl => {
+        this.controls.forEach(ctrl => {
             ctrl.writeValue(this._entity ? this._entity[ctrl.name] : null);
         });
         setTimeout(() => this._detectChanges(), 100);

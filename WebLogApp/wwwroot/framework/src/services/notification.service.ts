@@ -9,6 +9,7 @@ export class NotificationService {
 
     printSuccessMessage(message: string) {
         this._notifier.success(message);
+        //this._notifier.notify(message, "success", [2000]);
     }
 
     printErrorMessage(message: string) {

@@ -15,6 +15,10 @@ namespace WebLogBase.Entities.System.Account
         public string Name { get; set; }
 
         //[Required]
+        [ForeignKey("Role")]
+        public int? Roleid { get; set; }
+
+        //[Required]
         [ForeignKey("Adduser")]
         public int? Adduserid { get; set; }
         [Required]
@@ -26,5 +30,7 @@ namespace WebLogBase.Entities.System.Account
 
         [InverseProperty("Group")]
         public virtual ICollection<UserGroup> Users { get; set; }
+
+        public virtual Role Role { get; set; }
     }
 }

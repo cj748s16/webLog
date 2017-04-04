@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleInjector;
 using System;
@@ -12,22 +13,17 @@ namespace WebLogBase.Infrastructure.Core
     public interface IStartup
     {
         void Configure(IConfigurationRoot configuration, Container container);
+        void InitializeDatabase(Container container);
     }
 
-    public static class SetupServiceCollectionExtensions
+    public static class SetupStartupExtensions
     {
-        // Searching and processing IStartup interface and it's implementations
-        public static IServiceCollection AddExternalDLLs(this IServiceCollection services, IConfigurationRoot configuration, Container container)
-        {
-            RegisterExternalDLLs(configuration, container);
-
-            return services;
-        }
-
-        private static void RegisterExternalDLLs(IConfigurationRoot configuration, Container container)
+        // Load all IStartup implementation from all referenced assemblies
+        private static IEnumerable<IStartup> GetStartups()
         {
             var iStartupType = typeof(IStartup);
             IStartup startup;
+            var list = new List<IStartup>();
 
             var referencedAssemblies = Assembly.GetEntryAssembly().GetReferencedAssemblies();
             foreach (var asmName in referencedAssemblies)
@@ -43,10 +39,44 @@ namespace WebLogBase.Infrastructure.Core
                     }
                     if (startup != null)
                     {
-                        startup.Configure(configuration, container);
+                        list.Add(startup);
                     }
                 }
             }
+
+            return list;
+        }
+
+        // Searching and processing IStartup interface and it's implementations
+        public static IServiceCollection AddExternalDLLs(this IServiceCollection services, IConfigurationRoot configuration, Container container)
+        {
+            RegisterExternalDLLs(configuration, container);
+
+            return services;
+        }
+
+        // Calling IStartup.Configure() method of loaded IStartup instances
+        private static void RegisterExternalDLLs(IConfigurationRoot configuration, Container container)
+        {
+            var startups = GetStartups();
+
+            foreach (var startup in startups)
+            {
+                startup.Configure(configuration, container);
+            }
+        }
+
+        // Calling IStartup.InitializeDatabase() method of loaded IStartup instances
+        public static IApplicationBuilder InitializeDatabase(this IApplicationBuilder app, Container container)
+        {
+            var startups = GetStartups();
+
+            foreach (var startup in startups)
+            {
+                startup.InitializeDatabase(container);
+            }
+
+            return app;
         }
     }
 }
