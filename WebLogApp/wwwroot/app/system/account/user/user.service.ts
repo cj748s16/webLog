@@ -1,5 +1,5 @@
 ﻿import { Injectable } from "@angular/core";
-import { Key, IService, UtilityService, DataService } from "@framework";
+import { Key, IAssignService, UtilityService, DataService } from "@framework";
 
 import { UserEdit } from "./domain";
 
@@ -7,7 +7,7 @@ declare var jQuery: any;
 const $ = jQuery;
 
 @Injectable()
-export class UserService implements IService {
+export class UserService implements IAssignService {
 
     private static _userAPI = "api/:lang/system/account/user/";
     private static _userGroupAPI = "api/:lang/system/account/usergroup/";
@@ -25,7 +25,6 @@ export class UserService implements IService {
     }
 
     modify(user: UserEdit) {
-        user.ConfirmPassword = null;
         this._dataService.set(UserService._userAPI);
         return this._dataService.put(user);
     }
@@ -37,19 +36,19 @@ export class UserService implements IService {
         return null;
     }
 
-    getAvailableGroups(user: Key) {
+    getAvailable(user: Key) {
         const userId = this._getId(user);
         this._dataService.set(`${UserService._userGroupAPI}availablebyuser/${userId}`);
         return this._dataService.get();
     }
 
-    getAssignedGroups(user: Key) {
+    getAssigned(user: Key) {
         const userId = this._getId(user);
         this._dataService.set(`${UserService._userGroupAPI}assignedbyuser/${userId}`);
         return this._dataService.get();
     }
 
-    assignToGroup(user: Key, group: Key) {
+    assign(user: Key, group: Key) {
         var keys: { [key: string]: any } = {};
         keys["userId"] = this._getId(user);
         keys["groupId"] = this._getId(group);
@@ -58,7 +57,7 @@ export class UserService implements IService {
         return this._dataService.post(JSON.stringify(keys));
     }
 
-    unassignFromGroup(user: Key, group: Key) {
+    unassign(user: Key, group: Key) {
         var keys: { [key: string]: any } = {};
         keys["userId"] = this._getId(user);
         keys["groupId"] = this._getId(group);

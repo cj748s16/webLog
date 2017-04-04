@@ -1,8 +1,8 @@
 ﻿<div id="group-list" name="group-list" tabContent>
     <button type="button" class="btn btn-default" (click)="new()" actionButton>{{'New' | translate}}</button>
-    <button [disabled]="!_selectedKey" type="button" class="btn btn-default" (click)="modify()" actionButton>{{'Modify' | translate}}</button>
+    <button [disabled]="!selectedKey" type="button" class="btn btn-default" (click)="modify()" actionButton>{{'Modify' | translate}}</button>
 
-    <grid [list]="_groups">
+    <grid [list]="list">
         <grid-column field="Id" hidden="true" key="true"></grid-column>
         <grid-column field="Groupname" width="180" caption="system.account.group.Groupname"></grid-column>
         <grid-column field="Addusername" width="80" caption="Creator"></grid-column>

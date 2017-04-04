@@ -117,6 +117,7 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     writeValue(v: any) {
         if (this._value != v) {
             this._value = v;
+            this.control.setValue(v, { onlySelf: false, emitEvent: false, emitModelToViewChange: false, emitViewToModelChange: false });
             this.validate(this.control);
         }
     }

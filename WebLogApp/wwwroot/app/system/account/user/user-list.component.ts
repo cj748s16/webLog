@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, forwardRef } from "@angular/core";
-import { Key, compareKey, TAB_ACCESSOR, TabAccessor, TabContentComponent, UtilityService } from "@framework";
+import { Key, compareKey, UtilityService, ListTabComponent } from "@framework";
 
 import { UserService } from "./user.service";
 import { UserViewModel } from "./domain";
@@ -12,55 +12,15 @@ const noop = () => { };
 @Component({
     moduleId: module.id,
     selector: "user-list",
-    templateUrl: "user-list.component.html",
-    providers: [
-        { provide: TAB_ACCESSOR, useExisting: forwardRef(() => UserListComponent), multi: true }
-    ]
+    templateUrl: "user-list.component.html"
 })
-export class UserListComponent implements OnInit, TabAccessor {
+export class UserListComponent extends ListTabComponent<UserViewModel> {
 
     private static _editUrl = "/:lang/account/user/edit/";
 
-    private _users: Array<UserViewModel>;
-    private _selectedKey: Key;
-
-    @ViewChild(TabContentComponent)
-    private _tabContent: TabContentComponent;
-
     constructor(
-        private _userService: UserService,
-        private _utilityService: UtilityService) { }
-
-    ngOnInit() {
-        this.getUsers();
-    }
-
-    getUsers() {
-        this._userService.get()
-            .subscribe((data: any) => {
-                this._users = data;
-            },
-            error => this._utilityService.handleError.bind(this._utilityService));
-    }
-
-    new() {
-        this._utilityService.navigate(UserListComponent._editUrl);
-    }
-
-    modify() {
-        if (this._selectedKey) {
-            let id = "Id" in this._selectedKey ? this._selectedKey["Id"] : null;
-            this._utilityService.navigate(`${UserListComponent._editUrl}${id}`);
-        }
-    }
-
-    getTab(): TabContentComponent {
-        return this._tabContent;
-    }
-
-    writeValue(value: Map<string, Key>) {
-        if (value.has("user-list")) {
-            this._selectedKey = value.get("user-list");
-        }
+        userService: UserService,
+        utilityService: UtilityService) {
+        super(userService, utilityService, UserListComponent._editUrl);
     }
 }

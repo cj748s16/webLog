@@ -14,8 +14,8 @@ export class GroupEditComponent extends EditTabComponent<GroupEdit> {
 
     constructor(
         groupService: GroupService,
-        notificationService: NotificationService,
-        utilityService: UtilityService) {
-        super(groupService, notificationService, utilityService);
+        utilityService: UtilityService,
+        notificationService: NotificationService) {
+        super(groupService, utilityService, notificationService);
     }
 }

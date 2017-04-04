@@ -14,6 +14,7 @@ import { ControlsModule } from "../controls/controls.module";
 import { ActivatedRouteComponent } from "./activated-route.component";
 import { PageComponent } from "./page.component";
 import { TabContentComponent } from "./tab-content.component";
+import { AssignTabContentComponent } from "./assign-tab-content.component";
 
 import { InlineEditComponent } from "./inline-edit.component";
 import { EditContentComponent } from "./edit-content.component";
@@ -30,6 +31,7 @@ import { EditContentComponent } from "./edit-content.component";
         ActivatedRouteComponent,
         PageComponent,
         TabContentComponent,
+        AssignTabContentComponent,
         InlineEditComponent,
         EditContentComponent
     ],
@@ -42,6 +44,7 @@ import { EditContentComponent } from "./edit-content.component";
         ActivatedRouteComponent,
         PageComponent,
         TabContentComponent,
+        AssignTabContentComponent,
         InlineEditComponent,
         EditContentComponent
     ],

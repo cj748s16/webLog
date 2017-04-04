@@ -98,7 +98,15 @@ export class OperationResult {
 
 export abstract class IService {
 
-    abstract get(key: any): Observable<any>;
+    abstract get(key?: any): Observable<any>;
     abstract modify(entity: any): Observable<any>;
     abstract new(entity: any): Observable<any>;
+}
+
+export abstract class IAssignService extends IService {
+
+    abstract getAvailable<T>(parentKey: any): Observable<any>;
+    abstract getAssigned<T>(parentKey: any): Observable<any>;
+    abstract assign<T>(parentKey: any, selectedKey: any): Observable<any>;
+    abstract unassign<T>(parentKey: any, selectedKey: any): Observable<any>;
 }

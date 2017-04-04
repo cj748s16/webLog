@@ -1,8 +1,8 @@
 ﻿<div id="user-list" name="user-list" tabContent>
     <button type="button" class="btn btn-default" (click)="new()" actionButton>{{'New' | translate}}</button>
-    <button [disabled]="!_selectedKey" type="button" class="btn btn-default" (click)="modify()" actionButton>{{'Modify' | translate}}</button>
+    <button [disabled]="!selectedKey" type="button" class="btn btn-default" (click)="modify()" actionButton>{{'Modify' | translate}}</button>
 
-    <grid [list]="_users">
+    <grid [list]="list">
         <grid-column field="Id" hidden="true" key="true"></grid-column>
         <grid-column field="Userid" width="80" caption="system.account.user.UserID"></grid-column>
         <grid-column field="Username" width="180" caption="system.account.user.Username"></grid-column>

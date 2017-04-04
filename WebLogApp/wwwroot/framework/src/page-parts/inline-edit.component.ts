@@ -107,7 +107,7 @@ export class InlineEditComponent implements AfterContentInit, IEdit<any>, OnDest
         this._controls.forEach(ctrl => {
             ctrl.writeValue(this._entity ? this._entity[ctrl.name] : null);
         });
-        setTimeout(() => this._detectChanges, 100);
+        setTimeout(() => this._detectChanges(), 100);
     }
 
     ngOnDestroy() {

@@ -1,4 +1,4 @@
-﻿import { OnInit, ViewChild } from "@angular/core";
+﻿import { Component, ViewChild, forwardRef } from "@angular/core";
 import { Location } from "@angular/common";
 import { ActivatedRoute, Params } from "@angular/router";
 import { ModalComponent } from "ng2-bs3-modal/ng2-bs3-modal";
@@ -8,11 +8,12 @@ import "rxjs/add/operator/switchMap";
 import { Key, OperationResult, IService } from "../utility";
 import { NotificationService, UtilityService } from "../services";
 
+import { BaseTabComponent } from "./base-tab.component";
 import { InlineEditComponent } from "./inline-edit.component";
 import { Control } from "../controls/control";
 import { IEdit } from "./iedit";
 
-export class EditTabComponent<T> implements OnInit {
+export class EditTabComponent<T> extends BaseTabComponent<T> {
 
     @ViewChild(IEdit)
     private _editComponent: IEdit<T>;
@@ -31,12 +32,13 @@ export class EditTabComponent<T> implements OnInit {
     private _location: Location;
 
     constructor(
-        private _service: IService,
-        private _notificationService: NotificationService,
-        private _utilityService: UtilityService) { }
+        service: IService,
+        utilityService: UtilityService,
+        private _notificationService: NotificationService) {
+        super(service, utilityService);
+    }
 
     ngOnInit() {
-        this.entity = <T>{};
         if (this._editComponent) {
             this._editComponent.cancel.subscribe(() => this._close(), error => console.error(`Error: ${error}`));
             this._editComponent.save.subscribe(() => this._save(), error => console.error(`Error: ${error}`));
@@ -67,6 +69,7 @@ export class EditTabComponent<T> implements OnInit {
                     this._showModal();
                 });
             } else {
+                this.entity = <T>{};
                 this._showModal();
             }
         });
@@ -87,13 +90,14 @@ export class EditTabComponent<T> implements OnInit {
             this._doneResolve();
         }
         if (this._modal) {
-            this._modal.close();
+            this._modal.close().then(() => {
+                this.entity = <T>{};
+                if (this._editComponent) {
+                    this._editComponent.entity = this.entity;
+                }
+            });
         } else if (this._location) {
             this._location.back();
-        }
-        this.entity = <T>{};
-        if (this._editComponent) {
-            this._editComponent.entity = this.entity;
         }
     }
 
@@ -150,5 +154,8 @@ export class EditTabComponent<T> implements OnInit {
                     this._notificationService.printErrorMessage(editResult.Message);
                 }
             });
+    }
+
+    writeValue(value: Map<string, Key>) {
     }
 }

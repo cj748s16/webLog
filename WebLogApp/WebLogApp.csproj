@@ -81,6 +81,9 @@
     <Content Include="wwwroot\framework\src\controls\textbox.control.ts" />
     <Content Include="wwwroot\framework\src\page-parts.ts" />
     <Content Include="wwwroot\framework\src\page-parts\activated-route.component.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\assign-tab-content.component.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\base-tab.component.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\detail-assign-tab.component.ts" />
     <Content Include="wwwroot\framework\src\page-parts\edit-content.component.js" />
     <Content Include="wwwroot\framework\src\page-parts\edit-content.component.js.map" />
     <Content Include="wwwroot\framework\src\page-parts\edit-tab.component.js" />
@@ -94,6 +97,7 @@
     <Content Include="wwwroot\framework\src\page-parts\index.module.js.map" />
     <Content Include="wwwroot\framework\src\page-parts\index.ts" />
     <Content Include="wwwroot\framework\src\page-parts\inline-edit.component.ts" />
+    <Content Include="wwwroot\framework\src\page-parts\list-tab.component.ts" />
     <Content Include="wwwroot\framework\src\services.ts" />
     <Content Include="wwwroot\framework\src\services\data.service.js" />
     <Content Include="wwwroot\framework\src\services\data.service.js.map" />

@@ -4,7 +4,7 @@
     selector: "saveButton",
     template: `
 <div class="form-group">
-    <button class="btn btn-primary btn-lg btn-block" (click)="_click($event)" [disabled]="disabled">{{'Save' | translate}}</button>
+    <button class="btn btn-raised btn-primary btn-lg btn-block" (click)="_click($event)" [disabled]="disabled">{{'Save' | translate}}</button>
 </div>
 `
 })

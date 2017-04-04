@@ -39,7 +39,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
 })
 export class FrameworkModule { }
 
-export { Key, compareKey, convertDateTime, isMapStringKey, OperationResult, IService } from "./utility";
+export { Key, compareKey, convertDateTime, isMapStringKey, OperationResult, IService, IAssignService } from "./utility";
 export { TabsComponent } from "./tabs";
-export { PageComponent, TabContentComponent, EditContentComponent, EditTabComponent, TabAccessor, TAB_ACCESSOR } from "./page-parts";
+export { PageComponent, TabContentComponent, EditContentComponent, ListTabComponent, EditTabComponent, DetailAssignTabComponent, TabAccessor, TAB_ACCESSOR } from "./page-parts";
 export { NotificationService, UtilityService, DataService } from "./services";
