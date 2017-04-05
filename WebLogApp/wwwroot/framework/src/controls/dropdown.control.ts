@@ -1,11 +1,16 @@
 ﻿import { Component, forwardRef, Input, ContentChildren, QueryList, ViewChild, ElementRef, AfterViewInit, OnChanges, SimpleChanges, OnDestroy } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { TranslateService } from "@ngx-translate/core";
 
 import { Control } from "./control";
 import { GridControl } from "./grid/grid.control";
 import { GridColumn } from "./grid/grid-column";
 
 import * as Utility from "../utility";
+
+import { EventsService } from "../services";
+
+import { Subscription } from "rxjs/Subscription";
 
 declare var jQuery: any;
 const $ = jQuery;
@@ -27,12 +32,13 @@ export class DropdownColumn {
 @Component({
     selector: "dropdown",
     template: `
-<div class="form-group">
+<div class="form-group form-group-lg label-floating dropdown" [class.has-error]="_errorMsg && _errorMsg.length">
     <input type="hidden" autocomplete="off" [formControl]="control" [(ngModel)]="value" />
+    <label for="{{uniqueid}}" class="control-label">{{placeholder | translate}}</label>
     <div class="input-group">
         <div class="ctrl-container">
-            <input type="text" class="form-control input-lg foreControl" autocomplete="off" [placeholder]="placeholder | translate" (blur)="onBlur()" #foreControl />
-            <input type="text" class="form-control input-lg backControl" autocomplete="off" #backControl tabindex="-1" />
+            <input id="{{uniqueid}}" name="{{uniqueid}}" type="text" class="form-control foreControl" autocomplete="off" (blur)="onBlur()" #foreControl />
+            <input type="text" class="form-control backControl" autocomplete="off" #backControl tabindex="-1" />
         </div>
         <div class="input-group-btn">
             <button type="button" class="btn btn-default dropdown-toggle" (click)="_toggleDropDown()"><span class="caret"></span></button>
@@ -41,41 +47,23 @@ export class DropdownColumn {
             <grid [list]="list" heading="false" autoselect="false"></grid>
         </div>
     </div>
-    <div *ngFor="let msg of _errorMsg" class="alert alert-danger">{{msg}}</div>
+    <error-msg [messages]="_errorMsg"></error-msg>
 </div>
 `,
-    styles: [`
-.foreControl {
-    z-index: 1;
-    background: none !important;
-    background-image: none !important;
-    position: relative;
-}
-.backControl {
-    z-index: 0;
-    background-color: #fff;
-    color: #c0c0c0;
-    position: absolute;
-    top: 0;
-}
-.ctrl-container {
-    position: relative;
-}
-.gridContainer {
-    position: absolute;
-    height: 200px;
-    z-index: 2050;
-    display: none;
-}
-.gridContainer.visible {
-    display: block;
-}
-`],
     providers: [
         { provide: Control, useExisting: forwardRef(() => DropdownControl), multi: true }
     ]
 })
 export class DropdownControl extends Control implements AfterViewInit, OnChanges, OnDestroy {
+
+    public static registerGlobalListener(eventsService: EventsService) {
+        $(document).on("click", (evt) => {
+            let $target = $(evt.target);
+            if ($target && $target.is("div")) {
+                eventsService.broadcast("closeup-dropdown");
+            }
+        });
+    }
 
     @ContentChildren(DropdownColumn) columns: QueryList<DropdownColumn>;
 
@@ -101,6 +89,16 @@ export class DropdownControl extends Control implements AfterViewInit, OnChanges
 
     @ViewChild(GridControl)
     private _grid: GridControl;
+
+    private _closeUpSubscription: Subscription;
+
+    constructor(
+        element: ElementRef,
+        translateService: TranslateService,
+        private _eventsService: EventsService) {
+        super(element, translateService);
+        this._closeUpSubscription = this._eventsService.subscribe("closeup-dropdown", () => this._closeUp());
+    }
 
     ngAfterViewInit() {
         this.$foreControl = $(this._foreControl.nativeElement);
@@ -226,6 +224,9 @@ export class DropdownControl extends Control implements AfterViewInit, OnChanges
             } else {
                 this._setValueByResult(null);
             }
+
+            this.control.markAsTouched();
+            this.validate(this.control);
         }
     }
 
@@ -271,6 +272,21 @@ export class DropdownControl extends Control implements AfterViewInit, OnChanges
         return null;
     }
 
+    //private _transitionDurationIntl: number;
+    //private get _transitionDuration(): number {
+    //    if (this._transitionDurationIntl == null) {
+    //        this._transitionDurationIntl = parseFloat(this.$gridContainer.css("transition-duration"));
+    //    }
+    //    return this._transitionDurationIntl;
+    //}
+
+    private _closeUp() {
+        let droppedDown = this.$gridContainer.hasClass("visible");
+        if (droppedDown) {
+            this._toggleDropDown();
+        }
+    }
+
     private _toggleDropDown() {
         let droppedDown = this.$gridContainer.hasClass("visible");
         if (!droppedDown) {
@@ -306,17 +322,16 @@ export class DropdownControl extends Control implements AfterViewInit, OnChanges
         if (keyField && v) {
             this._setValue(v[keyField.field]);
         }
-        this._toggleDropDown();
+        //this._toggleDropDown();
     }
 
     ngOnDestroy() {
-        this.$gridContainer.removeClass("visible");
+        this._closeUpSubscription.unsubscribe();
+        this._closeUp();
     }
 }
 
 /* ** TODO
-- global: closeUp
-- inline-edit: closeUp
 - moving dropdown when controls moved...
 - key handling
 */

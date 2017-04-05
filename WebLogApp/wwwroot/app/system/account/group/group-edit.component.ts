@@ -1,6 +1,6 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, ElementRef } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { EditTabComponent, NotificationService, UtilityService } from "@framework";
+import { EditTabComponent, NotificationService, UtilityService, EventsService } from "@framework";
 
 import { GroupEdit, RoleViewModel } from "./domain";
 import { GroupService } from "./group.service";
@@ -17,8 +17,10 @@ export class GroupEditComponent extends EditTabComponent<GroupEdit> {
     constructor(
         private _groupService: GroupService,
         utilityService: UtilityService,
-        notificationService: NotificationService) {
-        super(_groupService, utilityService, notificationService);
+        el: ElementRef,
+        notificationService: NotificationService,
+        eventsService: EventsService) {
+        super(_groupService, utilityService, el, notificationService, eventsService);
     }
 
     ngOnInit() {

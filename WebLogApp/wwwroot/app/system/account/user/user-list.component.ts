@@ -22,6 +22,6 @@ export class UserListComponent extends ListTabComponent<UserViewModel> {
         userService: UserService,
         utilityService: UtilityService,
         el: ElementRef) {
-        super(userService, utilityService, UserListComponent._editUrl, el);
+        super(userService, utilityService, el, UserListComponent._editUrl);
     }
 }

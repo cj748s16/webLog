@@ -6,10 +6,10 @@ import { Control } from "./control";
 @Component({
     selector: "textbox",
     template: `
-<div class="form-group">
-    <input type="{{!password ? 'text' : 'password'}}" class="form-control input-lg" autocomplete="off" (blur)="onBlur()" [formControl]="control"
-        [(ngModel)]="value" [placeholder]="placeholder | translate" />
-    <div *ngFor="let msg of _errorMsg" class="alert alert-danger">{{msg}}</div>
+<div class="form-group form-group-lg label-floating" [class.has-error]="_errorMsg && _errorMsg.length">
+    <label for="{{uniqueid}}" class="control-label">{{placeholder | translate}}</label>
+    <input id="{{uniqueid}}" name="{{uniqueid}}" type="{{!password ? 'text' : 'password'}}" class="form-control" autocomplete="off" (blur)="onBlur()" [formControl]="control" [(ngModel)]="value" />
+    <error-msg [messages]="_errorMsg"></error-msg>
 </div>
 `,
     providers: [

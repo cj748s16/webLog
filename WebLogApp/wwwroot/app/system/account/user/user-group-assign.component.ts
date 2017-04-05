@@ -1,4 +1,4 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, ElementRef } from "@angular/core";
 import { UserService } from "./user.service";
 import { NotificationService, UtilityService, DetailAssignTabComponent } from "@framework";
 
@@ -14,7 +14,8 @@ export class UserGroupAssignComponent extends DetailAssignTabComponent<GroupView
     constructor(
         userService: UserService,
         utilityService: UtilityService,
-        notificationService: NotificationService) {
-        super(userService, utilityService, notificationService);
+        notificationService: NotificationService,
+        el: ElementRef) {
+        super(userService, utilityService, el, notificationService);
     }
 }

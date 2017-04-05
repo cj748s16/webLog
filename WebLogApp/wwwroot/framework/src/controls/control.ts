@@ -2,6 +2,8 @@
 import { FormControl, AbstractControl, Validators, ControlValueAccessor, Validator, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 
+import { createId } from "../utility";
+
 declare var jQuery: any;
 const $ = jQuery;
 
@@ -22,11 +24,14 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
 
     protected $host: any;
     protected $control: any;
+    protected $formGroup: any;
 
     protected _errorMsg: string[];
     protected _validators = new Array<ValidatorFn>();
 
     control: FormControl = new FormControl();
+
+    uniqueid: string = createId(this.constructor.name);
 
     constructor(
         protected _element: ElementRef,
@@ -36,6 +41,7 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     ngOnInit() {
         this.$host = $(this._element.nativeElement);
         this.$control = $("input:first-child", this.$host);
+        this.$formGroup = $(".form-group", this.$host);
 
         this._parseAttributesAndErrors();
 
@@ -107,23 +113,42 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     }
 
     set value(v: any) {
+        this.control.markAsTouched();
         this._setValue(v);
     }
 
-    protected _setValue(v: any) {
+    private _checkFormGroupIsEmpty() {
+        if (!this.value) {
+            this.$formGroup.addClass("is-empty");
+        } else {
+            this.$formGroup.removeClass("is-empty");
+        }
+    }
+
+    private _intrlSetValue(v: any, setToControl: boolean = false): boolean {
         if (this._value != v) {
             this._value = v;
+            if (setToControl) {
+                this.control.setValue(v, { onlySelf: true, emitEvent: false, emitModelToViewChange: false, emitViewToModelChange: false });
+            }
             this.validate(this.control);
+            this._checkFormGroupIsEmpty();
+            return true;
+        } else {
+            this._checkFormGroupIsEmpty();
+            return false;
+        }
+    }
+
+    protected _setValue(v: any) {
+        if (this._intrlSetValue(v, true)) {
             this.onChangedCallback(v);
         }
     }
 
     writeValue(v: any) {
-        if (this._value != v) {
-            this._value = v;
-            this.control.setValue(v, { onlySelf: false, emitEvent: false, emitModelToViewChange: false, emitViewToModelChange: false });
-            this.validate(this.control);
-        }
+        this._intrlSetValue(v, true);
+        this.control.markAsUntouched();
     }
 
     registerOnChange(fn: any) {

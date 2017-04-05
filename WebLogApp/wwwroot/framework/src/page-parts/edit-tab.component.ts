@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, forwardRef } from "@angular/core";
+﻿import { Component, ViewChild, forwardRef, ElementRef } from "@angular/core";
 import { Location } from "@angular/common";
 import { ActivatedRoute, Params } from "@angular/router";
 import { ModalComponent } from "ng2-bs3-modal/ng2-bs3-modal";
@@ -6,7 +6,7 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/switchMap";
 
 import { Key, OperationResult, IService } from "../utility";
-import { NotificationService, UtilityService } from "../services";
+import { NotificationService, UtilityService, EventsService } from "../services";
 
 import { BaseTabComponent } from "./base-tab.component";
 import { EditModalComponent } from "./edit-modal.component";
@@ -34,8 +34,10 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
     constructor(
         service: IService,
         utilityService: UtilityService,
-        protected _notificationService: NotificationService) {
-        super(service, utilityService);
+        el: ElementRef,
+        protected _notificationService: NotificationService,
+        protected _eventsService: EventsService) {
+        super(service, utilityService, el);
     }
 
     ngOnInit() {
@@ -46,6 +48,10 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
             if (this._editComponent.activatedRoute) {
                 this._route = this._editComponent.activatedRoute.route;
                 this._location = this._editComponent.activatedRoute.location;
+            }
+            if (this._modal) {
+                this._modal.onDismiss.subscribe(() => this._eventsService.broadcast("closeup-dropdown"));
+                this._modal.onClose.subscribe(() => this._eventsService.broadcast("closeup-dropdown"));
             }
         }
         if (this._route != null) {
@@ -86,6 +92,8 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
     }
 
     private _close(success: boolean = false) {
+        this._eventsService.broadcast("closeup-dropdown");
+
         if (success) {
             this.afterSaved();
             this._doneResolve();

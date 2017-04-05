@@ -16,7 +16,9 @@ import { IEdit } from "./iedit";
     </div>
     <div class="modal-body" style="overflow: auto;">
         <form class="form col-md-12 center-block" [formGroup]="form">
-            <ng-content></ng-content>
+            <div class="inputs">
+                <ng-content></ng-content>
+            </div>
             <saveButton (clicked)="_save($event)" [disabled]="!form.valid"></saveButton>
         </form>
     </div>

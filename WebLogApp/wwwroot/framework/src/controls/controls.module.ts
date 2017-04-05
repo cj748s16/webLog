@@ -9,6 +9,9 @@ import { GridControl } from "./grid/grid.control";
 import { GridColumn } from "./grid/grid-column";
 import { SaveButtonControl } from "./save-button.control";
 import { CancelButtonControl } from "./cancel-button.control";
+import { ErrorMsgComponent } from "./error-msg.component";
+
+import { EventsService } from "../services";
 
 @NgModule({
     imports: [
@@ -24,7 +27,8 @@ import { CancelButtonControl } from "./cancel-button.control";
         GridControl,
         GridColumn,
         SaveButtonControl,
-        CancelButtonControl
+        CancelButtonControl,
+        ErrorMsgComponent
     ],
     exports: [
         CommonModule,
@@ -38,6 +42,10 @@ import { CancelButtonControl } from "./cancel-button.control";
         GridColumn,
         SaveButtonControl,
         CancelButtonControl,
+        ErrorMsgComponent
+    ],
+    providers: [
+        EventsService
     ]
 })
 export class ControlsModule { }

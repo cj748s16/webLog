@@ -19,7 +19,7 @@ export class GroupListComponent extends ListTabComponent<GroupViewModel> {
         groupService: GroupService,
         utilityService: UtilityService,
         el: ElementRef) {
-        super(groupService, utilityService, null, el);
+        super(groupService, utilityService, el, null);
     }
 
 

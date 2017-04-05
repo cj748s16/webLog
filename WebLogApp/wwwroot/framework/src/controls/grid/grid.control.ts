@@ -493,5 +493,4 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 - column orders
 - column resize
 - column move
-- assign-tab height???
 */

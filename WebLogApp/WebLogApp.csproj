@@ -56,6 +56,7 @@
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
     <Content Include="wwwroot\assets\locales.json" />
     <Content Include="wwwroot\css\alertify.less" />
+    <Content Include="wwwroot\css\dropdown.less" />
     <Content Include="wwwroot\css\font.less" />
     <Content Include="wwwroot\css\material.less" />
     <Content Include="wwwroot\framework\src\action-bar.ts" />
@@ -71,6 +72,7 @@
     <Content Include="wwwroot\framework\src\controls\control.ts" />
     <Content Include="wwwroot\framework\src\controls\controls.module.ts" />
     <Content Include="wwwroot\framework\src\controls\dropdown.control.ts" />
+    <Content Include="wwwroot\framework\src\controls\error-msg.component.ts" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.js" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.js.map" />
     <Content Include="wwwroot\framework\src\controls\grid\grid.control.ts" />
@@ -106,6 +108,7 @@
     <Content Include="wwwroot\framework\src\services\data.service.js" />
     <Content Include="wwwroot\framework\src\services\data.service.js.map" />
     <Content Include="wwwroot\framework\src\services\data.service.ts" />
+    <Content Include="wwwroot\framework\src\services\events.service.ts" />
     <Content Include="wwwroot\framework\src\services\index.ts" />
     <Content Include="wwwroot\framework\src\services\notification.service.js" />
     <Content Include="wwwroot\framework\src\services\notification.service.js.map" />

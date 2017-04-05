@@ -1,4 +1,4 @@
-﻿import { ViewChild, ViewChildren, ElementRef, Input, AfterViewInit, QueryList, OnDestroy } from "@angular/core";
+﻿import { ViewChild, ViewChildren, ElementRef, Input, AfterViewInit, QueryList } from "@angular/core";
 
 import { Key, IService } from "../utility";
 import { UtilityService } from "../services";
@@ -8,14 +8,11 @@ import { GridControl } from "../controls";
 declare var jQuery: any;
 const $ = jQuery;
 
-export class ListTabComponent<T> extends BaseTabComponent<T> implements AfterViewInit, OnDestroy {
+export class ListTabComponent<T> extends BaseTabComponent<T> implements AfterViewInit {
 
     protected list: Array<T>;
     protected selectedKey: Key;
     public id: string;
-
-    private _sizeCheckInterval: any;
-    private $el: any;
 
     @ViewChildren(GridControl)
     private _grids: QueryList<GridControl>;
@@ -23,38 +20,20 @@ export class ListTabComponent<T> extends BaseTabComponent<T> implements AfterVie
     constructor(
         service: IService,
         utilityService: UtilityService,
+        el: ElementRef,
         private _editUrl: string,
-        private _el: ElementRef,
         protected idField: string = "Id") {
-        super(service, utilityService);
-        this.$el = $(this._el.nativeElement);
+        super(service, utilityService, el);
     }
 
     ngOnInit() {
         this.getList();
     }
 
-    Height: number;
-
     ngAfterViewInit() {
         const tab = this.getTab();
         if (!this.id) {
             this.id = tab.id;
-        }
-
-        this._sizeCheckInterval = setInterval(() => {
-            let h = this.$el.height();
-            if (h != this.Height) {
-                this.Height = h;
-                tab.setHeight();
-            }
-        }, 100);
-    }
-
-    ngOnDestroy() {
-        if (this._sizeCheckInterval) {
-            clearInterval(this._sizeCheckInterval);
-            this._sizeCheckInterval = null;
         }
     }
 

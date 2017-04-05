@@ -1,6 +1,6 @@
-﻿import { Component, forwardRef, ViewChild } from "@angular/core";
+﻿import { Component, forwardRef, ViewChild, ElementRef } from "@angular/core";
 import { AbstractControl, ValidationErrors } from "@angular/forms";
-import { Key, EditContentComponent, EditTabComponent, TAB_ACCESSOR, NotificationService, UtilityService } from "@framework";
+import { Key, EditContentComponent, EditTabComponent, TAB_ACCESSOR, NotificationService, UtilityService, EventsService } from "@framework";
 
 import { UserEdit } from "./domain";
 import { UserService } from "./user.service";
@@ -15,8 +15,10 @@ export class UserEditComponent extends EditTabComponent<UserEdit> {
     constructor(
         userService: UserService,
         utilityService: UtilityService,
-        notificationService: NotificationService) {
-        super(userService, utilityService, notificationService);
+        el: ElementRef,
+        notificationService: NotificationService,
+        eventsService: EventsService) {
+        super(userService, utilityService, el, notificationService, eventsService);
     }
 
     isConfirmMatches(c: AbstractControl): ValidationErrors {

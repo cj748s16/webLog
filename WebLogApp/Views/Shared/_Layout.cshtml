@@ -68,7 +68,7 @@
 
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
-        $.material.init();
+        $.material.init({ "validate": false });
         @if (ViewBag.isWatchLess)
         {
             <text>less.watch();</text>

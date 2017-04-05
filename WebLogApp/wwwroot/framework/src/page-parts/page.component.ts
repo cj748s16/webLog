@@ -7,6 +7,7 @@ import { TabContentComponent } from "./tab-content.component";
 import { TabAccessor } from "./tab_accessor";
 import { Key } from "../utility";
 import { EditTabComponent } from "./edit-tab.component";
+import { EventsService } from "../services";
 
 @Component({
     selector: "page",
@@ -35,12 +36,13 @@ export class PageComponent implements AfterViewInit {
     class: string;
 
     private _tabKeys: Map<string, (Key | Map<string, Key>)> = new Map<string, (Key | Map<string, Key>)>();
-    //private _tabObjs: Map<string, Subject<Map<string, Key>>> = new Map<string, Subject<Map<string, Key>>>();
 
     private _activeTabAccessor: TabAccessor;
     private _activeTab: TabContentComponent;
 
-    constructor(private _renderer: Renderer) { }
+    constructor(
+        private _renderer: Renderer,
+        private _eventsService: EventsService) { }
 
     ngAfterViewInit() {
         if (this._tabs) {
@@ -68,6 +70,7 @@ export class PageComponent implements AfterViewInit {
         } else {
             this._tabs.enable();
             this._activeTab.registerOnChange(this._tabValueChanged.bind(this));
+            this._activeTabAccessor.startSizeCheck();
             this._activeTabAccessor.writeValue(this._tabKeys);
             if (this._tabKeys.has(this._activeTab.id)) {
                 this._activeTab.writeValue(this._tabKeys.get(this._activeTab.id));
@@ -81,6 +84,8 @@ export class PageComponent implements AfterViewInit {
     }
 
     private _onTabDeactivate() {
+        this._eventsService.broadcast("closeup-dropdown");
+        this._activeTabAccessor.stopSizeCheck();
         this._activeTab.registerOnChange(null);
         this._activeTab = null;
         this._activeTabAccessor = null;

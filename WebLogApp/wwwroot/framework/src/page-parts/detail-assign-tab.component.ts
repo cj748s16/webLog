@@ -1,4 +1,4 @@
-﻿import { AfterViewInit } from "@angular/core";
+﻿import { AfterViewInit, ElementRef } from "@angular/core";
 
 import { BaseTabComponent } from "./base-tab.component";
 import { Key, compareKey, isMapStringKey, IAssignService, OperationResult } from "../utility";
@@ -23,8 +23,9 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
     constructor(
         protected _assignService: IAssignService,
         utilityService: UtilityService,
+        el: ElementRef,
         protected _notificationService: NotificationService) {
-        super(_assignService, utilityService);
+        super(_assignService, utilityService, el);
     }
 
     ngOnInit() {
