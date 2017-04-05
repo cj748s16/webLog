@@ -110,3 +110,8 @@ export abstract class IAssignService extends IService {
     abstract assign<T>(parentKey: any, selectedKey: any): Observable<any>;
     abstract unassign<T>(parentKey: any, selectedKey: any): Observable<any>;
 }
+
+export const layoutSizes = {
+    resWidthCollapseSidebar: 1200,
+    resWidthHideSidebar: 500
+};

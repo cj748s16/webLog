@@ -334,4 +334,6 @@ export class DropdownControl extends Control implements AfterViewInit, OnChanges
 /* ** TODO
 - moving dropdown when controls moved...
 - key handling
+- filtering when typing
+- at dropdown place focus on input
 */

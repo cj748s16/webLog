@@ -20,9 +20,7 @@ import { GroupEditComponent } from "./group/group-edit.component";
 
 @NgModule({
     imports: [
-        FrameworkModule,
-        LocalizeRouterModule.forChild(accountRoutes),
-        RouterModule.forChild(accountRoutes)
+        FrameworkModule.forChild(accountRoutes)
     ],
     declarations: [
         AccountComponent,

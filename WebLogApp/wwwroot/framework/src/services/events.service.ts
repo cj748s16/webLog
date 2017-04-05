@@ -29,7 +29,7 @@ export class EventsService {
         });
     }
 
-    subscribe(name: string, observerOrNext?: (value: Array<any>) => void, error?: (error: any) => void, complete?: () => void): Rx.Subscription {
+    subscribe(name: string, observerOrNext?: (value: any | Array<any>) => void, error?: (error: any) => void, complete?: () => void): Rx.Subscription {
         const subject = new Rx.Subject<Array<any>>();
 
         let obsws: ObservableWithSubject;

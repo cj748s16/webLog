@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\app\app.menu.ts" />
     <Content Include="wwwroot\app\core\domain\index.js" />
     <Content Include="wwwroot\app\core\domain\index.js.map" />
     <Content Include="wwwroot\app\core\domain\index.ts" />
@@ -59,6 +60,7 @@
     <Content Include="wwwroot\css\dropdown.less" />
     <Content Include="wwwroot\css\font.less" />
     <Content Include="wwwroot\css\material.less" />
+    <Content Include="wwwroot\css\sidebar.less" />
     <Content Include="wwwroot\framework\src\action-bar.ts" />
     <Content Include="wwwroot\framework\src\action-bar\index.js" />
     <Content Include="wwwroot\framework\src\action-bar\index.js.map" />
@@ -109,11 +111,20 @@
     <Content Include="wwwroot\framework\src\services\data.service.js.map" />
     <Content Include="wwwroot\framework\src\services\data.service.ts" />
     <Content Include="wwwroot\framework\src\services\events.service.ts" />
+    <Content Include="wwwroot\framework\src\services\global-state.service.ts" />
     <Content Include="wwwroot\framework\src\services\index.ts" />
+    <Content Include="wwwroot\framework\src\services\menu.service.ts" />
     <Content Include="wwwroot\framework\src\services\notification.service.js" />
     <Content Include="wwwroot\framework\src\services\notification.service.js.map" />
     <Content Include="wwwroot\framework\src\services\notification.service.ts" />
     <Content Include="wwwroot\framework\src\services\utility.service.ts" />
+    <Content Include="wwwroot\framework\src\sidebar.ts" />
+    <Content Include="wwwroot\framework\src\sidebar\index.ts" />
+    <Content Include="wwwroot\framework\src\sidebar\side-menu-item.component.ts" />
+    <Content Include="wwwroot\framework\src\sidebar\side-menu.component.ts" />
+    <Content Include="wwwroot\framework\src\sidebar\side-slim-scroll.directive.ts" />
+    <Content Include="wwwroot\framework\src\sidebar\sidebar.component.ts" />
+    <Content Include="wwwroot\framework\src\sidebar\sidebar.module.ts" />
     <Content Include="wwwroot\framework\src\tabs.ts" />
     <Content Include="wwwroot\framework\src\tabs\index.js" />
     <Content Include="wwwroot\framework\src\tabs\index.js.map" />

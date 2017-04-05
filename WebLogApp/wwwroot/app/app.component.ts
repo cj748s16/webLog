@@ -1,9 +1,13 @@
 ﻿import { Component, OnInit, ViewChild, ViewChildren, QueryList, ElementRef, AfterViewInit, Renderer } from "@angular/core";
+import { Routes } from "@angular/router";
 import { LocalizeRouterService } from "localize-router";
 import { TranslateService } from "@ngx-translate/core";
+import { MenuService, EventsService, SidebarComponent } from "@framework";
 
 import { UtilityService, LanguageService } from "./core/services";
 import { LanguageViewModel } from "./core/domain";
+
+import { APP_MENU } from "./app.menu";
 
 declare var jQuery: any;
 const $ = jQuery;
@@ -27,11 +31,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     @ViewChildren("navbarDropdown")
     private _navbarDropdown: QueryList<ElementRef>;
 
+    @ViewChild(SidebarComponent)
+    private _sidebar: SidebarComponent;
+
+    private _isMenuCollapsed: boolean = false;
+
     constructor(
         private _languageService: LanguageService,
         private _localize: LocalizeRouterService,
         private _utilityService: UtilityService,
         private _translateService: TranslateService,
+        private _menuService: MenuService,
+        private _eventService: EventsService,
         private _renderer: Renderer) {
         // this language will be used as a fallback when a translation isn't found in the current language
         _translateService.setDefaultLang("en");
@@ -46,6 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.getLanguages();
+        this._menuService.updateMenuByRoutes(<Routes>APP_MENU);
     }
 
     ngAfterViewInit() {
@@ -59,6 +71,14 @@ export class AppComponent implements OnInit, AfterViewInit {
             });
         }
         this._setAppContainerHeight();
+
+        // sidebar collapse
+        this._eventService.subscribe("menu.isCollapsed", (args) => {
+            this._isMenuCollapsed = <boolean>args[0];
+        });
+        setTimeout(() => {
+            this._isMenuCollapsed = this._sidebar.isMenuCollapsed;
+        });
     }
 
     private _bindNavToggleListener($el: any, event: string) {
@@ -99,5 +119,9 @@ export class AppComponent implements OnInit, AfterViewInit {
             this._setHeightTimer = null;
         }
         this._setAppContainerHeight();
+    }
+
+    private _toggleSidebar() {
+        this._eventService.broadcast("menu.isCollapsed", !this._isMenuCollapsed);
     }
 }

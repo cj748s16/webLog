@@ -22,24 +22,21 @@ function createTranslateLoader(http: Http) {
 @NgModule({
     imports: [
         BrowserModule,
-        FrameworkModule,
-        LocalizeRouterModule.forRoot(appRoutes),
+        FrameworkModule.forRoot(appRoutes),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
                 useFactory: (createTranslateLoader),
                 deps: [Http]
             }
-        }),
-        RouterModule.forRoot(appRoutes)
+        })
     ],
     declarations: [AppComponent, HomeComponent],
     providers: [
         { provide: fwUtilityService, useClass: UtilityService },
         UtilityService,
         LanguageService,
-        { provide: LocationStrategy, useClass: HashLocationStrategy },
-        { provide: LOCALE_ID, deps: [TranslateService], useFactory: (translateService) => translateService.currentLang }
+        { provide: LocationStrategy, useClass: HashLocationStrategy }
     ],
     bootstrap: [AppComponent]
 })

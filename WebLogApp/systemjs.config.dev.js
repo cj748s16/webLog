@@ -16,6 +16,7 @@
         // other libraries
         "dateformat": "npm:dateformat.js",
         "crypto-js": "npm:crypto-js",
+        "lodash": "npm:lodash/lodash.min.js",
         "@framework": "framework"
     };
 
@@ -38,6 +39,9 @@
             main: "index.js",
             defaultExtension: "js"
         },
+        //"lodash": {
+        //    defaultExtension: "js"
+        //},
         "@framework": {
             main: "index",
             defaultExtension: "ts"

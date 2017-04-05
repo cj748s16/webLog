@@ -493,4 +493,6 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 - column orders
 - column resize
 - column move
+- horz scroll not moving the heading
+- DynamicGridRowComponent -> error at heading click
 */
