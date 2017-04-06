@@ -1,6 +1,6 @@
 ﻿import { InjectionToken } from "@angular/core";
-import { TabContentComponent } from "./tab-content.component";
-import { Key } from "../utility";
+import { TabContentComponent } from "../tab-contents";
+import { Key } from "../../utility";
 
 export interface TabAccessor {
     getTab(): TabContentComponent;

@@ -5,8 +5,7 @@ import { TranslateModule } from "@ngx-translate/core";
 
 import { TextboxControl } from "./textbox.control";
 import { DropdownControl, DropdownColumn } from "./dropdown.control";
-import { GridControl } from "./grid/grid.control";
-import { GridColumn } from "./grid/grid-column";
+import { GridControl, GridColumn } from "./grid";
 import { SaveButtonControl } from "./save-button.control";
 import { CancelButtonControl } from "./cancel-button.control";
 import { ErrorMsgComponent } from "./error-msg.component";

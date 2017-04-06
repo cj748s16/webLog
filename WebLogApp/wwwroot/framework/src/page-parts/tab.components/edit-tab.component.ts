@@ -5,13 +5,13 @@ import { ModalComponent } from "ng2-bs3-modal/ng2-bs3-modal";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/switchMap";
 
-import { Key, OperationResult, IService } from "../utility";
-import { NotificationService, UtilityService, EventsService } from "../services";
+import { Key, OperationResult, IService } from "../../utility";
+import { NotificationService, UtilityService, EventsService } from "../../services";
 
 import { BaseTabComponent } from "./base-tab.component";
-import { EditModalComponent } from "./edit-modal.component";
-import { Control } from "../controls/control";
-import { IEdit } from "./iedit";
+import { EditModalComponent } from "../edit-modal.component";
+import { Control } from "../../controls";
+import { IEdit } from "../helpers";
 
 export class EditTabComponent<T> extends BaseTabComponent<T> {
 

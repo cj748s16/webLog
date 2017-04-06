@@ -1,4 +1,4 @@
-﻿import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from "@angular/core";
+﻿import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";
 
@@ -9,7 +9,7 @@ declare var jQuery: any;
 @Component({
     selector: "side-menu",
     template: `
-<div class="sidebar" (mouseleave)="_hoverElemTop=_outOfArea">
+<div class="sidebar" (mouseleave)="_hoverElemTop=_outOfArea" #sidebar>
     <ul id="sidebar-list" class="sidebar-list">
         <side-menu-item *ngFor="let item of _menuItems" [menuItem]="item" (itemHover)="_hoverItem($event)" (toggleSubMenu)="_toggleSubMenu($event)"></side-menu-item>
     </ul>
@@ -17,12 +17,17 @@ declare var jQuery: any;
 </div>
 `
 })
-export class SideMenuComponent implements OnInit, OnDestroy {
+export class SideMenuComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() sidebarCollapsed: boolean = false;
+    @Input() sidebarShouldCollapsed: boolean = false;
     @Input() menuHeight: number;
 
     @Output() expandMenu = new EventEmitter<MenuItem>();
+
+    @ViewChild("sidebar")
+    private _sidebar: ElementRef;
+    private $sidebar: any;
 
     private _menuItems: MenuItems;
 
@@ -48,6 +53,9 @@ export class SideMenuComponent implements OnInit, OnDestroy {
         if (this._menuItems) {
             this._menuItems = this._service.selectMenuItem(this._menuItems);
             this._eventsService.broadcast("menu.activeLink", this._service.getCurrentItem());
+            if (this.sidebarShouldCollapsed && !this.sidebarCollapsed) {
+                this._eventsService.broadcast("menu.isCollapsed", true);
+            }
         }
     }
 
@@ -65,16 +73,27 @@ export class SideMenuComponent implements OnInit, OnDestroy {
         this._menuItemsSub = this._service.subscribe(this.updateMenu.bind(this));
     }
 
+    ngAfterViewInit() {
+        this.$sidebar = jQuery(this._sidebar.nativeElement);
+    }
+
     ngOnDestroy() {
         this._onRouteChanged.unsubscribe();
         this._menuItemsSub.unsubscribe();
     }
 
+    private _sidebarTop: number;
+    private get sidebarTop(): number {
+        if (this._sidebarTop == null) {
+            this._sidebarTop = this.$sidebar.offset().top;
+        }
+        return this._sidebarTop;
+    }
+
     private _hoverItem($event) {
         this._showHoverElem = true;
         this._hoverElemHeight = $event.currentTarget.clientHeight;
-        // TODO: get rid of magic 66 constant
-        this._hoverElemTop = $event.currentTarget.getBoundingClientRect().top - 66;
+        this._hoverElemTop = $event.currentTarget.getBoundingClientRect().top - this.sidebarTop;
     }
 
     private _toggleSubMenu($event): boolean {

@@ -1,9 +1,9 @@
 ﻿import { AfterViewInit, ElementRef } from "@angular/core";
 
 import { BaseTabComponent } from "./base-tab.component";
-import { Key, compareKey, isMapStringKey, IAssignService, OperationResult } from "../utility";
-import { UtilityService, NotificationService } from "../services";
-import { AssignTabContentComponent } from "./assign-tab-content.component";
+import { Key, compareKey, isMapStringKey, IAssignService, OperationResult } from "../../utility";
+import { UtilityService, NotificationService } from "../../services";
+import { AssignTabContentComponent } from "../tab-contents";
 
 export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements AfterViewInit {
 

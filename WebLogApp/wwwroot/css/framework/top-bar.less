@@ -1,0 +1,60 @@
+﻿@import "constants.less";
+
+.top-bar {
+    background-color: @sidebar;
+    position: fixed;
+    z-index: 904;
+    /*box-shadow: 2px 0 3px rgba(0, 0, 0, 0.5);*/
+    height: 66px;
+    width: 100%;
+    min-width: @resMin;
+    padding: 0 32px 0 40px;
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+}
+
+a.logo {
+    color: @sidebar-text;
+    display: block;
+    .font-face;
+    font-size: 24px;
+    white-space: nowrap;
+    float: left;
+    outline: none !important;
+    text-decoration: none;
+    line-height: 60px;
+
+    &:hover {
+        color: @primary;
+    }
+}
+
+a.collapse-menu-link {
+    font-size: 24px;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    line-height: 38px;
+    color: @sidebar-text;
+    padding: 0;
+    float: left;
+    margin: 11px 0 0 15px;
+
+    &:hover {
+        color: @warning;
+    }
+}
+
+@media screen and (max-width: @resXS) {
+    .top-bar {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: @resXXS) {
+    a.collapse-menu-link {
+        margin-left: 10px;
+    }
+}

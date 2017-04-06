@@ -1,10 +1,9 @@
 ﻿import { Component, Input, Output, ViewChild, EventEmitter, ContentChildren, QueryList, forwardRef, AfterContentInit, ChangeDetectorRef, ElementRef, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 
-import { Control } from "../controls/control";
-import { ActivatedRouteComponent } from "./activated-route.component";
+import { Control } from "../../controls";
+import { ActivatedRouteComponent, IEdit } from "../helpers";
 import { TabContentComponent } from "./tab-content.component";
-import { IEdit } from "./iedit";
 
 @Component({
     selector: "[editTab]",

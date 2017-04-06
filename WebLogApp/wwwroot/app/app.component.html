@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-default">
+﻿<!--<nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -19,13 +19,6 @@
                         <span class="icon-bar"></span>
                     </button>
                 </li>
-                <!--<li class="dropdown" #navbarDropdown>
-                    <a id="account" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-fw"></i>&nbsp;{{'Menu.Account' | translate}}</a>
-                    <ul class="dropdown-menu" aria-labelledby="account">
-                        <li><a [routerLink]="['/account/user' | localize]"><i class="fa fa-user fa-fw"></i>&nbsp;{{'Menu.Users' | translate}}</a></li>
-                        <li><a [routerLink]="['/account/group' | localize]"><i class="fa fa-user fa-fw"></i>&nbsp;{{'Menu.Groups' | translate}}</a></li>
-                    </ul>
-                </li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown" #navbarDropdown>
@@ -37,12 +30,8 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav>-->
 
-<main [ngClass]="{'menu-collapsed': _isMenuCollapsed}">
-    <sidebar></sidebar>
-</main>
-
-<div class="app-container" #appContainer>
+<main [ngClass]="{'menu-collapsed': _isMenuCollapsed}" pageMaster>
     <router-outlet></router-outlet>
-</div>
+</main>

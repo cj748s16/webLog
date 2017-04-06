@@ -1,9 +1,9 @@
 ﻿import { ViewChild, ViewChildren, ElementRef, Input, AfterViewInit, QueryList } from "@angular/core";
 
-import { Key, IService } from "../utility";
-import { UtilityService } from "../services";
+import { Key, IService } from "../../utility";
+import { UtilityService } from "../../services";
 import { BaseTabComponent } from "./base-tab.component";
-import { GridControl } from "../controls";
+import { GridControl } from "../../controls";
 
 declare var jQuery: any;
 const $ = jQuery;

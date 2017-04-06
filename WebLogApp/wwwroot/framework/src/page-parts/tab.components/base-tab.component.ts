@@ -1,9 +1,9 @@
 ﻿import { Component, forwardRef, ViewChild, OnInit, OnDestroy, ElementRef } from "@angular/core";
 
-import { Key, IService } from "../utility";
-import { UtilityService } from "../services";
-import { TabAccessor, TAB_ACCESSOR } from "./tab_accessor";
-import { TabContentComponent } from "./tab-content.component";
+import { Key, IService } from "../../utility";
+import { UtilityService } from "../../services";
+import { TabAccessor, TAB_ACCESSOR } from "../helpers";
+import { TabContentComponent } from "../tab-contents";
 
 declare var jQuery: any;
 const $ = jQuery;

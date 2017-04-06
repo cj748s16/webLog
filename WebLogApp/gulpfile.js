@@ -164,7 +164,7 @@ gulp.task("clean", function (done) {
 });
 
 gulp.task("build-css", ["clean"], function (done) {
-    gulp.src(project.webroot + "/css/*.less")
+    gulp.src(project.webroot + "/css/site.less")
         .pipe(sourcemaps.init())
         .pipe(less())
         //.pipe(cachebust.resources())

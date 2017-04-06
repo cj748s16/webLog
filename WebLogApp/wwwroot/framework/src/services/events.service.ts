@@ -43,7 +43,7 @@ export class EventsService {
         return obs.subscribe(observerOrNext);
     }
 
-    broadcast(name: string, ...args) {
+    broadcast(name: string, args?: any) {
         this.eventsSubject.next({ name, args });
     }
 }

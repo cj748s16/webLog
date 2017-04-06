@@ -1,10 +1,13 @@
-﻿export { PageComponent } from "./page.component";
-export { TabContentComponent } from "./tab-content.component";
-export { TabAccessor, TAB_ACCESSOR } from "./tab_accessor";
-export { EditContentComponent } from "./edit-content.component";
-export { EditModalComponent } from "./edit-modal.component";
-export { PagePartsModule } from "./page-parts.module";
+﻿import { PageMasterComponent } from "./page-master.component";
 
-export { ListTabComponent } from "./list-tab.component";
-export { EditTabComponent } from "./edit-tab.component";
-export { DetailAssignTabComponent } from "./detail-assign-tab.component";
+export { PageComponent } from "./page.component";
+export * from "./tab-contents";
+
+export * from "./helpers";
+
+export * from "./tab.components";
+export { EditModalComponent } from "./edit-modal.component";
+
+export { TopBarComponent } from "./top-bar.component";
+
+export { PagePartsModule } from "./page-parts.module";

@@ -3,7 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { ModalComponent } from "ng2-bs3-modal/ng2-bs3-modal";
 
 import { Control } from "../controls/control";
-import { IEdit } from "./iedit";
+import { IEdit } from "./helpers";
 
 @Component({
     selector: "inline-edit",

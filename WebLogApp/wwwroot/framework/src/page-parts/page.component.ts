@@ -3,10 +3,10 @@ import { ControlValueAccessor } from "@angular/forms";
 import { Subject } from "rxjs/Subject";
 
 import { TabComponent, TabsComponent } from "../tabs";
-import { TabContentComponent } from "./tab-content.component";
-import { TabAccessor } from "./tab_accessor";
+import { TabContentComponent } from "./tab-contents";
+import { TabAccessor } from "./helpers";
 import { Key } from "../utility";
-import { EditTabComponent } from "./edit-tab.component";
+import { EditTabComponent } from "./tab.components";
 import { EventsService } from "../services";
 
 @Component({

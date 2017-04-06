@@ -8,7 +8,6 @@ import { LocalizeRouterModule } from "localize-router";
 import { JitModule } from "./jit/jit";
 
 import { PagePartsModule } from "./page-parts";
-import { SidebarModule } from "./sidebar";
 import { DataService, EventsService } from "./services";
 import { DropdownControl } from "./controls";
 
@@ -26,10 +25,9 @@ class AppBaseRequestOptions extends BaseRequestOptions {
 @NgModule({
     imports: [
         HttpModule,
-        PagePartsModule,
         LocalizeRouterModule,
         TranslateModule,
-        SidebarModule,
+        PagePartsModule,
         JitModule.forRoot()
     ],
     declarations: [
@@ -39,7 +37,6 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         LocalizeRouterModule,
         TranslateModule,
         PagePartsModule,
-        SidebarModule
     ],
 })
 export class FrameworkModule {
@@ -58,7 +55,7 @@ export class FrameworkModule {
             providers: [
                 DataService,
                 { provide: RequestOptions, useClass: AppBaseRequestOptions },
-                ...SidebarModule.forRoot(routes).providers
+                ...PagePartsModule.forRoot(routes).providers
             ]
         };
     }
@@ -69,14 +66,8 @@ export class FrameworkModule {
             providers: [
                 DataService,
                 { provide: RequestOptions, useClass: AppBaseRequestOptions },
-                ...SidebarModule.forChild(routes).providers
+                ...PagePartsModule.forChild(routes).providers
             ]
         };
     }
 }
-
-export { Key, compareKey, convertDateTime, isMapStringKey, OperationResult, IService, IAssignService } from "./utility";
-export { TabsComponent } from "./tabs";
-export { PageComponent, TabContentComponent, EditContentComponent, ListTabComponent, EditTabComponent, DetailAssignTabComponent, TabAccessor, TAB_ACCESSOR } from "./page-parts";
-export { NotificationService, UtilityService, DataService, EventsService, MenuService, MenuItem } from "./services";
-export { SidebarComponent } from "./sidebar";

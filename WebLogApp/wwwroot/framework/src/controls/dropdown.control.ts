@@ -1,16 +1,13 @@
 ﻿import { Component, forwardRef, Input, ContentChildren, QueryList, ViewChild, ElementRef, AfterViewInit, OnChanges, SimpleChanges, OnDestroy } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
+import { Subscription } from "rxjs/Subscription";
 
 import { Control } from "./control";
-import { GridControl } from "./grid/grid.control";
-import { GridColumn } from "./grid/grid-column";
+import { GridControl, GridColumn } from "./grid";
 
 import * as Utility from "../utility";
-
 import { EventsService } from "../services";
-
-import { Subscription } from "rxjs/Subscription";
 
 declare var jQuery: any;
 const $ = jQuery;
