@@ -22,14 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot/app\system\account\login.component.ts" />
-    <Content Remove="wwwroot/framework\src\page-parts\page-parts.module.js" />
-    <Content Remove="wwwroot/framework\src\page-parts\page-parts.module.js.map" />
-    <Content Remove="wwwroot/lib\spa\css\alertify.min.css" />
-    <Content Remove="wwwroot/lib\spa\css\colors.min.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="wwwroot\app\app.menu.ts" />
     <Content Include="wwwroot\app\core\domain\index.js" />
     <Content Include="wwwroot\app\core\domain\index.js.map" />
@@ -41,6 +33,7 @@
     <Content Include="wwwroot\app\core\services\index.ts" />
     <Content Include="wwwroot\app\core\services\language.service.ts" />
     <Content Include="wwwroot\app\home.component.ts" />
+    <Content Include="wwwroot\app\system\account\group.ts" />
     <Content Include="wwwroot\app\system\account\group\domain.ts" />
     <Content Include="wwwroot\app\system\account\group\group-edit.component.html" />
     <Content Include="wwwroot\app\system\account\group\group-edit.component.ts" />
@@ -49,7 +42,11 @@
     <Content Include="wwwroot\app\system\account\group\group.component.html" />
     <Content Include="wwwroot\app\system\account\group\group.component.ts" />
     <Content Include="wwwroot\app\system\account\group\group.service.ts" />
+    <Content Include="wwwroot\app\system\account\group\index.ts" />
+    <Content Include="wwwroot\app\system\account\index.ts" />
+    <Content Include="wwwroot\app\system\account\user.ts" />
     <Content Include="wwwroot\app\system\account\user\domain.ts" />
+    <Content Include="wwwroot\app\system\account\user\index.ts" />
     <Content Include="wwwroot\app\system\account\user\user-edit.component.html" />
     <Content Include="wwwroot\app\system\account\user\user-edit.component.js" />
     <Content Include="wwwroot\app\system\account\user\user-edit.component.js.map" />
@@ -57,6 +54,17 @@
     <Content Include="wwwroot\app\system\account\user\user-group-assign.component.html" />
     <Content Include="wwwroot\app\system\account\user\user-group-assign.component.ts" />
     <Content Include="wwwroot\app\system\account\user\user.service.ts" />
+    <Content Include="wwwroot\app\system\index.ts" />
+    <Content Include="wwwroot\app\system\login.ts" />
+    <Content Include="wwwroot\app\system\login\domain.ts" />
+    <Content Include="wwwroot\app\system\login\index.ts" />
+    <Content Include="wwwroot\app\system\login\login.component.html" />
+    <Content Include="wwwroot\app\system\login\login.component.ts" />
+    <Content Include="wwwroot\app\system\login\login.service.ts" />
+    <Content Include="wwwroot\app\system\system.component.html" />
+    <Content Include="wwwroot\app\system\system.component.ts" />
+    <Content Include="wwwroot\app\system\system.module.ts" />
+    <Content Include="wwwroot\app\system\system.routes.ts" />
     <Content Include="wwwroot\assets\locales.json" />
     <Content Include="wwwroot\css\alertify.less" />
     <Content Include="wwwroot\css\framework\colors.less" />
@@ -70,6 +78,7 @@
     <Content Include="wwwroot\css\framework\page-parts.less" />
     <Content Include="wwwroot\css\framework\sidebar.less" />
     <Content Include="wwwroot\css\framework\top-bar.less" />
+    <Content Include="wwwroot\css\login.less" />
     <Content Include="wwwroot\framework\src\action-bar.ts" />
     <Content Include="wwwroot\framework\src\action-bar\index.js" />
     <Content Include="wwwroot\framework\src\action-bar\index.js.map" />
@@ -149,6 +158,7 @@
     <Content Include="wwwroot\framework\src\page-parts\top-bar.component.ts" />
     <Content Include="wwwroot\framework\src\public_exports.ts" />
     <Content Include="wwwroot\framework\src\services.ts" />
+    <Content Include="wwwroot\framework\src\services\crypto.service.ts" />
     <Content Include="wwwroot\framework\src\services\data.service.js" />
     <Content Include="wwwroot\framework\src\services\data.service.js.map" />
     <Content Include="wwwroot\framework\src\services\data.service.ts" />
@@ -181,6 +191,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
@@ -192,9 +203,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.3.1" />
-    <PackageReference Include="SimpleInjector" Version="3.3.2" />
-    <PackageReference Include="SimpleInjector.Integration.AspNetCore" Version="3.3.2" />
-    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="3.3.2" />
+    <PackageReference Include="SimpleInjector" Version="4.0.0" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore" Version="4.0.0" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

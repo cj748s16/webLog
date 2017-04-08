@@ -24,6 +24,8 @@ using System.Reflection;
 using WebLogBase.Infrastructure.Core;
 using NLog;
 using WebLogApp.Infrastructure.Logging;
+using WebLogApp.Infrastructure.Security;
+using System.Security.Claims;
 
 namespace WebLogApp
 {
@@ -66,7 +68,7 @@ namespace WebLogApp
             services.AddSingleton<Microsoft.AspNetCore.Mvc.ViewComponents.IViewComponentActivator>(viewComponentActivator);
 
             Container.RegisterSingleton(Environment);
-            Container.RegisterSingleton(Container);
+            //Container.RegisterSingleton(Container);
 
             // Add ConfigurationRoot to SimpleInjector
             Container.RegisterSingleton(Configuration);
@@ -87,7 +89,20 @@ namespace WebLogApp
             // Add localization resources
             ConfigureLocalization(services);
 
+            // Add authentication
             services.AddAuthentication();
+
+            // Add policies
+            ConfigurePolicies(services);
+
+            // Adds a default in-memory implementation of IDistributedCache.
+            //services.AddDistributedMemoryCache();
+            // Adds Session storage
+            //services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromSeconds(3600);
+            //    options.CookieHttpOnly = true;
+            //});
 
             // Add MVC services to the services container.
             services
@@ -126,6 +141,9 @@ namespace WebLogApp
             //    loggerFactory.AddDebug();
             //}
 
+            // Add security headers: X-Frame-Options: DENY; XSS-Protection: mode=block; Strict-Transport-Security: max-age: 1yr; X-Content-Type-Options: nosniff
+            app.UseSecurityHeadersMiddleware(new SecurityHeadersBuilder().AddDefaultSecurityPolicy());
+
             // this will serve up wwwroot
             ConfigureStaticFiles(app);
 
@@ -137,6 +155,9 @@ namespace WebLogApp
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
+                AuthenticationScheme = "webLog",
+                LoginPath = new PathString("/hu/system/login/"),
+                AccessDeniedPath = new PathString("/hu/system/login/"),
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true
             });
@@ -145,6 +166,9 @@ namespace WebLogApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Add Session
+            //app.UseSession();
 
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
@@ -162,9 +186,9 @@ namespace WebLogApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapWebApiRoute(
-                    name: "defaultApi",
-                    template: "api/{controller}/{action}/{id?}");
+                //routes.MapWebApiRoute(
+                //    name: "defaultApi",
+                //    template: "api/{controller}/{action}/{id?}");
             });
 
             app.InitializeDatabase(Container);
@@ -201,6 +225,31 @@ namespace WebLogApp
             });
         }
 
+        // Configure policies
+        private void ConfigurePolicies(IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DevOnly", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role, WebLogBase.Entities.System.Account.Role.DeveloperClaimName);
+                });
+                options.AddPolicy("AdminOnly", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role,
+                        WebLogBase.Entities.System.Account.Role.DeveloperClaimName,
+                        WebLogBase.Entities.System.Account.Role.AdministratorClaimName);
+                });
+                options.AddPolicy("UserOnly", policy =>
+                {
+                    policy.RequireClaim(ClaimTypes.Role,
+                        WebLogBase.Entities.System.Account.Role.DeveloperClaimName,
+                        WebLogBase.Entities.System.Account.Role.AdministratorClaimName,
+                        WebLogBase.Entities.System.Account.Role.UserClaimName);
+                });
+            });
+        }
+
         // Entry point for the application.
         public static void Main(string[] args)
         {
@@ -209,7 +258,7 @@ namespace WebLogApp
                 .UseContentRoot(System.IO.Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseApplicationInsights()
+                //.UseApplicationInsights()
                 .Build();
 
             host.Run();
