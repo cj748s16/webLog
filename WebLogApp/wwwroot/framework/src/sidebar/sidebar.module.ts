@@ -1,6 +1,6 @@
 ﻿import { NgModule, LOCALE_ID, ModuleWithProviders } from "@angular/core";
 import { CommonModule, Location, LocationStrategy, HashLocationStrategy } from "@angular/common";
-import { RouterModule, Routes } from "@angular/router";
+import { RouterModule, Routes, Router } from "@angular/router";
 import { HttpModule, Http } from "@angular/http";
 import { TranslateModule, TranslateService, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -11,6 +11,17 @@ import { SideMenuComponent } from "./side-menu.component";
 import { SideMenuItemComponent } from "./side-menu-item.component";
 
 import { MenuService } from "../services";
+
+function createMenuService() {
+    let instance: MenuService = null;
+
+    return (router: Router, translateService: TranslateService) => {
+        if (instance == null) {
+            instance = new MenuService(router, translateService);
+        }
+        return instance;
+    };
+}
 
 @NgModule({
     imports: [
@@ -41,7 +52,7 @@ export class SidebarModule {
         return {
             ngModule: SidebarModule,
             providers: [
-                MenuService,
+                { provide: MenuService, deps: [Router, TranslateService], useFactory: createMenuService() },
                 { provide: LOCALE_ID, deps: [TranslateService], useFactory: (translateService) => translateService.currentLang },
                 ...LocalizeRouterModule.forRoot(routes).providers,
                 ...RouterModule.forRoot(routes).providers
@@ -53,7 +64,7 @@ export class SidebarModule {
         return {
             ngModule: SidebarModule,
             providers: [
-                MenuService,
+                { provide: MenuService, deps: [Router, TranslateService], useFactory: (createMenuService) },
                 ...LocalizeRouterModule.forChild(routes).providers,
                 ...RouterModule.forChild(routes).providers
             ]

@@ -37,10 +37,15 @@ export abstract class UtilityService {
 
     handleError(error: any) {
         if (error.status == 401 || error.status == 404) {
-            this._notificationService.printErrorMessage("Authentication required");
+            this._notificationService.printErrorMessage(this._translateService.instant("Authentication required"));
             this.navigateToSignIn();
+        } else if (error.status == 403) {
+            this._notificationService.printErrorMessage(this._translateService.instant("You don't have rights to access this page"));
+            // TODO: navigate back
+            //this.navigateToSignIn();
         } else {
             console.error(`Error: ${error}`);
+            this._notificationService.printErrorMessage(error.message || error.statusText);
         }
     }
 }

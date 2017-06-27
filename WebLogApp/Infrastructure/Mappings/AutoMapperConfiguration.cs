@@ -16,6 +16,7 @@ namespace WebLogApp.Infrastructure.Mappings
                 cfg.AddProfile<UserMappingProfile>();
                 cfg.AddProfile<RoleMappingProfile>();
                 cfg.AddProfile<GroupMappingProfile>();
+                cfg.AddProfile<GroupRightsMappingProfile>();
                 cfg.AddProfile<UserGroupMappingProfile>();
             });
 

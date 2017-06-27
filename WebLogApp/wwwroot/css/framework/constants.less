@@ -7,4 +7,9 @@
 
 @top-height: 66px;
 @sidebar-width: 180px;
+@sidebar-collapsed-width: 52px;
 @sidebar-scroll-width: 4px;
+
+.bg-translucent-dark (@opacity) {
+    background: fadeout(@sidebar, @opacity);
+}

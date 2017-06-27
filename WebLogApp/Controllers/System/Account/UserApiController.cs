@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -11,12 +12,15 @@ using WebLogApp.Infrastructure.Core;
 using WebLogApp.ViewModels.System.Account;
 using WebLogBase.Entities.System.Account;
 using WebLogBase.Infrastructure;
+using WebLogBase.Infrastructure.Core;
+using WebLogBase.Infrastructure.Menu;
 using WebLogBase.Repositories.System.Account;
 
 namespace WebLogApp.Controllers.System.Account
 {
     //[Route("api/{language:regex(^[[a-z]]{{2}}(?:-[[A-Z]]{{2}})?$)}/system/account/[controller]")]
     //[Route("api/system/account/[controller]")]
+    [Menu(Path = "system/account/user/list", Title = "Menu.Users", Icon = "fa fa-user fa-fw", Order = 0)]
     public class UserApiController : BaseApiController<UserApiController>
     {
         private readonly IUserRepository userRepository;
@@ -30,8 +34,9 @@ namespace WebLogApp.Controllers.System.Account
             this.userRepository = userRepository;
         }
 
+        [Authorize("UserOnly")]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             IEnumerable<UserViewModel> usersVM = null;
 
@@ -45,8 +50,9 @@ namespace WebLogApp.Controllers.System.Account
             return new ObjectResult(usersVM);
         }
 
+        [Authorize("UserOnly")]
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int? id)
+        public async Task<IActionResult> GetAsync(int? id)
         {
             GenericResult result = null;
 
@@ -54,6 +60,7 @@ namespace WebLogApp.Controllers.System.Account
             if (user != null)
             {
                 var userVM = Mapper.Map<User, UserViewModel>(user);
+
                 result = new GenericResult
                 {
                     Succeeded = true,
@@ -72,8 +79,9 @@ namespace WebLogApp.Controllers.System.Account
             return new ObjectResult(result);
         }
 
+        [Authorize("UserOnly")]
         [HttpPost]
-        public async Task<IActionResult> New([FromBody] UserEditViewModel userVM)
+        public async Task<IActionResult> NewAsync([FromBody] UserEditViewModel userVM)
         {
             GenericResult result = null;
 
@@ -82,17 +90,21 @@ namespace WebLogApp.Controllers.System.Account
                 if (ModelState.IsValid)
                 {
                     //var loggedInUserId = await GetLoggedInUserId();
-
-                    var user = Mapper.Map<UserEditViewModel, User>(userVM);
-
-                    userRepository.Add(user);
-                    await userRepository.CommitAsync();
-
-                    result = new GenericResult
+                    result = await CheckPasswordConfirm(userVM);
+                    if (result.Succeeded)
                     {
-                        Succeeded = true,
-                        Message = Localizer["User created"]
-                    };
+                        var user = Mapper.Map<UserEditViewModel, User>(userVM);
+                        user.PasswordStr = (string)result.CustomData;
+
+                        await userRepository.AddAsync(user);
+                        await userRepository.CommitAsync();
+
+                        result = new GenericResult
+                        {
+                            Succeeded = true,
+                            Message = Localizer["User created"]
+                        };
+                    }
                 }
                 else
                 {
@@ -117,8 +129,9 @@ namespace WebLogApp.Controllers.System.Account
             return new ObjectResult(result);
         }
 
+        [Authorize("UserOnly")]
         [HttpPut]
-        public async Task<IActionResult> Modify([FromBody] UserEditViewModel userVM)
+        public async Task<IActionResult> ModifyAsync([FromBody] UserEditViewModel userVM)
         {
             GenericResult result = null;
 
@@ -126,29 +139,33 @@ namespace WebLogApp.Controllers.System.Account
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await userRepository.GetSingleByIdAsync(userVM.Id);
-
-                    if (user != null)
+                    result = await CheckPasswordConfirm(userVM);
+                    if (result.Succeeded)
                     {
-                        user.Name = userVM.Username;
-                        user.PasswordStr = userVM.Password;
-
-                        userRepository.Modify(user);
-                        await userRepository.CommitAsync();
-
-                        result = new GenericResult
+                        var password = (string)result.CustomData;
+                        var user = await userRepository.GetSingleByIdAsync(userVM.Id);
+                        if (user != null)
                         {
-                            Succeeded = true,
-                            Message = Localizer["User modified"]
-                        };
-                    }
-                    else
-                    {
-                        result = new GenericResult
+                            user.Name = userVM.Username;
+                            user.PasswordStr = password;
+
+                            await userRepository.ModifyAsync(user);
+                            await userRepository.CommitAsync();
+
+                            result = new GenericResult
+                            {
+                                Succeeded = true,
+                                Message = Localizer["User modified"]
+                            };
+                        }
+                        else
                         {
-                            Succeeded = false,
-                            Message = Localizer["User not found (Id: {0})", userVM.Id]
-                        };
+                            result = new GenericResult
+                            {
+                                Succeeded = false,
+                                Message = Localizer["User not found (Id: {0})", userVM.Id]
+                            };
+                        }
                     }
                 }
                 else
@@ -172,6 +189,31 @@ namespace WebLogApp.Controllers.System.Account
             }
 
             return new ObjectResult(result);
+        }
+
+        private async Task<GenericResult> CheckPasswordConfirm(UserEditViewModel userVM)
+        {
+            var cipherBytes = Convert.FromBase64String(userVM.Password);
+            var password = await WebLogBase.Infrastructure.Core.CryptoService.DecryptAsync(cipherBytes);
+            cipherBytes = Convert.FromBase64String(userVM.ConfirmPassword);
+            var confirmPassword = await WebLogBase.Infrastructure.Core.CryptoService.DecryptAsync(cipherBytes);
+
+            if (!string.Equals(password, confirmPassword))
+            {
+                return new GenericResult
+                {
+                    Succeeded = false,
+                    Message = Localizer["validators.confirmMismatch"]
+                };
+            }
+            else
+            {
+                return new GenericResult
+                {
+                    Succeeded = true,
+                    CustomData = password
+                };
+            }
         }
     }
 }

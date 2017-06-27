@@ -14,11 +14,11 @@ namespace WebLogBase.Entities.System.Account
         [Required]
         public string Name { get; set; }
 
-        //[Required]
+        [Required]
         [ForeignKey("Role")]
         public int? Roleid { get; set; }
 
-        //[Required]
+        [Required]
         [ForeignKey("Adduser")]
         public int? Adduserid { get; set; }
         [Required]

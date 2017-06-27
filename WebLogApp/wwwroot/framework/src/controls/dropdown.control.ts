@@ -1,5 +1,5 @@
 ﻿import { Component, forwardRef, Input, ContentChildren, QueryList, ViewChild, ElementRef, AfterViewInit, OnChanges, SimpleChanges, OnDestroy } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { FormControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 import { Subscription } from "rxjs/Subscription";
 
@@ -48,7 +48,9 @@ export class DropdownColumn {
 </div>
 `,
     providers: [
-        { provide: Control, useExisting: forwardRef(() => DropdownControl), multi: true }
+        { provide: Control, useExisting: forwardRef(() => DropdownControl), multi: true },
+        { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DropdownControl), multi: true },
+        { provide: NG_VALIDATORS, useExisting: forwardRef(() => DropdownControl), multi: true }
     ]
 })
 export class DropdownControl extends Control implements AfterViewInit, OnChanges, OnDestroy {

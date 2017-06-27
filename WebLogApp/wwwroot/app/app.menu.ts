@@ -1,6 +1,6 @@
 ﻿export const APP_MENU = [
     {
-        path: "/home",
+        path: "home",
         data: {
             menu: {
                 title: "Home",
@@ -12,38 +12,12 @@
         }
     },
     {
-        path: "account",
+        path: "system/login",
         data: {
             menu: {
-                title: "Menu.Account",
-                icon: "fa fa-user fa-fw",
+                title: "Menu.Login",
+                icon: "fa fa-user fa-fw"
             }
-        },
-        children: [
-            {
-                path: "user/list",
-                data: {
-                    menu: {
-                        title: "Menu.Users",
-                        icon: "fa fa-user fa-fw",
-                        selected: false,
-                        expanded: false,
-                        order: 0
-                    }
-                }
-            },
-            {
-                path: "group/list",
-                data: {
-                    menu: {
-                        title: "Menu.Groups",
-                        icon: "fa fa-group fa-fw",
-                        selected: false,
-                        expanded: false,
-                        order: 100
-                    }
-                }
-            }
-        ]
+        }
     }
 ];

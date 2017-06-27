@@ -1,4 +1,5 @@
 ﻿import { Component, Input, ElementRef, forwardRef } from "@angular/core";
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 
 import { Control } from "./control";
@@ -13,7 +14,9 @@ import { Control } from "./control";
 </div>
 `,
     providers: [
-        { provide: Control, useExisting: forwardRef(() => TextboxControl), multi: true }
+        { provide: Control, useExisting: forwardRef(() => TextboxControl), multi: true },
+        { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => TextboxControl), multi: true },
+        { provide: NG_VALIDATORS, useExisting: forwardRef(() => TextboxControl), multi: true }
     ]
 })
 export class TextboxControl extends Control {

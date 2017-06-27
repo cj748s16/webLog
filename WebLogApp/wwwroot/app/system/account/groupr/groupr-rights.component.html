@@ -1,0 +1,18 @@
+﻿<div id="groupr-rights" name="groupr-rights" customTab>
+    <button class="btn btn-raised btn-primary" actionButton (click)="onSave($event)">{{'Save' | translate}}</button>
+    <button class="btn btn-default" actionButton (click)="onCancel($event)">{{'Cancel' | translate}}</button>
+
+    <dropdown id="Groupid" name="Groupid" placeholder="system.account.grouprights.Groupid" [list]="_groupList" [errorDefs]="{required: true}" (change)="_groupChanged($event)" #groupid>
+        <column field="Id" hidden="true" key="true"></column>
+        <column field="Groupname" width="180" lookup="true"></column>
+    </dropdown>
+
+    <hr />
+
+    <grid [list]="_list">
+        <grid-column field="Key" key="true" hidden="true" caption="system.account.grouprights.Key"></grid-column>
+        <grid-column field="Title" width="380" caption="system.account.grouprights.Title" format="LOC"></grid-column>
+        <grid-column field="Allowed" width="80" caption="system.account.grouprights.Allowed" checkbox="true"></grid-column>
+        <grid-column field="Forbidden" width="80" caption="system.account.grouprights.Forbidden" checkbox="true"></grid-column>
+    </grid>
+</div>

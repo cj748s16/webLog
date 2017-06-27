@@ -6,7 +6,5 @@ import { HomeComponent } from "./home.component";
 export const appRoutes: Routes = [
     { path: "", redirectTo: "home", pathMatch: "full" },
     { path: "home", component: HomeComponent },
-    { path: "account", loadChildren: "./app/system/account/account.module#AccountModule" }
+    { path: "system", loadChildren: "./app/system/system.module#SystemModule" }
 ];
-
-//export const appRouting: ModuleWithProviders = RouterModule.forRoot(routes);

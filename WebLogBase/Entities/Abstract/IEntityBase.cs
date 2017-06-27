@@ -19,6 +19,7 @@ namespace WebLogBase.Entities
 
     public interface IEntityWithAdding : IEntityBase
     {
+        [Required]
         int? Adduserid { get; set; }
         [Required]
         DateTime? Adddate { get; set; }

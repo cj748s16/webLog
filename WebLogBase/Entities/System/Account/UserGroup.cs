@@ -13,7 +13,7 @@ namespace WebLogBase.Entities.System.Account
         [ForeignKey("Group")]
         public int? Groupid { get; set; }
 
-        //[Required]
+        [Required]
         [ForeignKey("Adduser")]
         public int? Adduserid { get; set; }
         [Required]

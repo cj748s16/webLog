@@ -11,6 +11,6 @@ export class UtilityService extends fwUtilityService {
         router: Router,
         notificationService: NotificationService,
         translateService: TranslateService) {
-        super(router, notificationService, translateService, "/:lang/account/login");
+        super(router, notificationService, translateService, "/:lang/system/login");
     }
 }

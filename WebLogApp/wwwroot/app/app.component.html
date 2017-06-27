@@ -32,6 +32,6 @@
     </div>
 </nav>-->
 
-<main [ngClass]="{'menu-collapsed': _isMenuCollapsed}" pageMaster>
+<main [ngClass]="{'menu-collapsed': _isMenuCollapsed}" pageMaster (signOut)="_onSignOut($event)" [loggedIn]="_isLoggedIn">
     <router-outlet></router-outlet>
 </main>

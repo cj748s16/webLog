@@ -8,8 +8,8 @@ using WebLogBase.Infrastructure;
 namespace WebLogBase.Migrations
 {
     [DbContext(typeof(WebLogContext))]
-    [Migration("20170404102329_AddGroup")]
-    partial class AddGroup
+    [Migration("20170407210243_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,7 +25,8 @@ namespace WebLogBase.Migrations
                     b.Property<DateTime?>("Adddate")
                         .IsRequired();
 
-                    b.Property<int?>("Adduserid");
+                    b.Property<int?>("Adduserid")
+                        .IsRequired();
 
                     b.Property<int?>("Delstat")
                         .IsRequired();
@@ -33,7 +34,8 @@ namespace WebLogBase.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("Roleid");
+                    b.Property<int?>("Roleid")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -49,10 +51,24 @@ namespace WebLogBase.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime?>("Adddate")
+                        .IsRequired();
+
+                    b.Property<int?>("Adduserid")
+                        .IsRequired();
+
+                    b.Property<string>("Code")
+                        .IsRequired();
+
+                    b.Property<int?>("Delstat")
+                        .IsRequired();
+
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Adduserid");
 
                     b.ToTable("Role");
                 });
@@ -65,7 +81,8 @@ namespace WebLogBase.Migrations
                     b.Property<DateTime?>("Adddate")
                         .IsRequired();
 
-                    b.Property<int?>("Adduserid");
+                    b.Property<int?>("Adduserid")
+                        .IsRequired();
 
                     b.Property<int?>("Delstat")
                         .IsRequired();
@@ -92,6 +109,27 @@ namespace WebLogBase.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("WebLogBase.Entities.System.Account.UserGroup", b =>
+                {
+                    b.Property<int?>("Userid");
+
+                    b.Property<int?>("Groupid");
+
+                    b.Property<DateTime?>("Adddate")
+                        .IsRequired();
+
+                    b.Property<int?>("Adduserid")
+                        .IsRequired();
+
+                    b.HasKey("Userid", "Groupid");
+
+                    b.HasIndex("Adduserid");
+
+                    b.HasIndex("Groupid");
+
+                    b.ToTable("UserGroup");
+                });
+
             modelBuilder.Entity("WebLogBase.Entities.System.Account.Group", b =>
                 {
                     b.HasOne("WebLogBase.Entities.System.Account.User", "Adduser")
@@ -103,11 +141,33 @@ namespace WebLogBase.Migrations
                         .HasForeignKey("Roleid");
                 });
 
+            modelBuilder.Entity("WebLogBase.Entities.System.Account.Role", b =>
+                {
+                    b.HasOne("WebLogBase.Entities.System.Account.User", "Adduser")
+                        .WithMany()
+                        .HasForeignKey("Adduserid");
+                });
+
             modelBuilder.Entity("WebLogBase.Entities.System.Account.User", b =>
                 {
                     b.HasOne("WebLogBase.Entities.System.Account.User", "Adduser")
                         .WithMany()
                         .HasForeignKey("Adduserid");
+                });
+
+            modelBuilder.Entity("WebLogBase.Entities.System.Account.UserGroup", b =>
+                {
+                    b.HasOne("WebLogBase.Entities.System.Account.User", "Adduser")
+                        .WithMany()
+                        .HasForeignKey("Adduserid");
+
+                    b.HasOne("WebLogBase.Entities.System.Account.Group", "Group")
+                        .WithMany("Users")
+                        .HasForeignKey("Groupid");
+
+                    b.HasOne("WebLogBase.Entities.System.Account.User", "User")
+                        .WithMany("Groups")
+                        .HasForeignKey("Userid");
                 });
         }
     }

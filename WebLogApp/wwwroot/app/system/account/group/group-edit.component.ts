@@ -31,6 +31,6 @@ export class GroupEditComponent extends EditTabComponent<GroupEdit> {
     private _getRoleList() {
         this._groupService.getRoleList()
             .subscribe((data: any) => this._roleList = data,
-            error => this._utilityService.handleError.bind(this._utilityService));
+            error => this._utilityService.handleError(error));
     }
 }

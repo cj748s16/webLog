@@ -7,7 +7,6 @@
     Renderer, forwardRef, ElementRef, HostListener,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import * as MD5 from "crypto-js/md5";
 
 import { GridColumn } from "./grid-column";
 import { IGridRow } from "./grid-row";
@@ -15,7 +14,9 @@ import { IGridRow } from "./grid-row";
 import { Key } from "../../utility";
 import * as Utility from "../../utility";
 
-import { IDynamicTemplateBuilder, DynamicTypeBuilder, JitModule } from "../../jit/jit";
+import { IDynamicTemplateBuilder, DynamicTypeBuilder } from "../../jit/jit";
+
+import { CryptoService } from "../../services";
 
 declare var jQuery: any;
 const $ = jQuery;
@@ -103,6 +104,7 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 
     constructor(
         private _typeBuilder: DynamicTypeBuilder<IGridRow>,
+        private _cryptoService: CryptoService,
         private _renderer: Renderer) {
         this.id = this.id || Utility.createId(this.constructor.name);
     }
@@ -200,11 +202,11 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
             }
             if (this.heading) {
                 const headingTemplate = this._createHeadingTemplate();
-                const headingKey = MD5(headingTemplate).toString();
+                const headingKey = this._cryptoService.md5(headingTemplate);
                 const compMeta = { template: headingTemplate };
 
-                this.$heading.removeClass("noheading");
-                this.$body.removeClass("noheading");
+                this.$heading && this.$heading.removeClass("noheading");
+                this.$body && this.$body.removeClass("noheading");
 
                 this._typeBuilder
                     .createComponentFactory(headingKey, () => { return this._createNewComponent(compMeta, null); })
@@ -213,8 +215,8 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
                         resolve();
                     });
             } else {
-                this.$heading.addClass("noheading");
-                this.$body.addClass("noheading");
+                this.$heading && this.$heading.addClass("noheading");
+                this.$body && this.$body.addClass("noheading");
                 resolve();
             }
         });
@@ -226,7 +228,7 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
             //let fnList: Map<string, Function>;
             //[rowTemplate, fnList] = this._createRowTemplate();
             rowTemplate = this._createRowTemplate();
-            const rowKey = MD5(rowTemplate).toString();
+            const rowKey = this._cryptoService.md5(rowTemplate);
             const compMeta = { template: rowTemplate };
 
             if (typeof this.autoselect === "string") {
@@ -360,27 +362,40 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
 
         this.columns.forEach(col => {
             if (!col.hidden) {
-                let field = `entity.${col.field}`;
-                //if (col.fn) {
-                //    let fnName = `jit_GridRowFn_${this._fnIndex++}`;
-                //    fnList.set(fnName, col.fn);
-                //    field = `_callFn("${fnName}", ${field})`;
-                //}
-                if (col.format) {
-                    switch (col.format) {
-                        case "D":
-                            //field = `convertDateTime(${field})`;
-                            field += " | date:'shortDate'";
-                            break;
-                        case "DT":
-                            //field = `convertDateTime(${field}, true)`;
-                            field += " | date:'short'";
-                            break;
-                        default:
-                            throw new Error(`Unknown column format: ${col.format}`);
+                if (!col.checkbox) {
+                    let field = `entity.${col.field}`;
+                    //if (col.fn) {
+                    //    let fnName = `jit_GridRowFn_${this._fnIndex++}`;
+                    //    fnList.set(fnName, col.fn);
+                    //    field = `_callFn("${fnName}", ${field})`;
+                    //}
+                    if (col.format) {
+                        switch (col.format) {
+                            case "D":
+                                //field = `convertDateTime(${field})`;
+                                field += " | date:'shortDate'";
+                                break;
+                            case "DT":
+                                //field = `convertDateTime(${field}, true)`;
+                                field += " | date:'short'";
+                                break;
+                            case "LOC":
+                                field += " | translate";
+                                break;
+                            default:
+                                throw new Error(`Unknown column format: ${col.format}`);
+                        }
                     }
+
+                    template += `<div class="cell" style="width: ${col.width}px; max-width: ${col.width}px;">{{${field}}}</div>`;
+                } else {
+                    template += `<div class="cell checkbox" style="width: ${col.width}px; max-width: ${col.width}px;">
+    <label>
+        <input id="${col.field}" name="${col.field}" type="checkbox" autocomplete="off" [(ngModel)]="entity.${col.field}">
+        <span class="checkbox-material"><span class="check"></span></span>
+    </label>
+</div>`;
                 }
-                template += `<div class="cell" style="width: ${col.width}px; max-width: ${col.width}px;">{{${field}}}</div>`;
             }
         });
 
@@ -398,6 +413,8 @@ export class GridControl implements OnInit, AfterViewInit, OnDestroy, OnChanges,
                 template += `<div class="cell" style="width: ${col.width}px; max-width: ${col.width}px;"><span>{{'${col.caption}' | translate}}</span></div>`;
             }
         });
+
+        template += "</div>";
 
         return template;
     }

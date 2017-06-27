@@ -9,5 +9,6 @@ export * from "./tab.components";
 export { EditModalComponent } from "./edit-modal.component";
 
 export { TopBarComponent } from "./top-bar.component";
+export { UserProfileComponent } from "./user-profile.component";
 
 export { PagePartsModule } from "./page-parts.module";

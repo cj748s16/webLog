@@ -34,7 +34,7 @@ namespace WebLogApp.Controllers.System.Account
         }
 
         [HttpGet("availablebyuser/{userId:int}")]
-        public async Task<IActionResult> AvailableByUser(int? userId)
+        public async Task<IActionResult> AvailableByUserAsync(int? userId)
         {
             IEnumerable<GroupViewModel> groupsVM = null;
 
@@ -46,7 +46,7 @@ namespace WebLogApp.Controllers.System.Account
         }
 
         [HttpGet("assignedbyuser/{userId:int}")]
-        public async Task<IActionResult> AssignedByUser(int? userId)
+        public async Task<IActionResult> AssignedByUserAsync(int? userId)
         {
             IEnumerable<GroupViewModel> groupsVM = null;
 
@@ -82,7 +82,7 @@ namespace WebLogApp.Controllers.System.Account
         }
 
         [HttpPost]
-        public async Task<IActionResult> Assign([FromBody] IDictionary<string, string> keys)
+        public async Task<IActionResult> AssignAsync([FromBody] IDictionary<string, string> keys)
         {
             GenericResult result = null;
 
@@ -172,7 +172,7 @@ namespace WebLogApp.Controllers.System.Account
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Unassign([FromQuery] IDictionary<string, string> keys)
+        public async Task<IActionResult> UnassignAsync([FromQuery] IDictionary<string, string> keys)
         {
             GenericResult result = null;
 

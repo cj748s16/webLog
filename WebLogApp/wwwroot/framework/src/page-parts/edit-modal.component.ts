@@ -57,7 +57,12 @@ export class EditModalComponent implements AfterContentInit, IEdit<any>, OnDestr
 
     activatedRoute: any;
 
-    constructor(private _changeDetector: ChangeDetectorRef) { }
+    public afterControlsCollected: Promise<Array<Control>>;
+    private afterControlsCollectedResolve: (controls: Array<Control>) => void;
+
+    constructor(private _changeDetector: ChangeDetectorRef) {
+        this.afterControlsCollected = new Promise<Array<Control>>(resolve => this.afterControlsCollectedResolve = resolve);
+    }
 
     private _save($event: Event) {
         this.save.emit($event);
@@ -83,6 +88,8 @@ export class EditModalComponent implements AfterContentInit, IEdit<any>, OnDestr
         });
 
         this.form = new FormGroup(group);
+
+        this.afterControlsCollectedResolve(this.controls);
     }
 
     private _detectChanges() {

@@ -1,6 +1,6 @@
 ﻿import { Component, forwardRef, ViewChild, ElementRef } from "@angular/core";
 import { AbstractControl, ValidationErrors } from "@angular/forms";
-import { Key, EditContentComponent, EditTabComponent, TAB_ACCESSOR, NotificationService, UtilityService, EventsService } from "@framework";
+import { EditTabComponent, NotificationService, UtilityService, EventsService } from "@framework";
 
 import { UserEdit } from "./domain";
 import { UserService } from "./user.service";

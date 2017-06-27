@@ -39,7 +39,7 @@ export class DynamicTypeBuilder<TComp> {
     private _createComponentModule(componentType: Type<any>): Type<any> {
         @NgModule({
             imports: [CommonModule, FormsModule, TranslateModule, JitModule],
-            declarations: [componentType],
+            declarations: [componentType]
             //exports: [componentType]
         })
         class RuntimeComponentModule { }

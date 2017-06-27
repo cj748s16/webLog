@@ -27,7 +27,7 @@ namespace WebLogApp.Controllers.System.Account
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             IEnumerable<RoleViewModel> rolesVM = null;
 

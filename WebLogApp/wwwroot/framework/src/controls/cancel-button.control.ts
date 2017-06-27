@@ -10,11 +10,12 @@
 })
 export class CancelButtonControl {
 
-    @Output()
-    public clicked = new EventEmitter<Event>();
+    // If calling it click, the event runs twice
+    @Output() clicked = new EventEmitter<Event>();
 
     private _click($event: Event) {
         this.clicked.emit($event);
         $event.preventDefault();
+        return false;
     }
 }

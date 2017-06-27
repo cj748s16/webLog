@@ -1,22 +1,15 @@
 ﻿import { NgModule } from "@angular/core";
-import { LocalizeRouterModule, LocalizeParser, ManualParserLoader } from "localize-router";
 import { RouterModule } from "@angular/router";
+import { LocalizeRouterModule } from "localize-router";
 import { FrameworkModule } from "@framework";
 
 import { accountRoutes } from "./account.routes";
 
 import { AccountComponent } from "./account.component";
 
-import { UserService } from "./user/user.service";
-import { UserComponent } from "./user/user.component";
-import { UserListComponent } from "./user/user-list.component";
-import { UserEditComponent } from "./user/user-edit.component";
-import { UserGroupAssignComponent } from "./user/user-group-assign.component";
-
-import { GroupService } from "./group/group.service";
-import { GroupComponent } from "./group/group.component";
-import { GroupListComponent } from "./group/group-list.component";
-import { GroupEditComponent } from "./group/group-edit.component";
+import { UserComponent, UserListComponent, UserEditComponent, UserGroupAssignComponent, UserService } from "./user";
+import { GroupComponent, GroupListComponent, GroupEditComponent, GroupService } from "./group";
+import { GroupRComponent, GroupRRightsComponent, GroupRService } from "./groupr";
 
 @NgModule({
     imports: [
@@ -32,11 +25,15 @@ import { GroupEditComponent } from "./group/group-edit.component";
 
         GroupComponent,
         GroupListComponent,
-        GroupEditComponent
+        GroupEditComponent,
+
+        GroupRComponent,
+        GroupRRightsComponent
     ],
     providers: [
         UserService,
-        GroupService
+        GroupService,
+        GroupRService
     ]
 })
 export class AccountModule { }

@@ -1,0 +1,9 @@
+﻿{
+  "Title": "Bejelentkezés",
+  "UserID": "Felhasználói azonosító",
+  "Password": "Jelszó",
+
+  "Login": "Bejelentkezés",
+
+  "Invalid User ID or Password":  "Hibás felhasznói azonosító vagy jelszó"
+}

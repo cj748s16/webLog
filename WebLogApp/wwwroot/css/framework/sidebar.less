@@ -1,9 +1,5 @@
 ﻿@import "constants.less";
 
-.bg-translucent-dark (@opacity) {
-    background: fadeout(@sidebar, @opacity);
-}
-
 .sidebar {
     width: @sidebar-width;
     top: @top-height;
@@ -74,7 +70,7 @@
 }
 
 a.sidebar-list-link {
-    display: block;
+    display: flex;
     height: 42px;
     padding-left: 18px;
     text-shadow: none;
@@ -85,6 +81,7 @@ a.sidebar-list-link {
     white-space: nowrap;
     overflow: hidden;
     cursor: pointer;
+    align-items: center;
 
     &:hover {
         color: @primary;
@@ -98,6 +95,17 @@ a.sidebar-list-link {
         margin-right: 18px;
         width: 16px;
         display: inline-block;
+        flex-shrink: 0;
+    }
+
+    & span {
+        display: inline-block;
+        max-width: ~"calc(100% - 24px)";
+        padding-right: 24px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        flex-shrink: 1;
     }
 
     & b {
@@ -115,6 +123,7 @@ a.sidebar-list-link {
         text-align: center;
         color: @sidebar-text;
         transform: transform 0.2s linear;
+        flex-shrink: 0;
     }
 }
 
@@ -134,6 +143,20 @@ a.sidebar-list-link {
         display: block;
     }
 
+    & > side-menu-item > li.sidebar-sublist-item:not(.with-sub-menu) > a {
+        display: flex;
+        text-shadow: none;
+        font-size: 13px;
+        text-decoration: none;
+        color: @sidebar-text;
+        height: auto;
+        line-height: 29px;
+
+        &:hover {
+            color: @primary;
+        }
+    }
+
     & > side-menu-item > li {
         display: block;
         float: none;
@@ -142,18 +165,7 @@ a.sidebar-list-link {
         position: relative;
 
         & a {
-            display: block;
-            text-shadow: none;
-            font-size: 13px;
-            text-decoration: none;
-            color: @sidebar-text;
-            padding-left: 52px;
-            height: auto;
-            line-height: 29px;
-
-            &:hover {
-                color: @primary;
-            }
+            padding-left: 28px;
         }
 
         &.selected:not(.with-sub-menu) > a {
@@ -190,7 +202,7 @@ a.sidebar-list-link {
 
 .sidebar-collapsed {
     & .sidebar {
-        width: 52px;
+        width: @sidebar-collapsed-width;
 
         & .fa-angle-down, & .fa-angle-up {
             opacity: 0;
@@ -199,7 +211,7 @@ a.sidebar-list-link {
         & .sidebar-sublist {
             position: absolute;
             top: -1px;
-            left: 52px;
+            left: 28px;
             .bg-translucent-dark(0.8);
             width: 0;
             display: block;

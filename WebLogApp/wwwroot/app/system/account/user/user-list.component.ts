@@ -16,7 +16,7 @@ const noop = () => { };
 })
 export class UserListComponent extends ListTabComponent<UserViewModel> {
 
-    private static _editUrl = "/:lang/account/user/edit/";
+    private static _editUrl = "/:lang/system/account/user/edit/";
 
     constructor(
         userService: UserService,

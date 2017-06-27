@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using WebLogBase.Entities;
 using WebLogBase.Infrastructure;
@@ -39,6 +40,11 @@ namespace WebLogBase.Repositories
             return await context.Set<T>().FirstOrDefaultAsync(predicate);
         }
 
+        public virtual async Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await context.Set<T>().Where(predicate).ToListAsync();
+        }
+
         public virtual async Task<int> CountAsync()
         {
             return await context.Set<T>().CountAsync();
@@ -49,6 +55,7 @@ namespace WebLogBase.Repositories
             if (entity is IEntityWithAdding)
             {
                 var ent = (IEntityWithAdding)entity;
+                ent.Adduserid = ent.Adduserid ?? Infrastructure.Authentication.SessionStore.Current.Id;
                 ent.Adddate = DateTime.Now;
             }
 
@@ -90,6 +97,12 @@ namespace WebLogBase.Repositories
         }
 
         protected string ConvertToSql(Expression<Func<T, bool>> predicate)
+        {
+            return ConvertToSql<T>(predicate);
+        }
+
+        protected string ConvertToSql<T1>(Expression<Func<T1, bool>> predicate)
+            where T1 : class, IEntityBase, new()
         {
             // visit the expression and convertes the predicate to a SQL part
             var expr = new Visitor().Visit(predicate) as ConstantExpression;
@@ -154,6 +167,14 @@ namespace WebLogBase.Repositories
                         return VisitBinary(binary);
                     }
                 }
+                if (body is MethodCallExpression)
+                {
+                    var call = body as MethodCallExpression;
+                    if (call != null)
+                    {
+                        return VisitMethodCall(call);
+                    }
+                }
                 return base.VisitLambda(node);
             }
 
@@ -168,9 +189,30 @@ namespace WebLogBase.Repositories
                     var right = VisitMember(memberRight);
                     var rightValue = ((ConstantExpression)right).Value;
 
-                    return Expression.Constant($"{leftValue} = {(rightValue is string ? $"'{rightValue}'" : rightValue)}");
+                    switch (node.NodeType)
+                    {
+                        case ExpressionType.Equal:
+                            return Expression.Constant($"{leftValue} = {(rightValue is string ? $"'{rightValue}'" : rightValue)}");
+                        default:
+                            throw new NotImplementedException(nameof(VisitBinary));
+                    }
                 }
                 return base.VisitBinary(node);
+            }
+
+            protected override Expression VisitMethodCall(MethodCallExpression node)
+            {
+                var stringType = typeof(string);
+                var typeInfo = stringType.GetTypeInfo();
+                var stringCompareMethod = typeInfo.GetMethods().Where(m => m == node.Method).FirstOrDefault();
+                switch (stringCompareMethod.Name)
+                {
+                    case "Equals":
+                        return VisitBinary(BinaryExpression.Equal(node.Arguments.First(), node.Arguments.Skip(1).First()));
+                    default:
+                        throw new NotImplementedException(nameof(VisitMethodCall));
+                }
+                //return base.VisitMethodCall(node);
             }
 
             protected override Expression VisitMember(MemberExpression node)

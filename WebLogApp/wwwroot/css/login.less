@@ -1,0 +1,53 @@
+﻿@import "framework/constants.less";
+
+@text-color: #fff;
+@font-light: 300;
+@primary-dark: shade(@primary, 15%);
+
+.auth-main {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: #eee;
+    z-index: 1500;
+}
+
+.auth-block {
+    margin: auto;
+    border-radius: 4px;
+    .bg-translucent-dark(0.55);
+    color: #fff;
+    padding: 4px;
+}
+
+.auth-container {
+    width: 540px;
+    margin: auto;
+    border-radius: 4px;
+    background: #fff;
+    padding: 32px;
+
+    & h1 {
+        font-weight: @font-light;
+        color: @primary;
+        margin-bottom: 28px;
+        text-align: center;
+    }
+
+    & a {
+        text-decoration: none;
+        outline: none;
+        transition: all 0.2s ease;
+        color: @primary;
+
+        &:hover {
+            color: @primary-dark;
+        }
+    }
+
+    & .form-group {
+        margin-bottom: 12px;
+    }
+}

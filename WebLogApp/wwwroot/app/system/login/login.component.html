@@ -1,0 +1,13 @@
+﻿<div class="auth-main" #authMain>
+    <div class="auth-block">
+        <div class="auth-container">
+            <h1>{{'system.login.Title' | translate}}</h1>
+
+            <form #form="ngForm" class="form-horizontal">
+                <textbox id="Userid" name="Userid" placeholder="system.login.UserID" [errorDefs]="{required: true}" [(ngModel)]="entity.Userid"></textbox>
+                <textbox id="Password" name="Password" placeholder="system.login.Password" password [errorDefs]="{required: true}" [(ngModel)]="entity.Password"></textbox>
+                <saveButton (clicked)="_login($event)" [disabled]="!form.valid" label="system.login.Login"></saveButton>
+            </form>
+        </div>
+    </div>
+</div>

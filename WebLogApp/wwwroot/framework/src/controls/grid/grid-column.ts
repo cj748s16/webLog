@@ -13,4 +13,5 @@ export class GridColumn {
     @Input() hidden: boolean;
     @Input() format: string;
     //@Input() fn: Function;
+    @Input() checkbox: boolean;
 }

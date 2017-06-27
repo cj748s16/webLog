@@ -19,7 +19,7 @@ export abstract class BaseTabComponent<T> implements OnInit, OnDestroy, TabAcces
     private _tabContent: TabContentComponent;
 
     constructor(
-        protected _assignService: IService,
+        protected _service: IService,
         protected _utilityService: UtilityService,
         protected _el: ElementRef) {
         this.$el = $(this._el.nativeElement);

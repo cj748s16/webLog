@@ -23,7 +23,7 @@ namespace WebLogBase.Entities.System.Account
         [Required]
         public DateTime? Passwdexpr { get; set; }
 
-        //[Required]
+        [Required]
         [ForeignKey("Adduser")]
         public int? Adduserid { get; set; }
         [Required]

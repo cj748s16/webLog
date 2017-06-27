@@ -1,9 +1,12 @@
 ﻿{
   "Menu": {
     "Language": "Nyelv",
+    "System": "Karbantartás",
+    "Login": "Bejelentkezés",
     "Account": "Fiók kezelés",
     "Users": "Felhasználók",
-    "Groups": "Csoporotok"
+    "Groups": "Csoporotok",
+    "GroupsRights": "Csoport Jogosultság"
   },
 
   "New": "Új...",
@@ -19,6 +22,9 @@
   "validators": {
     "required": "{{value}} megadása kötelező"
   },
+
+  "Authentication required": "Kérem jelentkezzen be",
+  "You don't have rights to access this page": "Önnek nincs joga a lap megtekintéséhez",
 
   "ROUTES.users": "users",
   "ROUTES.groups": "groups"

@@ -26,6 +26,9 @@ using NLog;
 using WebLogApp.Infrastructure.Logging;
 using WebLogApp.Infrastructure.Security;
 using System.Security.Claims;
+using WebLogBase.Infrastructure.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace WebLogApp
 {
@@ -61,6 +64,8 @@ namespace WebLogApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             // SimpleInjector
             var controllerActivator = new SimpleInjectorControllerActivator(Container);
             services.AddSingleton<Microsoft.AspNetCore.Mvc.Controllers.IControllerActivator>(controllerActivator);
@@ -96,13 +101,13 @@ namespace WebLogApp
             ConfigurePolicies(services);
 
             // Adds a default in-memory implementation of IDistributedCache.
-            //services.AddDistributedMemoryCache();
+            services.AddDistributedMemoryCache();
             // Adds Session storage
-            //services.AddSession(options =>
-            //{
-            //    options.IdleTimeout = TimeSpan.FromSeconds(3600);
-            //    options.CookieHttpOnly = true;
-            //});
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(3600);
+                options.CookieHttpOnly = true;
+            });
 
             // Add MVC services to the services container.
             services
@@ -127,6 +132,9 @@ namespace WebLogApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory)
         {
+            // Add IAuthorizationService adapter to the Container
+            Container.RegisterSingleton<IAspNetAuthorizerAdapter>(new Infrastructure.Core.AspNetAuthorizerAdapter(GetAspNetServiceProvider<IAuthorizationService>(app)));
+
             // Add Localization options to the container
             var jsonLocOptions = app.ApplicationServices.GetService<IOptions<JsonLocalizationOptions>>();
             Container.RegisterSingleton(jsonLocOptions);
@@ -153,11 +161,16 @@ namespace WebLogApp
 
             //var mapperInstance = AutoMapperConfiguration.Configure();
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    AuthenticationScheme = "webLog",
+            //    LoginPath = new PathString("/hu/system/login/"),
+            //    AccessDeniedPath = new PathString("/hu/system/login/"),
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true
+            //});
+            app.UseSidAuthentication(new SidAuthenticationOptions
             {
-                AuthenticationScheme = "webLog",
-                LoginPath = new PathString("/hu/system/login/"),
-                AccessDeniedPath = new PathString("/hu/system/login/"),
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true
             });
@@ -168,7 +181,7 @@ namespace WebLogApp
             }
 
             // Add Session
-            //app.UseSession();
+            app.UseSession();
 
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>
@@ -223,6 +236,20 @@ namespace WebLogApp
                 options.SupportedUICultures = Controllers.System.LanguageApiController.SupportedCultures;
                 options.RequestCultureProviders.Insert(0, new UrlRequestCultureProvider());
             });
+        }
+
+        private static Func<T> GetAspNetServiceProvider<T>(IApplicationBuilder app)
+        {
+            var accessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
+            return () =>
+            {
+                if (accessor.HttpContext == null)
+                {
+                    throw new InvalidOperationException("No HttpContext");
+                }
+
+                return accessor.HttpContext.RequestServices.GetRequiredService<T>();
+            };
         }
 
         // Configure policies

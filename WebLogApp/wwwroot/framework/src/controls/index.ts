@@ -3,6 +3,7 @@ export { TextboxControl } from "./textbox.control";
 export { DropdownControl } from "./dropdown.control";
 export { SaveButtonControl } from "./save-button.control";
 export { CancelButtonControl } from "./cancel-button.control";
+export { CheckboxControl } from "./checkbox.control";
 
 export * from "./grid";
 

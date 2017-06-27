@@ -1,5 +1,5 @@
 ﻿import { NgModule, Injector, Type, ModuleWithProviders } from "@angular/core";
-import { HttpModule, Http, Headers, RequestOptions, BaseRequestOptions } from "@angular/http";
+import { HttpModule } from "@angular/http";
 import { Routes } from "@angular/router";
 import { TranslateModule, TranslateService, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -10,17 +10,6 @@ import { JitModule } from "./jit/jit";
 import { PagePartsModule } from "./page-parts";
 import { DataService, EventsService } from "./services";
 import { DropdownControl } from "./controls";
-
-class AppBaseRequestOptions extends BaseRequestOptions {
-
-    headers: Headers = new Headers();
-
-    constructor() {
-        super();
-        this.headers.append("Content-Type", "application/json");
-        this.body = "";
-    }
-}
 
 @NgModule({
     imports: [
@@ -54,7 +43,6 @@ export class FrameworkModule {
             ngModule: FrameworkModule,
             providers: [
                 DataService,
-                { provide: RequestOptions, useClass: AppBaseRequestOptions },
                 ...PagePartsModule.forRoot(routes).providers
             ]
         };
@@ -65,7 +53,6 @@ export class FrameworkModule {
             ngModule: FrameworkModule,
             providers: [
                 DataService,
-                { provide: RequestOptions, useClass: AppBaseRequestOptions },
                 ...PagePartsModule.forChild(routes).providers
             ]
         };

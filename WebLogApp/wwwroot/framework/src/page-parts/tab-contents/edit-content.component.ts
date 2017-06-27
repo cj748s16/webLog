@@ -1,9 +1,8 @@
-﻿import { Component, Input, Output, ViewChild, EventEmitter, ContentChildren, QueryList, forwardRef, AfterContentInit, ChangeDetectorRef, ElementRef, OnDestroy } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+﻿import { Component, Output, EventEmitter, forwardRef, ChangeDetectorRef, ElementRef } from "@angular/core";
 
-import { Control } from "../../controls";
-import { ActivatedRouteComponent, IEdit } from "../helpers";
+import { IEdit } from "../helpers";
 import { TabContentComponent } from "./tab-content.component";
+import { CustomContentComponent } from "./custom-content.component";
 
 @Component({
     selector: "[editTab]",
@@ -24,13 +23,7 @@ import { TabContentComponent } from "./tab-content.component";
         { provide: IEdit, useExisting: forwardRef(() => EditContentComponent), multi: true }
     ]
 })
-export class EditContentComponent extends TabContentComponent implements IEdit<any>, AfterContentInit, OnDestroy {
-
-    @Input()
-    public id: string;
-
-    @Input()
-    public title: string;
+export class EditContentComponent extends CustomContentComponent implements IEdit<any> {
 
     @Output()
     public save = new EventEmitter<Event>();
@@ -38,20 +31,10 @@ export class EditContentComponent extends TabContentComponent implements IEdit<a
     @Output()
     public cancel = new EventEmitter<Event>();
 
-    @ContentChildren(forwardRef(() => Control))
-    private _content: QueryList<Control>;
-
-    public controls: Array<Control>;
-
-    @ViewChild(ActivatedRouteComponent)
-    activatedRoute: ActivatedRouteComponent;
-
-    private form: FormGroup;
-
     modal: any;
 
-    constructor(private _changeDetector: ChangeDetectorRef, el: ElementRef) {
-        super(el);
+    constructor(changeDetector: ChangeDetectorRef, el: ElementRef) {
+        super(changeDetector, el);
         this._handleButtons = false;
     }
 
@@ -61,54 +44,5 @@ export class EditContentComponent extends TabContentComponent implements IEdit<a
 
     private _cancel($event: Event) {
         this.cancel.emit($event);
-    }
-
-    ngAfterContentInit() {
-        let group: any = {};
-
-        this.controls = this._content.map(c => c);
-
-        this.controls.forEach(ctrl => {
-            ctrl.registerOnChange((v) => {
-                if (this.entity) {
-                    this.entity[ctrl.name] = v;
-                }
-                setTimeout(() => this._detectChanges(), 100);
-            });
-            group[ctrl.name] = ctrl.control;
-        });
-
-        this.form = new FormGroup(group);
-    }
-
-    private _detectChanges() {
-        if (this._changeDetector != null) {
-            this._changeDetector.detectChanges();
-        }
-    }
-
-    private _entity: any;
-
-    public get entity(): any {
-        return this._entity;
-    }
-
-    public set entity(v: any) {
-        if (this._entity != v) {
-            this._entity = v;
-            this._assignDataToControls();
-        }
-    }
-
-    private _assignDataToControls() {
-        this._changeDetector.detach();
-        this.controls.forEach(ctrl => {
-            ctrl.writeValue(this._entity ? this._entity[ctrl.name] : null);
-        });
-        setTimeout(() => this._detectChanges(), 100);
-    }
-
-    ngOnDestroy() {
-        this._changeDetector = null;
     }
 }

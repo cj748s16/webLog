@@ -25,6 +25,7 @@ namespace WebLogBase
 
             RegisterWebLogContext();
             RegisterRepositories();
+            RegisterServices();
         }
 
         private void RegisterRepositories()
@@ -33,7 +34,14 @@ namespace WebLogBase
             Container.Register<Repositories.System.Account.IUserRepository, Repositories.System.Account.UserRepository>();
             Container.Register<Repositories.System.Account.IRoleRepository, Repositories.System.Account.RoleRepository>();
             Container.Register<Repositories.System.Account.IGroupRepository, Repositories.System.Account.GroupRepository>();
+            Container.Register<Repositories.System.Account.IGroupRightsRepository, Repositories.System.Account.GroupRightsRepository>();
             Container.Register<Repositories.System.Account.IUserGroupRepository, Repositories.System.Account.UserGroupRepository>();
+        }
+
+        private void RegisterServices()
+        {
+            // add services
+            Container.Register<IMembershipService, MembershipService>();
         }
 
         private void RegisterWebLogContext()

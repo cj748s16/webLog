@@ -14,12 +14,13 @@ import { SidebarModule } from "../sidebar/sidebar.module";
 
 import { ActivatedRouteComponent } from "./helpers";
 
-import { TabContentComponent, AssignTabContentComponent, EditContentComponent } from "./tab-contents";
+import { TabContentComponent, AssignTabContentComponent, CustomContentComponent, EditContentComponent } from "./tab-contents";
 
 import { PageMasterComponent } from "./page-master.component";
 import { PageComponent } from "./page.component";
 import { EditModalComponent } from "./edit-modal.component";
 import { TopBarComponent } from "./top-bar.component";
+import { UserProfileComponent } from "./user-profile.component";
 
 @NgModule({
     imports: [
@@ -33,11 +34,13 @@ import { TopBarComponent } from "./top-bar.component";
     declarations: [
         PageMasterComponent,
         TopBarComponent,
+        UserProfileComponent,
         ActivatedRouteComponent,
         PageComponent,
         TabContentComponent,
         AssignTabContentComponent,
         EditModalComponent,
+        CustomContentComponent,
         EditContentComponent
     ],
     exports: [
@@ -49,11 +52,13 @@ import { TopBarComponent } from "./top-bar.component";
         SidebarModule,
         PageMasterComponent,
         TopBarComponent,
+        UserProfileComponent,
         ActivatedRouteComponent,
         PageComponent,
         TabContentComponent,
         AssignTabContentComponent,
         EditModalComponent,
+        CustomContentComponent,
         EditContentComponent
     ]
 })

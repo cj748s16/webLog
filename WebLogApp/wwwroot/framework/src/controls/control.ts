@@ -1,4 +1,4 @@
-﻿import { Component, Input, ElementRef, SimpleChanges, OnInit, OnChanges, forwardRef } from "@angular/core";
+﻿import { Component, Input, Output, ElementRef, SimpleChanges, OnInit, OnChanges, forwardRef, EventEmitter } from "@angular/core";
 import { FormControl, AbstractControl, Validators, ControlValueAccessor, Validator, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -21,6 +21,8 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     @Input() placeholder: string;
     @Input() disabled: boolean;
     @Input() errorDefs: { [key: string]: any };
+
+    @Output() change = new EventEmitter<any>();
 
     protected $host: any;
     protected $control: any;
@@ -143,6 +145,7 @@ export abstract class Control implements OnInit, OnChanges, ControlValueAccessor
     protected _setValue(v: any) {
         if (this._intrlSetValue(v, true)) {
             this.onChangedCallback(v);
+            this.change.emit(v);
         }
     }
 

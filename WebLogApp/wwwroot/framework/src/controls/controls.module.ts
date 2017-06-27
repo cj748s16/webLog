@@ -5,12 +5,13 @@ import { TranslateModule } from "@ngx-translate/core";
 
 import { TextboxControl } from "./textbox.control";
 import { DropdownControl, DropdownColumn } from "./dropdown.control";
+import { CheckboxControl } from "./checkbox.control";
 import { GridControl, GridColumn } from "./grid";
 import { SaveButtonControl } from "./save-button.control";
 import { CancelButtonControl } from "./cancel-button.control";
 import { ErrorMsgComponent } from "./error-msg.component";
 
-import { EventsService } from "../services";
+import { EventsService, CryptoService } from "../services";
 
 @NgModule({
     imports: [
@@ -23,6 +24,7 @@ import { EventsService } from "../services";
         TextboxControl,
         DropdownControl,
         DropdownColumn,
+        CheckboxControl,
         GridControl,
         GridColumn,
         SaveButtonControl,
@@ -37,6 +39,7 @@ import { EventsService } from "../services";
         TextboxControl,
         DropdownControl,
         DropdownColumn,
+        CheckboxControl,
         GridControl,
         GridColumn,
         SaveButtonControl,
@@ -44,7 +47,8 @@ import { EventsService } from "../services";
         ErrorMsgComponent
     ],
     providers: [
-        EventsService
+        EventsService,
+        CryptoService
     ]
 })
 export class ControlsModule { }

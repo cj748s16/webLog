@@ -12,6 +12,7 @@ namespace WebLogBase.Repositories
         IQueryable<T> AsQueryable();
         IQueryable<T> AsQueryable(params Expression<Func<T, object>>[] includeProperties);
         Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>> predicate);
         Task<int> CountAsync();
         void Add(T entity);
         void Modify(T entity);

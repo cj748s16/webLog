@@ -23,7 +23,7 @@ namespace WebLogApp.Infrastructure.Mappings.System.Account
                 .ForMember(d => d.Adduser, map => map.Ignore())
                 .ForMember(d => d.Adduserid, map => map.Ignore())
                 .ForMember(d => d.Delstat, map => map.Ignore())
-                .ForMember(d => d.PasswordStr, map => map.MapFrom(vm => vm.Password))
+                .ForMember(d => d.PasswordStr, map => map.Ignore())
                 .ForMember(d => d.Password, map => map.Ignore())
                 .ForMember(d => d.Salt, map => map.Ignore())
                 .ForMember(d => d.Groups, map => map.Ignore());

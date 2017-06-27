@@ -1,9 +1,12 @@
 ﻿{
   "Menu": {
     "Language": "Language",
+    "System": "System",
+    "Login": "Sign in",
     "Account": "Account",
     "Users": "Users",
-    "Groups": "Groups"
+    "Groups": "Groups",
+    "GroupsRights": "Group's right"
   },
 
   "New": "New...",
@@ -18,6 +21,9 @@
     "required": "{{value}} is required"
   },
 
+  "Authentication required": "Authentication required",
+  "You don't have rights to access this page": "You don't have rights to access this page",
+
   "ROUTES.users": "users",
-  "ROUTES.groups":  "groups"
+  "ROUTES.groups": "groups"
 }

@@ -63,13 +63,17 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
         }
     }
 
+    private _keyIsValid(key: Key) {
+        return key != null && this.idField in key && key[this.idField] != null;
+    }
+
     open(key: Key = null): Promise<any> {
         return this._donePromise = new Promise<any>((resolve, reject) => {
             this._doneResolve = resolve;
             this._doneReject = reject;
 
             this.key = key;
-            if (this.key != null) {
+            if (this._keyIsValid(this.key)) {
                 this._loadEntity(this.key).then(this._showModal.bind(this)).catch(() => {
                     this.key = null;
                     this._showModal();
@@ -84,7 +88,9 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
     private _showModal() {
         if (this._editComponent) {
             this._editComponent.entity = this.entity;
-            this._editComponent.controls.forEach(c => c.reset());
+            this._editComponent.afterControlsCollected.then((controls) => {
+                controls.forEach(c => c.reset());
+            });
         }
         if (this._modal) {
             this._modal.open();
@@ -123,11 +129,11 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
             if (id == null) {
                 reject();
             } else {
-                this._assignService.get(id)
+                this._service.get(id)
                     .subscribe(res => {
                         loadResult = OperationResult.fromResponse(res);
                     },
-                    error => this._utilityService.handleError.bind(this._utilityService),
+                    error => this._utilityService.handleError(error),
                     () => {
                         if (loadResult.Succeeded) {
                             this.entity = <T>loadResult.CustomData;
@@ -146,15 +152,15 @@ export class EditTabComponent<T> extends BaseTabComponent<T> {
         let editResult: OperationResult = new OperationResult(false, "");
         let obs: Observable<any>;
 
-        if (this.key) {
-            obs = this._assignService.modify(this.entity);
+        if (this._keyIsValid(this.key)) {
+            obs = this._service.modify(this.entity);
         } else {
-            obs = this._assignService.new(this.entity);
+            obs = this._service.new(this.entity);
         }
 
         obs
             .subscribe(res => editResult = OperationResult.fromResponse(res),
-            error => this._utilityService.handleError.bind(this._utilityService),
+            error => this._utilityService.handleError(error),
             () => {
                 if (editResult.Succeeded) {
                     this._notificationService.printSuccessMessage(editResult.Message);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,46 +21,53 @@ namespace WebLogBase.Infrastructure
 
         private static void InitializeUser()
         {
-            if (!context.Roles.Any())
-            {
-                context.Roles.Add(new Entities.System.Account.Role { Name = "Developer" });
-                context.Roles.Add(new Entities.System.Account.Role { Name = "Administrator" });
-                context.Roles.Add(new Entities.System.Account.Role { Name = "User" });
-
-                context.SaveChanges();
-            }
-
             if (!context.Users.Any())
             {
-                //var devUser = context.Users.Add(new Entities.Account.User
-                //{
-                //    Userid = "dev",
-                //    Name = "Developer",
-                //    Salt = Convert.FromBase64String("+yhIgwWdxCLMxWaWpgNsWA=="),
-                //    Password = Convert.FromBase64String("KldYcCB2ar+InCQjQaHy5XPCS+hdLRcVsQHmhvcrsTM="),
-                //    Passwdexpr = new DateTime(2199, 12, 31),
-                //    Adduserid = "dev",
-                //    Adddate = DateTime.Now,
-                //    Delstat = 0
-                //}).Entity;
+                using (var trans = context.Database.BeginTransaction())
+                {
+                    context.Database.ExecuteSqlCommand("set identity_insert [dbo].[User] on");
 
-                //var devGroup = context.Groups.Add(new Entities.Account.Group
-                //{
-                //    Name = "Developer",
-                //    Adduser = devUser,
-                //    Adddate = DateTime.Now,
-                //    Delstat = 0
-                //}).Entity;
+                    var devUser = context.Users.Add(new Entities.System.Account.User
+                    {
+                        Id = 1,
+                        Userid = "dev",
+                        Name = "Developer",
+                        Salt = Convert.FromBase64String("yvMXmQEHj2A3IS+ATdgPEw=="),
+                        Password = Convert.FromBase64String("I2chcDySqd87EzU44WKZEQ=="),
+                        Passwdexpr = new DateTime(2199, 12, 31),
+                        Adduserid = 1,
+                        Adddate = DateTime.Now,
+                        Delstat = 0
+                    }).Entity;
+                    context.SaveChanges();
 
-                //context.UserGroups.Add(new Entities.Account.UserGroup
-                //{
-                //    User = devUser,
-                //    Group = devGroup,
-                //    Adduser = devUser,
-                //    Adddate = DateTime.Now
-                //});
+                    context.Database.ExecuteSqlCommand("set identity_insert [dbo].[User] off");
 
-                context.SaveChanges();
+                    var devRole = context.Roles.Add(new Entities.System.Account.Role { Name = "Developer", Code = Entities.System.Account.Role.DeveloperClaimName, Adduser = devUser, Adddate = DateTime.Now, Delstat = 0 }).Entity;
+                    context.Roles.Add(new Entities.System.Account.Role { Name = "Administrator", Code = Entities.System.Account.Role.AdministratorClaimName, Adduser = devUser, Adddate = DateTime.Now, Delstat = 0 });
+                    context.Roles.Add(new Entities.System.Account.Role { Name = "User", Code = Entities.System.Account.Role.UserClaimName, Adduser = devUser, Adddate = DateTime.Now, Delstat = 0 });
+
+                    var devGroup = context.Groups.Add(new Entities.System.Account.Group
+                    {
+                        Name = "Developer",
+                        Role = devRole,
+                        Adduser = devUser,
+                        Adddate = DateTime.Now,
+                        Delstat = 0
+                    }).Entity;
+
+                    context.UserGroups.Add(new Entities.System.Account.UserGroup
+                    {
+                        User = devUser,
+                        Group = devGroup,
+                        Adduser = devUser,
+                        Adddate = DateTime.Now
+                    });
+
+                    context.SaveChanges();
+
+                    trans.Commit();
+                }
             }
         }
     }

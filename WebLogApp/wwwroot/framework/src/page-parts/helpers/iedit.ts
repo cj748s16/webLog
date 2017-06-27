@@ -11,4 +11,5 @@ export abstract class IEdit< T > {
     activatedRoute: ActivatedRouteComponent;
     entity: T;
     controls: Array<Control>;
+    afterControlsCollected: Promise<Array<Control>>;
 }

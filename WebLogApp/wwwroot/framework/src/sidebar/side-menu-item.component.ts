@@ -29,7 +29,7 @@ const $ = jQuery;
 
     <ul *ngIf="menuItem.children" class="sidebar-sublist" [ngClass]="{'slide-right': menuItem.slideRight}">
         <side-menu-item *ngFor="let subItem of menuItem.children" [menuItem]="subItem" [child]="true"
-            (itemHover)="_onHoverItem($event)" (toggleSubmenu)="_onToggleSubMenu($event, subItems)"></side-menu-item>
+            (itemHover)="_onHoverItem($event)" (toggleSubMenu)="_onToggleSubMenu($event, subItem)"></side-menu-item>
     </ul>
 </li>
 `

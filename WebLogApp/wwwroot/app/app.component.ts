@@ -4,10 +4,9 @@ import { LocalizeRouterService } from "localize-router";
 import { TranslateService } from "@ngx-translate/core";
 import { MenuService, EventsService, SidebarComponent } from "@framework";
 
-import { UtilityService, LanguageService } from "./core/services";
+import { UtilityService, LanguageService, SystemService } from "./core/services";
 import { LanguageViewModel } from "./core/domain";
-
-import { APP_MENU } from "./app.menu";
+import { LoginService } from "./system/login";
 
 declare var jQuery: any;
 const $ = jQuery;
@@ -28,8 +27,8 @@ export class AppComponent implements OnInit {
         private _localize: LocalizeRouterService,
         private _utilityService: UtilityService,
         private _translateService: TranslateService,
-        private _menuService: MenuService,
         private _eventService: EventsService,
+        private _systemService: SystemService,
         private _changeDetector: ChangeDetectorRef) {
         // this language will be used as a fallback when a translation isn't found in the current language
         _translateService.setDefaultLang("en");
@@ -53,7 +52,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.getLanguages();
-        this._menuService.updateMenuByRoutes(<Routes>APP_MENU);
+        this._systemService.clearLoggedInUser().then(() => this._systemService.getClientInfo());
     }
 
     getLanguages() {
@@ -61,10 +60,20 @@ export class AppComponent implements OnInit {
             .subscribe((data: any) => {
                 this._languages = data;
             },
-            error => this._utilityService.handleError.bind(this._utilityService));
+            error => this._utilityService.handleError(error));
     }
 
     setLanguage(langId: string) {
         this._localize.changeLanguage(langId);
+    }
+
+    private _onSignOut($event: Event): boolean {
+        this._systemService.logout();
+        $event.preventDefault();
+        return false;
+    }
+
+    private get _isLoggedIn(): boolean {
+        return this._systemService.UserId != null;
     }
 }

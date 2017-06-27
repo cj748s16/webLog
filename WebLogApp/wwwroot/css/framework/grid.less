@@ -115,6 +115,26 @@
         height: 36px;
         padding: 7px;
         .font-face;
+
+        &.checkbox {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 3px;
+
+            & .checkbox-material .check {
+                background-color: @white;
+            }
+
+            & input[type=checkbox]:checked+.checkbox-material .check {
+                background-color: rgba(0,0,0,.54);
+                border-color: rgba(0,0,0,.54);
+
+                &:before {
+                    color: @white;
+                }
+            }
+        }
     }
 
     & .v-scroller {

@@ -293,16 +293,20 @@ namespace WebLogApp.Infrastructure.Localization
             var type = typeof(T);
             var typeInfo = type.GetTypeInfo();
             var baseType = typeInfo.BaseType;
-            var localizerType = typeof(IStringLocalizer<>).MakeGenericType(baseType);
-            var localizer = ((JsonStringLocalizerFactory)_factory).Container.GetInstance(localizerType);
-
-            if (localizer != null)
+            var baseTypeInfo = baseType.GetTypeInfo();
+            if (!baseTypeInfo.IsAbstract)
             {
-                var jsonStringLocalizerType = typeof(JsonStringLocalizer<>).MakeGenericType(baseType);
-                var method = jsonStringLocalizerType.GetMethod("GetLocalizedString", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod);
-                if (method != null)
+                var localizerType = typeof(IStringLocalizer<>).MakeGenericType(baseType);
+                var localizer = ((JsonStringLocalizerFactory)_factory).Container.GetInstance(localizerType);
+
+                if (localizer != null)
                 {
-                    return (string)method.Invoke(localizer, new object[] { name, CultureInfo.CurrentUICulture });
+                    var jsonStringLocalizerType = typeof(JsonStringLocalizer<>).MakeGenericType(baseType);
+                    var method = jsonStringLocalizerType.GetMethod("GetLocalizedString", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod);
+                    if (method != null)
+                    {
+                        return (string)method.Invoke(localizer, new object[] { name, CultureInfo.CurrentUICulture });
+                    }
                 }
             }
 

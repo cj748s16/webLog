@@ -11,9 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using WebLogBase.Entities.System.Account;
 using WebLogApp.Infrastructure.Core;
 using NLog;
+using Microsoft.AspNetCore.Authorization;
+using WebLogBase.Infrastructure.Core;
+using WebLogBase.Infrastructure.Menu;
 
 namespace WebLogApp.Controllers.System.Account
 {
+    [Menu(Path = "system/account/group/list", Title = "Menu.Groups", Icon = "fa fa-group fa-fw", Order = 100)]
     public class GroupApiController : BaseApiController<GroupApiController>
     {
         private readonly IGroupRepository groupRepository;
@@ -27,8 +31,9 @@ namespace WebLogApp.Controllers.System.Account
             this.groupRepository = groupRepository;
         }
 
+        [Authorize("AdminOnly")]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             IEnumerable<GroupViewModel> groupsVM = null;
 
@@ -42,8 +47,9 @@ namespace WebLogApp.Controllers.System.Account
             return new ObjectResult(groupsVM);
         }
 
+        [Authorize("AdminOnly")]
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int? id)
+        public async Task<IActionResult> GetAsync(int? id)
         {
             GenericResult result = null;
 
@@ -69,8 +75,9 @@ namespace WebLogApp.Controllers.System.Account
             return new ObjectResult(result);
         }
 
+        [Authorize("AdminOnly")]
         [HttpPost]
-        public async Task<IActionResult> New([FromBody] GroupEditViewModel groupVM)
+        public async Task<IActionResult> NewAsync([FromBody] GroupEditViewModel groupVM)
         {
             GenericResult result = null;
 
@@ -112,8 +119,9 @@ namespace WebLogApp.Controllers.System.Account
             return new ObjectResult(result);
         }
 
+        [Authorize("AdminOnly")]
         [HttpPut]
-        public async Task<IActionResult> Modify([FromBody] GroupEditViewModel groupVM)
+        public async Task<IActionResult> ModifyAsync([FromBody] GroupEditViewModel groupVM)
         {
             GenericResult result = null;
 

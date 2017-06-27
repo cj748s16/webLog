@@ -4,13 +4,23 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using WebLogBase.Entities.System;
 using WebLogBase.Entities.System.Account;
 
 namespace WebLogBase.Repositories.System.Account
 {
-    public interface IUserRepository : IEntityBaseWithIdRepository<User> { }
+    public interface IUserRepository : IEntityBaseWithIdRepository<User>
+    {
+        Task AddAsync(User entity);
+        Task ModifyAsync(User entity);
+    }
 
     public interface IGroupRepository : IEntityBaseWithIdRepository<Group> { }
+
+    public interface IGroupRightsRepository : IEntityBaseWithIdRepository<GroupRights>
+    {
+        Task<IEnumerable<GroupRightsView>> GroupRightsViewAsync(Expression<Func<GroupRightsView, bool>> predicate);
+    }
 
     public interface IUserGroupRepository : IEntityBaseRepository<UserGroup>
     {

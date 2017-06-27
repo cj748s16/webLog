@@ -38,9 +38,9 @@ export class ListTabComponent<T> extends BaseTabComponent<T> implements AfterVie
     }
 
     getList() {
-        this._assignService.get()
+        this._service.get()
             .subscribe((data: any) => this.list = data,
-            error => this._utilityService.handleError.bind(this._utilityService));
+            error => this._utilityService.handleError(error));
     }
 
     new() {

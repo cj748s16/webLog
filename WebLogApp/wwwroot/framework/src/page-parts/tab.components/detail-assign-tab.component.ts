@@ -64,7 +64,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
                 .subscribe((data: any) => {
                     this.availableList = data;
                 },
-                error => this._utilityService.handleError.bind(this._utilityService));
+                error => this._utilityService.handleError(error));
         } else {
             this.availableList = [];
         }
@@ -76,7 +76,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
                 .subscribe((data: any) => {
                     this.assignedList = data;
                 },
-                error => this._utilityService.handleError.bind(this._utilityService));
+                error => this._utilityService.handleError(error));
         } else {
             this.assignedList = [];
         }
@@ -87,7 +87,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
             let assignResult: OperationResult = new OperationResult(false, "");
             this._assignService.assign<T>(this.parentKey, this.availableSelectedKey)
                 .subscribe(res => assignResult = OperationResult.fromResponse(res),
-                error => this._utilityService.handleError.bind(this._utilityService),
+                error => this._utilityService.handleError(error),
                 () => {
                     if (assignResult.Succeeded) {
                         this.getAvailableList();
@@ -104,7 +104,7 @@ export class DetailAssignTabComponent<T> extends BaseTabComponent<T> implements 
             let unassignResult: OperationResult = new OperationResult(false, "");
             this._assignService.unassign<T>(this.parentKey, this.assignedSelectedKey)
                 .subscribe(res => unassignResult = OperationResult.fromResponse(res),
-                error => this._utilityService.handleError.bind(this._utilityService),
+                error => this._utilityService.handleError(error),
                 () => {
                     if (unassignResult.Succeeded) {
                         this.getAvailableList();

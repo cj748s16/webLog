@@ -42,7 +42,7 @@ export class TabContentComponent implements AfterViewInit, ControlValueAccessor 
     @HostBinding("class.tab")
     private _isTab: boolean = false;
 
-    private $el: any;
+    protected $el: any;
     private _keyGrid: GridControl;
     private _gridKeys: Map<string, Key> = new Map<string, Key>();
 
